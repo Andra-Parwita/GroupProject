@@ -1,7 +1,7 @@
 #include "application.h"
 
-application::application() : health(1), cost(0), id(0){}
-application::application(int health, int cost, int id) : health(health), cost(cost), id(id){}
+application::application() : health(0), cost(0), id(0), isAlive(false){}
+application::application(int health, int cost, int id) : health(health), cost(cost), id(id), isAlive(true){}
 application::~application(){}
 
 //setters

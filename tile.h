@@ -7,16 +7,19 @@ class tile
 {
 private:
     bool isOccupied;
-    application applicationType;
+    application* applicationType;
 public:
     //constructors
     tile();
     ~tile();
 
     //public functions
-    bool occupy();
-    bool clear();
-};
+    void occupy(int appId);
+    void clear();
 
+    //accessor
+    bool getIsOccupied();
+    application getApplicationType();
+};
 
 #endif

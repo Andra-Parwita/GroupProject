@@ -3,16 +3,21 @@
 
 //constructors
 grid::grid(){
-    int i,j;
-    for (i = 0;i<5;i++){ //setting tiles as empty
-        for (j=0;i<20;j++){
-            map[i][j] =0;
-        }
+    for (int i = 0; i < 5; i++){
+        tiles = new tile*[20];
     }
-
 }
 
 grid::~grid(){delete tiles;}
 
-void grid::addApplication(int x, int y){}
-void grid::removeApplication(){}
+//functions
+void grid::addApplication(int x, int y, int appId){
+    if (tiles[x][y].getIsOccupied() == false && appId != 0){
+        tiles[x][y].occupy(appId);
+    }
+}
+void grid::removeApplication(int x, int y){
+    if (tiles[x][y].getIsOccupied() == true){
+        tiles[x][y].clear();
+    }
+}

@@ -6,18 +6,16 @@
 class grid
 {
 private:
-    int map[5][20]; //map size
-    tile* tiles; //tile data
-
+    tile** tiles; //tile data
 public:
     //constructors
     grid();
     ~grid();
 
-    void addApplication(int x, int y);
-    void removeApplication();
+    //functions
+    void addApplication(int x, int y, int appId);
+    void removeApplication(int x, int y);
 };
-
 
 
 #endif
