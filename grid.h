@@ -14,7 +14,6 @@ public:
     grid();
     ~grid();
 
-    int getMapSize();
     void addApplication(int x, int y);
     void removeApplication();
 };

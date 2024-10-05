@@ -14,6 +14,5 @@ grid::grid(){
 
 grid::~grid(){delete tiles;}
 
-int grid::getMapSize(){return map[5][20];};
 void grid::addApplication(int x, int y){}
 void grid::removeApplication(){}
