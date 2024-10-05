@@ -2,7 +2,8 @@
 #include "game.h"
 
 int main(){
-    Game game;
+    Game game; //creates a game
+
     while(game.getWindowIsOpen()){
         game.render();
         game.update();

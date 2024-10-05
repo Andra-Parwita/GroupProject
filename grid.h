@@ -1,19 +1,24 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GRID_H
+#define GRID_H
 #include <SFML/Graphics.hpp> 
+#include "tile.h"
 
-class game
+class grid
 {
 private:
-    bool gameState;
-    int time;
-    sf::RenderWindow window;
+    int map[5][20]; //map size
+    tile* tiles; //tile data
+
 public:
-    game(sf::RenderWindow window);
-    bool startGame();
-    bool endGame();
-    ~game();
+    //constructors
+    grid();
+    ~grid();
+
+    int getMapSize();
+    void addApplication(int x, int y);
+    void removeApplication();
 };
+
 
 
 #endif

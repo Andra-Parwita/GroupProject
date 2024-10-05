@@ -10,9 +10,13 @@ private:
     sf::VideoMode videoMode; //window size params
     sf::Event ev; //gets curent input events on the window (continuous)
 
+    //gameObject
+    sf::RectangleShape** dispTiles;
+
     //init functions
     void initVariables(); //initalises variables
     void initWindow(); //starts the window
+    void initMap();
 public:
     //constuctors and destructors
     Game();
