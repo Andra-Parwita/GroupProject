@@ -19,8 +19,7 @@ void vscode::updateTimer(int deltaTime) {
   if (elapsedTime >= productionInterval) {
     // Reset elapsed time and produce memory
     elapsedTime = 0;
-    // You might want to do something with the produced memory, like adding it
-    // to a total
+    // Add memory to total "bank" later
     produceMemory();
   }
 }
