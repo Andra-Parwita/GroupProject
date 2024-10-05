@@ -8,7 +8,7 @@ virus::~virus() {}
 // setters
 void virus::setId(int id) { this->id = id; }
 void virus::setHealth(int health) { this->health = health; }
-void virus::setSpeed(int price) { this->speed = price; }
+void virus::setSpeed(int speed) { this->speed = speed; }
 void virus::setStatus(bool status) { this->isAlive = status; }
 
 // accessors
