@@ -13,7 +13,7 @@ public:
     ~grid();
 
     //functions
-    void addApplication(int x, int y, int appId);
+    bool addApplication(int x, int y, int appId);
     void removeApplication(int x, int y);
 };
 

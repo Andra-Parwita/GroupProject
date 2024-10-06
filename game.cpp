@@ -33,10 +33,8 @@ void Game::initBar(){  //task bar
 void Game::initMap(){
     gridMap = new grid; //making mapdata
 
-    float position_x = 0;
-    float position_y = 0;
-
     dispTiles = new sf::RectangleShape*[5]; //making display tiles
+
     for (int i=0; i < 5; i++){
         dispTiles[i] = new sf::RectangleShape[20];
     }
@@ -67,7 +65,6 @@ Game::~Game(){
 
 bool Game::taskBarChecker(int i){
     if (taskBar[i].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
-        std::cout << "Wow! it in box " << i << std::endl;
         return true;
     } 
     return false;
@@ -75,7 +72,7 @@ bool Game::taskBarChecker(int i){
 
 bool Game::gridMapChecker(int x, int y){
     if (dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
-        std::cout << "Wow! it in box " << x << std::endl;
+        std::cout << "Wow! it in box " << x << " " << y << std::endl;
         return true;
     } 
     return false;
@@ -95,7 +92,13 @@ void Game::pollEvents(){ //game ui inputs
                     std::cout << "changed Id to " << currentSelectionId << std::endl;
                 }
             }
-
+            for (int j = 0; j < 5; j++){
+                for (int k = 0; k < 20; k++){
+                    if(Game::gridMapChecker(j,k) == true){
+                        gridMap->addApplication(j,k,currentSelectionId); //adds selection id to 
+                    }
+                }
+            }
         }
     }
 }

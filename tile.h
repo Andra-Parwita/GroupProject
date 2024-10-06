@@ -21,6 +21,7 @@ public:
     //accessor
     bool getIsOccupied();
     application getApplicationType();
+    int getAppId();
 };
 
 #endif

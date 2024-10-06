@@ -7,6 +7,8 @@ tile::~tile(){delete applicationType;}
 //public functions
 void tile::occupy(int appId){ //add app ids and connect to new application creation
     switch (appId) {
+        case 0:
+            break;
         case 1:
 
             break;
@@ -17,9 +19,6 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
 
             break;
         case 4:
-
-            break;
-        case 5:
 
             break;
         default:
