@@ -7,7 +7,7 @@
 // Constructor
 vscode::vscode(int health, int cost, int id, int memoryProduction,
                int productionInterval)
-    : application(100, 5, 1),
+    : application(100, 5, 0),
       memoryProduction(memoryProduction),
       productionInterval(productionInterval),
       elapsedTime(0) {}

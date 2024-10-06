@@ -7,7 +7,7 @@
 // Constructor
 fileExplorer::fileExplorer(int health, int cost, int id, int dmg,
                            int attackInterval)
-    : application(100, 15, 2),
+    : application(100, 15, 1),
       dmg(dmg),
       attackInterval(attackInterval),
       elapsedTime(0) {}
