@@ -7,6 +7,7 @@ class antivirus : public application {
  public:
   // Constructor
   antivirus(int health, int cost, int id);
+  antivirus();
 };
 
 #endif

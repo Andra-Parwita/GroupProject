@@ -5,26 +5,26 @@ class virus {
  protected:
   // variables
   int id;
-  int speed;
+  float tileTime;  // higher tileTime value = lower speed
   int health;
   bool isAlive;
 
  public:
   // constructors
   virus();
-  virus(int health, int speed, int id);
+  virus(int health, float tileTime, int id);
   ~virus();
 
   // setters
   void setId(int id);
   void setHealth(int health);
-  void setSpeed(int speed);
+  void setTileTime(float tileTime);
   void setStatus(bool status);
 
   // accessors
   int getId();
   int getHealth();
-  int getSpeed();
+  int getTileTime();
   bool checkAlive();
 };
 

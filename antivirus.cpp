@@ -2,5 +2,6 @@
 
 #include <iostream>
 
-// Constructor with default high health (500) and low cost (10)
+// Constructor
 antivirus::antivirus(int health, int cost, int id) : application(500, 10, 2) {}
+antivirus::antivirus() : application(500, 10, 2) {}
