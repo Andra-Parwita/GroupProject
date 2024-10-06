@@ -8,12 +8,13 @@ tile::~tile(){delete applicationType;}
 void tile::occupy(int appId){ //add app ids and connect to new application creation
     switch (appId) {
         case 0:
+            applicationType = new vscode();
             break;
         case 1:
-
+            applicationType = new fileExplorer();
             break;
         case 2:
-
+            applicationType = new vpn(); //will be antivirus
             break;
         case 3:
 
@@ -29,6 +30,7 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
 void tile::clear(){delete applicationType; isOccupied = false; applicationType = new application;}
 
 bool tile::checkAppStatus(){return applicationType->checkAlive();}
+
 
 //accessors
 bool tile::getIsOccupied(){return isOccupied;}

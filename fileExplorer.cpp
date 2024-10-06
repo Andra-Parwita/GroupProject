@@ -11,6 +11,8 @@ fileExplorer::fileExplorer(int health, int cost, int id, int dmg,
       dmg(dmg),
       attackInterval(attackInterval),
       elapsedTime(0) {}
+fileExplorer::fileExplorer() : application(100,15,1), dmg(1), attackInterval(3){}
+
 
 // Simulate shooting (dealing damage)
 void fileExplorer::shoot() {

@@ -7,6 +7,7 @@ class vpn : public application {
  public:
   // Constructor
   vpn(int health, int cost, int id);
+  vpn();
 };
 
 #endif

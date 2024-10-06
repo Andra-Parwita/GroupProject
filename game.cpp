@@ -72,7 +72,6 @@ bool Game::taskBarChecker(int i){
 
 bool Game::gridMapChecker(int x, int y){
     if (dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
-        std::cout << "Wow! it in box " << x << " " << y << std::endl;
         return true;
     } 
     return false;

@@ -11,6 +11,7 @@ vscode::vscode(int health, int cost, int id, int memoryProduction,
       memoryProduction(memoryProduction),
       productionInterval(productionInterval),
       elapsedTime(0) {}
+ vscode::vscode() :  application(100,5,0), memoryProduction(5), productionInterval(3){}
 
 // Produce memory every productionInterval seconds
 int vscode::produceMemory() {

@@ -2,6 +2,9 @@
 #define TILE_H
 #include <SFML/Graphics.hpp> 
 #include "application.h"
+#include "fileExplorer.h"
+#include "vscode.h"
+#include "vpn.h"
 
 class tile
 {

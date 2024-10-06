@@ -13,6 +13,7 @@ class fileExplorer : public application {
   // Constructor
   fileExplorer(int health, int cost, int id, int dmg = 1,
                int attackInterval = 3);
+  fileExplorer();
 
   // Function to attack enemies
   void shoot();

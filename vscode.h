@@ -13,6 +13,7 @@ class vscode : public application {
   // Constructor
   vscode(int health, int cost, int id, int memoryProduction = 5,
          int productionInterval = 3);
+  vscode();
 
   // Function to produce memory
   int produceMemory();
