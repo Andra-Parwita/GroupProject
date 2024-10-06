@@ -15,6 +15,9 @@ public:
     //functions
     bool addApplication(int x, int y, int appId);
     void removeApplication(int x, int y);
+
+    //accessor
+    bool checkOccupancy(int x, int y);
 };
 
 

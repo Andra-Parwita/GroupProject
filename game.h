@@ -15,7 +15,10 @@ private:
 
     //gameObject
     sf::RectangleShape** dispTiles;
+    sf::RectangleShape** appSpriteHolders;
+
     sf::RectangleShape* taskBar;
+    sf::RectangleShape* taskBarSprites;
     grid* gridMap; //actual map data
     int currentSelectionId;
 

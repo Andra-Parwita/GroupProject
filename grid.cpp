@@ -32,3 +32,5 @@ void grid::removeApplication(int x, int y){
         tiles[x][y].clear();
     }
 }
+
+bool grid::checkOccupancy(int x, int y){return tiles[x][y].getIsOccupied();}

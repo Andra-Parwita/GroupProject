@@ -9,12 +9,15 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
     switch (appId) {
         case 0:
             applicationType = new vscode();
+            applicationType->setStatus(true);
             break;
         case 1:
             applicationType = new fileExplorer();
+            applicationType->setStatus(true);
             break;
         case 2:
             applicationType = new vpn(); //will be antivirus
+            applicationType->setStatus(true);
             break;
         case 3:
 

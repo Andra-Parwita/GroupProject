@@ -28,6 +28,18 @@ void Game::initBar(){  //task bar
         taskBar[i].setPosition(600+i*(88.f),10.f);
         taskBar[i].setFillColor(sf::Color::Transparent);
     }
+    
+    taskBarSprites = new sf::RectangleShape[6];
+    for (int i=0; i< 6; i++){
+        taskBarSprites[i].setSize(sf::Vector2f(50.f,50.f));
+        taskBarSprites[i].setPosition(620+i*(88.f),60.f);
+    }
+    taskBarSprites[0].setFillColor(sf::Color::Blue);
+    taskBarSprites[1].setFillColor(sf::Color::Cyan);
+    taskBarSprites[2].setFillColor(sf::Color::Red);
+    taskBarSprites[3].setFillColor(sf::Color::Green);
+    taskBarSprites[4].setFillColor(sf::Color::Magenta);
+    taskBarSprites[5].setFillColor(sf::Color::Transparent);
 }
 
 void Game::initMap(){
@@ -48,6 +60,20 @@ void Game::initMap(){
         }
     } 
     std::cout << "made map" << std::endl;
+
+    appSpriteHolders = new sf::RectangleShape*[5];
+    for (int i=0; i < 5; i++){
+        appSpriteHolders[i] = new sf::RectangleShape[20];
+    }
+    for (int i = 0; i < 5; i++){
+        for(int j = 0; j < 20; j++){
+            appSpriteHolders[i][j].setSize(sf::Vector2f(50.f,50.f));
+            appSpriteHolders[i][j].setPosition(j*(85.f)+30,i*(150.f)+250);
+            appSpriteHolders[i][j].setFillColor(sf::Color::Transparent);
+        }
+    } 
+
+    std::cout << "made sprite holders" << std::endl;
 }
 
 //constuctors and destructors
@@ -61,6 +87,8 @@ Game::~Game(){
     delete this->window;
     delete this->dispTiles;
     delete this->gridMap;
+    delete this->appSpriteHolders;
+    delete this->taskBarSprites;
 }
 
 bool Game::taskBarChecker(int i){
@@ -94,7 +122,30 @@ void Game::pollEvents(){ //game ui inputs
             for (int j = 0; j < 5; j++){
                 for (int k = 0; k < 20; k++){
                     if(Game::gridMapChecker(j,k) == true){
-                        gridMap->addApplication(j,k,currentSelectionId); //adds selection id to 
+                        if((gridMap->checkOccupancy(j,k) == false) || (currentSelectionId == 5)){
+                            switch (currentSelectionId){
+                            case 0:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Blue);
+                                break;
+                            case 1:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Cyan);
+                                break;
+                            case 2:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Red);
+                                break;
+                            case 3:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Green);
+                                break;
+                            case 4:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Magenta);
+                                break;
+                            default:
+                                appSpriteHolders[j][k].setFillColor(sf::Color::Transparent);
+                                break;
+                            }
+                        gridMap->addApplication(j,k,currentSelectionId); //adds selection id to
+                        std::cout << gridMap->checkOccupancy(j,k) << std::endl;
+                        }
                     }
                 }
             }
@@ -119,8 +170,18 @@ void Game::render(){ //renders the game objects
         }
     } 
 
+    for (int i = 0; i < 5; i ++){ //for application sprites
+        for (int j = 0; j < 20; j++){
+            this->window->draw(this->appSpriteHolders[i][j]);
+        }
+    } 
+
     for (int i=0; i< 6; i++){ //task bar
         this->window->draw(this->taskBar[i]);
+    }
+
+    for (int i=0; i<6; i++){ //task bar sprites
+        this->window->draw(this->taskBarSprites[i]);
     }
 
     this->window->display(); //displays frame
