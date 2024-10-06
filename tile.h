@@ -16,6 +16,7 @@ public:
     //public functions
     void occupy(int appId);
     void clear();
+    bool checkAppStatus();
 
     //accessor
     bool getIsOccupied();

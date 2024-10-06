@@ -2,6 +2,7 @@
 #define GAME_H
 #include <SFML/Graphics.hpp> 
 #include <iostream>
+#include "grid.h"
 
 
 class Game
@@ -14,11 +15,15 @@ private:
 
     //gameObject
     sf::RectangleShape** dispTiles;
+    sf::RectangleShape* taskBar;
+    grid* gridMap; //actual map data
+    int currentSelectionId;
 
     //init functions
     void initVariables(); //initalises variables
     void initWindow(); //starts the window
     void initMap();
+    void initBar();
 public:
     //constuctors and destructors
     Game();
@@ -31,6 +36,9 @@ public:
     void pollEvents();
     void update();
     void render();
+
+    bool taskBarChecker(int i);
+    bool gridMapChecker(int x, int y);
 
 };
 

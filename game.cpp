@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include "grid.h"
 
 //private functions
 void Game::initVariables(){
@@ -18,20 +19,33 @@ const bool Game::getWindowIsOpen() const{ //checks if window is open
     return this->window->isOpen();
 }
 
+void Game::initBar(){  //task bar
+    taskBar = new sf::RectangleShape[6];
+    for (int i=0; i< 6; i++){
+        taskBar[i].setSize(sf::Vector2f(88.f,150.f));
+        taskBar[i].setOutlineThickness(1.f);
+        taskBar[i].setOutlineColor(sf::Color::Cyan);
+        taskBar[i].setPosition(600+i*(88.f),10.f);
+        taskBar[i].setFillColor(sf::Color::Transparent);
+    }
+}
+
 void Game::initMap(){
+    gridMap = new grid; //making mapdata
+
     float position_x = 0;
     float position_y = 0;
 
-    dispTiles = new sf::RectangleShape*[5];
+    dispTiles = new sf::RectangleShape*[5]; //making display tiles
     for (int i=0; i < 5; i++){
         dispTiles[i] = new sf::RectangleShape[20];
     }
     for (int i = 0; i < 5; i++){
         for(int j = 0; j < 20; j++){
-            dispTiles[i][j].setSize(sf::Vector2f(88.f,150.f));
+            dispTiles[i][j].setSize(sf::Vector2f(85.f,150.f));
             dispTiles[i][j].setOutlineThickness(1.f);
             dispTiles[i][j].setOutlineColor(sf::Color::Cyan);
-            dispTiles[i][j].setPosition(j*(88.f),i*(150.f)+200);
+            dispTiles[i][j].setPosition(j*(85.f)+10,i*(150.f)+200);
             dispTiles[i][j].setFillColor(sf::Color::Transparent);
         }
     } 
@@ -39,14 +53,32 @@ void Game::initMap(){
 }
 
 //constuctors and destructors
-Game::Game(){
+Game::Game() : currentSelectionId(0) {
     this->initVariables();
     this->initWindow();
     this->initMap();
+    this->initBar();
 }
 Game::~Game(){
     delete this->window;
     delete this->dispTiles;
+    delete this->gridMap;
+}
+
+bool Game::taskBarChecker(int i){
+    if (taskBar[i].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
+        std::cout << "Wow! it in box " << i << std::endl;
+        return true;
+    } 
+    return false;
+}
+
+bool Game::gridMapChecker(int x, int y){
+    if (dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
+        std::cout << "Wow! it in box " << x << std::endl;
+        return true;
+    } 
+    return false;
 }
 
 //Public Functions
@@ -55,13 +87,23 @@ void Game::pollEvents(){ //game ui inputs
         if (this->ev.type == sf::Event::Closed){ //close window button
             this->window->close();
         }
+        if (this->ev.type == sf::Event::MouseButtonPressed){
+            std::cout << "button pressed" << std::endl;
+            for (int i = 0; i < 6; i++){
+                if (Game::taskBarChecker(i) == true){
+                    currentSelectionId = i;
+                    std::cout << "changed Id to " << currentSelectionId << std::endl;
+                }
+            }
+
+        }
     }
 }
 void Game::update(){ //game updates
     this->pollEvents();
 
     //mouse position updates
-    std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
+    // std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
 
 }
 void Game::render(){ //renders the game objects
@@ -69,10 +111,15 @@ void Game::render(){ //renders the game objects
     this->window->clear(); //clearing frame
 
     //drawing objects
-    for (int i = 0; i < 5; i ++){
+    for (int i = 0; i < 5; i ++){ //grid map display
         for (int j = 0; j < 20; j++){
             this->window->draw(this->dispTiles[i][j]);
         }
     } 
+
+    for (int i=0; i< 6; i++){ //task bar
+        this->window->draw(this->taskBar[i]);
+    }
+
     this->window->display(); //displays frame
 }
