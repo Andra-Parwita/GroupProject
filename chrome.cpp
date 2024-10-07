@@ -6,7 +6,7 @@
 
 // Constructor
 chrome::chrome(int health, int cost, int id, int dmg, int explodeTime)
-    : application(health, cost, id),
+    : application(100, 500, 4),
       dmg(dmg),
       explodeTime(explodeTime),
       elapsedTime(0),
