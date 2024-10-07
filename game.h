@@ -1,9 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
+
 #include <SFML/Graphics.hpp> 
 #include <iostream>
 #include "grid.h"
-
+#include "gameController.h"
+#include <string>
 
 class Game
 {
@@ -22,11 +24,24 @@ private:
     grid* gridMap; //actual map data
     int currentSelectionId;
 
+    //fonts and text
+    sf::Font font; 
+    sf::Text timerText;
+    sf::Text resourceText;
+
+    //gameController
+    gameController* gameManager;
+
+    //clock
+    sf::Clock clock;
+
     //init functions
     void initVariables(); //initalises variables
     void initWindow(); //starts the window
     void initMap();
     void initBar();
+    void initText();
+
 public:
     //constuctors and destructors
     Game();

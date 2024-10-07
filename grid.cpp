@@ -34,3 +34,16 @@ void grid::removeApplication(int x, int y){
 }
 
 bool grid::checkOccupancy(int x, int y){return tiles[x][y].getIsOccupied();}
+
+int grid::checkNumOfTileIDs(int wantedId){
+    int total = 0;
+    for (int i =0; i < 5; i++){
+        for(int j = 0; j < 20; j++){
+            int current = tiles[i][j].getApplicationType().getId();
+            if (current == wantedId){
+                total += 1;
+            }
+        }
+    }
+    return total;
+}

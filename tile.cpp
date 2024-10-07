@@ -16,14 +16,16 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
             applicationType->setStatus(true);
             break;
         case 2:
-            applicationType = new vpn(); //will be antivirus
+            applicationType = new antivirus(); 
             applicationType->setStatus(true);
             break;
         case 3:
-
+            applicationType = new vpn(); 
+            applicationType->setStatus(true);
             break;
         case 4:
-
+            applicationType = new chrome(); 
+            applicationType->setStatus(true);
             break;
         default:
         return;

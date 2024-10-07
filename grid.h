@@ -18,6 +18,8 @@ public:
 
     //accessor
     bool checkOccupancy(int x, int y);
+
+    int checkNumOfTileIDs(int iD);
 };
 
 
