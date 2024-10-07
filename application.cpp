@@ -1,6 +1,6 @@
 #include "application.h"
 
-application::application() : health(0), cost(0), id(0), isAlive(false){}
+application::application() : health(0), cost(0), id(99), isAlive(false){}
 application::application(int health, int cost, int id) : health(health), cost(cost), id(id), isAlive(true){}
 application::~application(){}
 

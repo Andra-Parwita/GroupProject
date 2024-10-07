@@ -12,6 +12,8 @@ chrome::chrome(int health, int cost, int id, int dmg, int explodeTime)
       elapsedTime(0),
       explodeRadius(3) {}
 
+chrome::chrome() : application(100,500,4), dmg(100), explodeTime(3), elapsedTime(0), explodeRadius(3){}
+
 // Explode funciton
 void chrome::explode() {
   // Additional explode functionality.

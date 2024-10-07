@@ -5,6 +5,8 @@
 #include "fileExplorer.h"
 #include "vscode.h"
 #include "vpn.h"
+#include "antivirus.h"
+#include "chrome.h"
 
 class tile
 {
