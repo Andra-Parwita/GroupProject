@@ -1,6 +1,8 @@
 #include "vpn.h"
 
+#include <chrono>
 #include <iostream>
+#include <thread>
 
 // Constructor
 vpn::vpn(int health, int cost, int id, int dmg, float slow, int slowDuration,
