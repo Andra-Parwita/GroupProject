@@ -6,7 +6,8 @@ gameController::gameController() : resource(5){
     virusCounter = 0;
 }
 
-gameController::~gameController(){}
+gameController::~gameController(){
+}
 
 //private function
 void gameController::startTimer() {
@@ -68,20 +69,20 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId){
 
         virus** temp = new virus*[virusCounter];
         std::cout << "made new temp virus Manager" << std::endl;
-        std::copy(virusManager, virusManager + std::min(oldSize,virusCounter), temp);
+
+        std::copy(virusManager, virusManager + oldSize, temp);
         std::cout << "copied Virus Manager" << std::endl;
+
         delete[] virusManager; 
         std::cout << "deleted old Virus Manager" << std::endl;
-        virusManager = temp; 
-        std::cout << "made Virus Manager to temp" << std::endl;
 
 
         /* checking ids
         switch (virusId)
         {
         case 0:
-            virusManager[virusCounter -1] = new bug;
-            virusManager[virusCounter -1]->setRow(rowSpawn);
+            temp[oldSize] = new bug;
+            temp[oldSize]->setRow(rowSpawn);
             std::cout << "bug spawned" << std::endl;
             break;
         case 1:
@@ -95,6 +96,9 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId){
         default:
             break;
         } */
+
+       virusManager = temp; 
+        std::cout << "made Virus Manager to temp" << std::endl;
     }
     return virusManager;
 }

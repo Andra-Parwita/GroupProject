@@ -98,8 +98,8 @@ void Game::initMap(){
 }
 
 void Game::initVirus(){
-    virusSprites = new sf::RectangleShape[0];
-    virusManager = new virus*[0];
+    virusSprites = nullptr;
+    virusManager = nullptr;
 }
 
 //constuctors and destructors
@@ -218,24 +218,31 @@ void Game::update(){ //game updates
                 int type = 0; // for debug - setting to only bug spawn
 
                 virusManager = gameManager->spawnVirus(virusManager, type);
+                std::cout << "spawning ended \n" << std::endl;
 
                 //resizing the number of rectangle shapes
-                int oldSize = gameManager->getVirusCount();
+                int oldSize = gameManager->getVirusCount()-1;
                 int newSize = oldSize + 1;
                 std::cout << "old:" << oldSize << "new:" << newSize << std::endl;
+
                 sf::RectangleShape* temp = new sf::RectangleShape[newSize];
                 std::cout << "new temp Virus sprites" << std::endl;
-                std::copy(virusSprites, virusSprites + std::min(oldSize,newSize), temp);
-                std::cout << "copied Virus sprites" << std::endl;
-                delete[] virusSprites;
-                std::cout << "deleted Virus sprites" << std::endl;
-                virusSprites = temp; 
-                std::cout << "made Virus sprites to temp" << std::endl;
+                if (virusSprites != nullptr){
+                    std::copy(virusSprites, virusSprites + oldSize, temp);
+                    std::cout << "copied Virus sprites" << std::endl;
+
+                    delete[] virusSprites;
+                    std::cout << "deleted Virus sprites" << std::endl;
+                }
 
                 //setting the size
-                virusSprites[newSize-1].setSize(sf::Vector2f(50.f,50.f));
-                virusSprites[newSize-1].setFillColor(sf::Color::Red);
-                virusSprites[newSize-1].setPosition((88.f),60.f); //for testing
+                temp[oldSize].setSize(sf::Vector2f(50.f,50.f));
+                temp[oldSize].setFillColor(sf::Color::Red);
+                temp[oldSize].setPosition(newSize*100+(88.f),60.f); //for testing
+
+                virusSprites = temp; 
+                std::cout << "made Virus sprites to temp" << std::endl;
+                std::cout << "spawning sprites ended \n" << std::endl;
             }
 
         //five second reset
