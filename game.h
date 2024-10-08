@@ -34,6 +34,7 @@ private:
 
     //clock
     sf::Clock clock;
+    int fiveSec;
 
     //init functions
     void initVariables(); //initalises variables
