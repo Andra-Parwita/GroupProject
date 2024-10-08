@@ -3,7 +3,7 @@
 
 #include "virus.h"
 
-class bug : public bug {
+class bug : public virus {
  protected:
  public:
   // constructors
