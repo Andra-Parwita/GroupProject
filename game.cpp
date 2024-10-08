@@ -12,6 +12,7 @@ void Game::initVariables(){
     gameManager = new gameController;
 }
 
+
 void Game::initWindow(){ //creates the window
     this->videoMode.height = 1000;
     this->videoMode.width = 2000;
@@ -96,6 +97,11 @@ void Game::initMap(){
     std::cout << "made sprite holders" << std::endl;
 }
 
+void Game::initVirus(){
+    virusSprites = new sf::RectangleShape[0];
+    virusManager = new virus*[0];
+}
+
 //constuctors and destructors
 Game::Game() : currentSelectionId(0) {
     this->initVariables();
@@ -103,6 +109,7 @@ Game::Game() : currentSelectionId(0) {
     this->initMap();
     this->initBar();
     this->initText();
+    this->initVirus();
 }
 Game::~Game(){
     delete this->window;
@@ -111,6 +118,8 @@ Game::~Game(){
     delete[] this->appSpriteHolders;
     delete[] this->taskBarSprites;
     delete this->gameManager;
+    delete[] this->virusManager;
+    delete[] this->virusSprites;
 }
 
 //Public Functions
@@ -203,9 +212,38 @@ void Game::update(){ //game updates
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock
         fiveSec++;
         if (fiveSec >= 5){
-            gameManager->addResource(1+1*gridMap->checkNumOfTileIDs(0));
-            fiveSec = 0;
+            if (gameManager->elapsedTime() >= 10){
+                //srand(time(NULL)); //seed for random
+                // int type = rand()%5;
+                int type = 0; // for debug - setting to only bug spawn
+
+                virusManager = gameManager->spawnVirus(virusManager, type);
+
+                //resizing the number of rectangle shapes
+                int oldSize = gameManager->getVirusCount();
+                int newSize = oldSize + 1;
+                std::cout << "old:" << oldSize << "new:" << newSize << std::endl;
+                sf::RectangleShape* temp = new sf::RectangleShape[newSize];
+                std::cout << "new temp Virus sprites" << std::endl;
+                std::copy(virusSprites, virusSprites + std::min(oldSize,newSize), temp);
+                std::cout << "copied Virus sprites" << std::endl;
+                delete[] virusSprites;
+                std::cout << "deleted Virus sprites" << std::endl;
+                virusSprites = temp; 
+                std::cout << "made Virus sprites to temp" << std::endl;
+
+                //setting the size
+                virusSprites[newSize-1].setSize(sf::Vector2f(50.f,50.f));
+                virusSprites[newSize-1].setFillColor(sf::Color::Red);
+                virusSprites[newSize-1].setPosition((88.f),60.f); //for testing
+            }
+
+        //five second reset
+        fiveSec = 0;
         } 
+        if (fiveSec == 3){
+            gameManager->addResource(1+1*gridMap->checkNumOfTileIDs(0));
+        }
         std::cout << fiveSec << std::endl;
         clock.restart();
     }
@@ -246,6 +284,10 @@ void Game::render(){ //renders the game objects
 
     for (int i=0; i<6; i++){ //task bar sprites
         this->window->draw(this->taskBarSprites[i]);
+    }
+
+    for (int i=0; i < gameManager->getVirusCount(); i++){
+        this->window->draw(this->virusSprites[i]);
     }
 
     this->window->draw(this->timerText);

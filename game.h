@@ -6,6 +6,7 @@
 #include "grid.h"
 #include "gameController.h"
 #include <string>
+#include "virus.h"
 
 class Game
 {
@@ -21,8 +22,9 @@ private:
 
     sf::RectangleShape* taskBar;
     sf::RectangleShape* taskBarSprites;
+
+    //mapdata
     grid* gridMap; //actual map data
-    int currentSelectionId;
 
     //fonts and text
     sf::Font font; 
@@ -31,6 +33,11 @@ private:
 
     //gameController
     gameController* gameManager;
+    int currentSelectionId;
+
+    //virus handler
+    virus** virusManager;
+    sf::RectangleShape* virusSprites;
 
     //clock
     sf::Clock clock;
@@ -42,6 +49,7 @@ private:
     void initMap();
     void initBar();
     void initText();
+    void initVirus();
 
 public:
     //constuctors and destructors
