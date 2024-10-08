@@ -7,7 +7,7 @@
 void Game::initVariables(){
     //window
     this->window = nullptr;
-
+    fiveSec =0;
     //game controller
     gameManager = new gameController;
 }
@@ -199,11 +199,17 @@ void Game::update(){ //game updates
         }
     }
 
-
+    //internal one second timer
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock
-        gameManager->addResource(1+ 1*currentProducers);
+        fiveSec++;
+        if (fiveSec >= 5){
+            gameManager->addResource(1+1*gridMap->checkNumOfTileIDs(0));
+            fiveSec = 0;
+        } 
+        std::cout << fiveSec << std::endl;
         clock.restart();
     }
+
 
     //mouse position updates
     // std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
