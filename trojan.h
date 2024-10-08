@@ -1,7 +1,15 @@
-#include "trojan.h"
+#ifndef TROJAN_H
+#define TROJAN_H
 
-// Constructor
-trojan::trojan(int health, float tileTime, int id, int dmg)
-    : virus(75, 1.0, 0, 10) {}
+#include "virus.h"
 
-trojan::trojan() : virus(75, 1.0, 0, 10) {}
+class trojan : public virus {
+ protected:
+ public:
+  // constructors
+  trojan();
+  trojan(int health, float tileTime, int id, int dmg);
+  ~trojan();
+};
+
+#endif
