@@ -43,6 +43,7 @@ void tile::updateStatus(){
 }
 
 bool tile::checkAppStatus(){return applicationType->checkAlive();}
+void tile::setAppHealth(int hp){applicationType->setHealth(hp);}
 
 
 //accessors

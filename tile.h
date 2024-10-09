@@ -27,6 +27,7 @@ public:
     //accessor
     bool getIsOccupied();
     application getApplicationType();
+    void setAppHealth(int hp);
 
 };
 

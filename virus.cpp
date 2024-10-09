@@ -19,6 +19,8 @@ void virus::setRow(int row){this->currentRow = row;}
 void virus::setPosX(float x){this->position_x = x;}
 void virus::setPosY(float y){this->position_y = y;}
 void virus::setPosXY(float x, float y){virus::setPosX(x); virus::setPosY(y);}
+void virus::setFreeze(bool state){this->freeze = state;}
+void virus::restartClock(){dmgClock.restart();}
 
 // accessors
 int virus::getId() { return this->id; }
@@ -29,16 +31,22 @@ bool virus::checkAlive() { return this->isAlive; }
 float virus::getPosY(){return position_y;}
 float virus::getPosX(){return position_x;}
 int virus::getRow(){return currentRow;}
+int virus::getDmgClock(){return dmgClock.getElapsedTime().asSeconds();}
+
 
 //movement
 bool virus::move(){
-    if ((virus::checkAlive() == true) && (health > 0)){
-        if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){
-            std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
-            virus::setPosX(position_x -85);
-            internalClock.restart(); 
-            return true;
+    if (freeze == false){
+        if ((virus::checkAlive() == true) && (health > 0)){
+            if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){
+                std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
+                virus::setPosX(position_x -85);
+                internalClock.restart(); 
+                return true;
+            }
         }
+    } else if (freeze == true){
+        return false;
     }
     return false;
 }

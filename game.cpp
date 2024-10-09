@@ -115,13 +115,36 @@ Game::Game() : currentSelectionId(0) {
 }
 Game::~Game(){
     delete this->window;
-    delete[] this->dispTiles;
-    delete this->gridMap;
-    delete[] this->appSpriteHolders;
-    delete[] this->taskBarSprites;
-    delete this->gameManager;
-    delete[] this->virusManager;
+
+    if (virusManager != nullptr){
+        for(int i = 0; i < gameManager->getVirusCount(); i++){
+            delete[] this->virusManager[i];
+        }
+        delete[] this->virusManager;
+    }
+
     delete[] this->virusSprites;
+
+    if (dispTiles != nullptr){
+        for(int i = 0; i < 5; i++){
+            delete[] this->dispTiles[i];
+        }
+        delete[] this->dispTiles;
+    }
+
+    delete[] this->taskBarSprites;
+
+    if (appSpriteHolders != nullptr){
+        for(int i = 0; i < 5; i++){
+            delete[] this->appSpriteHolders[i];
+        }
+        delete[] this->appSpriteHolders;
+    }
+
+    
+    
+    delete this->gridMap;
+    delete this->gameManager;
 }
 
 //Public Functions
@@ -316,6 +339,7 @@ void Game::update(){ //game updates
         clock.restart();
     }
 
+    //virus interactions
     for (int i = 0; i < gameManager->getVirusCount(); i++){ //enemy virus checking for movement and health
         if (virusManager[i]->getHealth() <= 0){
             virusManager[i]->setStatus(false);
@@ -325,6 +349,7 @@ void Game::update(){ //game updates
         if (virusManager[i]->checkAlive() == true){
             if (virusManager[i]->move() == true){
                 virusSprites[i].setPosition(sf::Vector2f((virusSprites[i].getPosition().x)-85.f,virusSprites[i].getPosition().y));
+                std::cout << "Sprite: " << virusSprites[i].getPosition().x << " Manager: " << virusManager[i]->getPosX() << std::endl;
             }
         }
 
@@ -332,10 +357,17 @@ void Game::update(){ //game updates
             //game over
         }
 
+        virusManager[i]->setFreeze(false);
         for (int j = 0; j < 5; j++){
             for (int k =0; k < 20; k++){
                 if ((dispTiles[j][k].getGlobalBounds().contains(virusManager[i]->getPosX(), virusManager[i]->getPosY()) == true) && (gridMap->checkOccupancy(j,k) == true)){
-                    std::cout << "enemy is attacking an app" << std::endl;
+                    virusManager[i]->setFreeze(true);
+                    if (virusManager[i]->getDmgClock() >= 1.0f){
+                        if (gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()) == true){
+                            virusManager[i]->setFreeze(true);
+                        } 
+                        virusManager[i]->restartClock();
+                    }
                 }
             }
         }
@@ -343,7 +375,15 @@ void Game::update(){ //game updates
         // dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
     }
 
-    gridMap->checkAppsStatus(); // checks if any apps are dead
+    
+    gridMap->checkAppsStatus(); // checks if any apps are dead and removes them
+    for (int i = 0; i < 5; i ++){ //for application sprites
+        for (int j = 0; j < 20; j++){
+            if (gridMap->checkOccupancy(i,j) == false){
+                appSpriteHolders[i][j].setFillColor(sf::Color::Transparent);
+            }
+        }
+    } 
 
     //mouse position updates
     // std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;

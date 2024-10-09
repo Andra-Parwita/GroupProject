@@ -15,8 +15,10 @@ class virus {
   int currentRow;
   float position_x;
   float position_y;
+  bool freeze; //whether it can move or not
 
   sf::Clock internalClock;
+  sf::Clock dmgClock;
 
  public:
   // constructors
@@ -35,6 +37,8 @@ class virus {
   void setPosX(float x);
   void setPosY(float y);
   void setPosXY(float x, float y);
+  void setFreeze(bool state);
+  void restartClock();
 
   // accessors
   int getId();
@@ -45,6 +49,7 @@ class virus {
   float getPosY();
   bool checkAlive();
   int getRow();
+  int getDmgClock();
 
   //movement
   bool move();

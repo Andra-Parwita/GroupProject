@@ -33,8 +33,8 @@ private:
     int maxVirusSpace;
     int bugSpawnTime;
     int trojanSpawnTime;
-    sf::Clock bugSpawnerClock;
-    sf::Clock trojanSpawnerClock;
+
+    sf::Clock* spawnerClock;
 public:
     //constructors
     gameController();
@@ -47,7 +47,8 @@ public:
     int costCheck(int Id);
 
     float elapsedTime() const;
-
+    
+    //spawning functions
     virus** spawnVirus(virus** virusManager, int virusId, int rowId);
     float bugSpawnTimeCheck();
     bool canSpawnBug();

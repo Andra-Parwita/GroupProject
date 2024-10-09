@@ -22,6 +22,8 @@ public:
     int checkNumOfTileIDs(int iD);
 
     void checkAppsStatus();
+
+    bool takeAppDamage(int x, int y, int dmgTaken);
 };
 
 

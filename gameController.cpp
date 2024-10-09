@@ -6,9 +6,11 @@ gameController::gameController() : resource(10){
     virusCounter = 0;
     maxVirusSpace = 10;
     bugSpawnTime = 10;
+    spawnerClock = new sf::Clock[5];
 }
 
 gameController::~gameController(){
+    delete[] spawnerClock;
 }
 
 //private function
@@ -72,8 +74,8 @@ float gameController::bugSpawnTimeCheck(){
 }
 
 bool gameController::canSpawnBug(){
-    if (bugSpawnerClock.getElapsedTime().asSeconds() >= gameController::bugSpawnTimeCheck()){
-        bugSpawnerClock.restart();
+    if (spawnerClock[0].getElapsedTime().asSeconds() >= gameController::bugSpawnTimeCheck()){
+        spawnerClock[0].restart();
         return true;
     } 
     return false;
@@ -91,8 +93,8 @@ float gameController::trojanSpawnTimeCheck(){
 }
 
 bool gameController::canSpawnTrojan(){
-    if (trojanSpawnerClock.getElapsedTime().asSeconds() >= gameController::trojanSpawnTimeCheck()){
-        trojanSpawnerClock.restart();
+    if (spawnerClock[2].getElapsedTime().asSeconds() >= gameController::trojanSpawnTimeCheck()){
+        spawnerClock[2].restart();
         return true;
     } 
     return false;
@@ -153,3 +155,5 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
     }
     return virusManager;
 }
+
+//virus interactions
