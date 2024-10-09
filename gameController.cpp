@@ -64,7 +64,7 @@ int gameController::getVirusCount(){return virusCounter;}
 //spawners
 float gameController::bugSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 60){
-        bugSpawnTime = 15;
+        bugSpawnTime = 20;
     } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 200)){
         bugSpawnTime = 10;
     } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){

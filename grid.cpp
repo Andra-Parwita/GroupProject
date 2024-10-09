@@ -79,7 +79,28 @@ int grid::getNumShootingTiles(){
     return numOfProjectileProducers;
 }
 
-std::vector<sf::CircleShape>* grid::getProjectiles(){return projectileContainers;}
+std::vector<sf::CircleShape>* grid::getProjectiles(){
+    // Clear the container before fetching updated projectiles
+    for (int i = 0; i < 100; i++) {
+        projectileContainers[i].clear();
+    }
+
+    int numOfProjectileProducers = 0;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 20; j++) {
+            if (tiles[i][j].getApplicationType().getId() == 1) {
+                std::vector<sf::CircleShape> newProjectiles = tiles[i][j].update();
+                projectileContainers[numOfProjectileProducers].insert(
+                    projectileContainers[numOfProjectileProducers].end(),
+                    newProjectiles.begin(), newProjectiles.end()
+                );
+                numOfProjectileProducers++;
+            }
+        }
+    }
+
+    return projectileContainers;
+}
 
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken){
