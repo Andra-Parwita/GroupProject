@@ -22,11 +22,12 @@ public:
     void occupy(int appId);
     void clear();
     bool checkAppStatus();
+    void updateStatus();
 
     //accessor
     bool getIsOccupied();
     application getApplicationType();
-    int getAppId();
+
 };
 
 #endif

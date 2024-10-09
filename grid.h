@@ -20,6 +20,8 @@ public:
     bool checkOccupancy(int x, int y);
 
     int checkNumOfTileIDs(int iD);
+
+    void checkAppsStatus();
 };
 
 

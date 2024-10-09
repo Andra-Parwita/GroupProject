@@ -38,10 +38,12 @@ private:
     //virus handler
     virus** virusManager;
     sf::RectangleShape* virusSprites;
+    int maxVirusSpritesSpace;
 
     //clock
     sf::Clock clock;
     int fiveSec;
+    sf::Clock bugSpawner;
 
     //init functions
     void initVariables(); //initalises variables
@@ -64,8 +66,11 @@ public:
     void update();
     void render();
 
+    void spawnEnemy(int id);
+
     bool taskBarChecker(int i);
     bool gridMapChecker(int x, int y);
+
 
 };
 

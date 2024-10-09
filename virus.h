@@ -1,6 +1,9 @@
 #ifndef VIRUS_H
 #define VIRUS_H
 
+#include <SFML/Graphics.hpp> 
+#include <iostream>
+
 class virus {
  protected:
   // variables
@@ -12,6 +15,8 @@ class virus {
   int currentRow;
   float position_x;
   float position_y;
+
+  sf::Clock internalClock;
 
  public:
   // constructors
@@ -41,7 +46,8 @@ class virus {
   bool checkAlive();
   int getRow();
 
-  void clear();
+  //movement
+  bool move();
 };
 
 #endif

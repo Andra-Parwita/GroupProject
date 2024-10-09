@@ -16,6 +16,7 @@
 #include "virus.h"
 #include "grid.h"
 #include "bug.h"
+#include "trojan.h"
 
 class gameController
 {
@@ -26,8 +27,14 @@ private:
 
     //init functions
     void startTimer();
-    int virusCounter;
 
+    //counters
+    int virusCounter;
+    int maxVirusSpace;
+    int bugSpawnTime;
+    int trojanSpawnTime;
+    sf::Clock bugSpawnerClock;
+    sf::Clock trojanSpawnerClock;
 public:
     //constructors
     gameController();
@@ -41,7 +48,12 @@ public:
 
     float elapsedTime() const;
 
-    virus** spawnVirus(virus** virusManager, int VirusId);
+    virus** spawnVirus(virus** virusManager, int virusId, int rowId);
+    float bugSpawnTimeCheck();
+    bool canSpawnBug();
+
+    float trojanSpawnTimeCheck();
+    bool canSpawnTrojan();
 };
 
 

@@ -1,9 +1,11 @@
 #include "virus.h"
 
-virus::virus() : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(99){}
-virus::virus(int row) : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(row){};
+
+//constuctors
+virus::virus() : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(99){srand(time(NULL));}
+virus::virus(int row) : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(row){srand(time(NULL));};
 virus::virus(int health, float tileTime, int id, int dmg)
-    : health(health), tileTime(tileTime), id(id), dmg(dmg), isAlive(false){}
+    : health(health), tileTime(tileTime), id(id), dmg(dmg), isAlive(false){srand(time(NULL));}
 virus::~virus() {}
 
 // setters
@@ -28,4 +30,15 @@ float virus::getPosY(){return position_y;}
 float virus::getPosX(){return position_x;}
 int virus::getRow(){return currentRow;}
 
-void virus::clear(){virus::~virus();}
+//movement
+bool virus::move(){
+    if ((virus::checkAlive() == true) && (health > 0)){
+        if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){
+            std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
+            virus::setPosX(position_x -85);
+            internalClock.restart(); 
+            return true;
+        }
+    }
+    return false;
+}

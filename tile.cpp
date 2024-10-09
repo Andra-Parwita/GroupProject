@@ -34,6 +34,14 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
 }
 void tile::clear(){delete applicationType; isOccupied = false; applicationType = new application;}
 
+void tile::updateStatus(){
+    if (applicationType->getId() != 99){ //checks if not placeholder application
+        if ((applicationType->getHealth() <= 0)){
+            tile::clear();
+        }
+    }
+}
+
 bool tile::checkAppStatus(){return applicationType->checkAlive();}
 
 
