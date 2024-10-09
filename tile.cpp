@@ -44,8 +44,15 @@ void tile::updateStatus(){
 
 bool tile::checkAppStatus(){return applicationType->checkAlive();}
 void tile::setAppHealth(int hp){applicationType->setHealth(hp);}
-
+void tile::setAppPosition(sf::Vector2f pos){
+    applicationType->setAppPosition(pos);
+}
+std::vector<sf::CircleShape> tile::update(){
+    std::vector<sf::CircleShape> data = applicationType->update();
+    return data;
+}
 
 //accessors
 bool tile::getIsOccupied(){return isOccupied;}
 application tile::getApplicationType(){return *applicationType;}
+sf::Vector2f tile::getAppPosition(){return applicationType->getAppPosition();}

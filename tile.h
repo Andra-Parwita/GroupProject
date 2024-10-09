@@ -23,11 +23,14 @@ public:
     void clear();
     bool checkAppStatus();
     void updateStatus();
+    sf::Vector2f getAppPosition();
+     std::vector<sf::CircleShape> update();
 
     //accessor
     bool getIsOccupied();
     application getApplicationType();
     void setAppHealth(int hp);
+    void setAppPosition(sf::Vector2f pos);
 
 };
 

@@ -2,11 +2,14 @@
 #define GRID_H
 #include <SFML/Graphics.hpp> 
 #include "tile.h"
+#include "fileExplorer.h"
 
 class grid
 {
 private:
     tile** tiles; //tile data
+    std::vector<sf::CircleShape>* projectileContainers;
+
 public:
     //constructors
     grid();
@@ -18,11 +21,11 @@ public:
 
     //accessor
     bool checkOccupancy(int x, int y);
-
     int checkNumOfTileIDs(int iD);
-
     void checkAppsStatus();
+    int getNumShootingTiles();
 
+    std::vector<sf::CircleShape>* getProjectiles();
     bool takeAppDamage(int x, int y, int dmgTaken);
 };
 

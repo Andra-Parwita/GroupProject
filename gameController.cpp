@@ -1,7 +1,7 @@
 #include "gameController.h"
 
 //constuctors
-gameController::gameController() : resource(10){
+gameController::gameController() : resource(100){
     gameController::startTimer();
     virusCounter = 0;
     maxVirusSpace = 10;

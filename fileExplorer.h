@@ -2,12 +2,15 @@
 #define FILEEXPLORER_H
 
 #include "application.h"
+#include <SFML/Graphics.hpp>
 
 class fileExplorer : public application {
  private:
   int dmg;             // Amount of damage dealt
   int attackInterval;  // Time between attacks (in seconds)
-  int elapsedTime;     // Time elapsed since the last attack
+  sf::Clock internalClock;
+
+  std::vector<sf::CircleShape> projectiles; //the container of projectiles
 
  public:
   // Constructor
@@ -19,7 +22,7 @@ class fileExplorer : public application {
   void shoot();
 
   // Update timer for attack
-  void updateTimer(int deltaTime);
+  std::vector<sf::CircleShape>  update();
 };
 
 #endif

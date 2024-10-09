@@ -140,8 +140,6 @@ Game::~Game(){
         }
         delete[] this->appSpriteHolders;
     }
-
-    
     
     delete this->gridMap;
     delete this->gameManager;
@@ -375,7 +373,7 @@ void Game::update(){ //game updates
         // dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
     }
 
-    
+    //refresh and checks apps statuses
     gridMap->checkAppsStatus(); // checks if any apps are dead and removes them
     for (int i = 0; i < 5; i ++){ //for application sprites
         for (int j = 0; j < 20; j++){
@@ -386,7 +384,7 @@ void Game::update(){ //game updates
     } 
 
     //mouse position updates
-    // std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
+    //std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
 
     std::string currentTime = std::to_string(gameManager->elapsedTime());
     timerText.setString(currentTime);
@@ -425,6 +423,15 @@ void Game::render(){ //renders the game objects
     for (int i=0; i < gameManager->getVirusCount(); i++){
         this->window->draw(this->virusSprites[i]);
     }
+
+    int projectileCount = gridMap->getNumShootingTiles();
+    std::vector<sf::CircleShape>* projected = gridMap->getProjectiles();
+    for (int i = 0; i < projectileCount; i++){
+        for (int j =0; j < projected[i].size(); j++){
+            window->draw(projected[i][j]);
+            projected[i][j].move(5,0);
+        }
+    } 
 
     this->window->draw(this->timerText);
     this->window->draw(this->resourceText);

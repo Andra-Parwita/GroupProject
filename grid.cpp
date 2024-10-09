@@ -8,10 +8,17 @@ grid::grid(){
 
     for (int i = 0; i < 5; i++){
         tiles[i] = new tile[20];
+        for (int j =0; j < 20; j++){
+            tiles[i][j].setAppPosition(sf::Vector2f(j*(85.f)+30,i*(150.f)+250));
+        }
     }
+    projectileContainers = new std::vector<sf::CircleShape>[100];
 }
 
-grid::~grid(){delete tiles;}
+grid::~grid(){
+    delete tiles;
+    delete[] projectileContainers;
+    }
 
 //functions
 bool grid::addApplication(int x, int y, int appId){
@@ -50,11 +57,29 @@ int grid::checkNumOfTileIDs(int wantedId){
             int current = tiles[i][j].getApplicationType().getId();
             if (current == wantedId){
                 total += 1;
+
             }
         }
     }
     return total;
 }
+
+int grid::getNumShootingTiles(){
+    int numOfProjectileProducers = 0;
+    for (int i =0; i < 5; i++){
+        for(int j = 0; j < 20; j++){
+            int current = tiles[i][j].getApplicationType().getId();
+            if (current == 1){
+                projectileContainers[numOfProjectileProducers] = tiles[i][j].update(); //
+                numOfProjectileProducers++;
+            }
+        }
+    }
+    return numOfProjectileProducers;
+}
+
+std::vector<sf::CircleShape>* grid::getProjectiles(){return projectileContainers;}
+
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken){
     if ((tiles[x][y].getIsOccupied() == true) && (tiles[x][y].checkAppStatus() == true) && (tiles[x][y].getApplicationType().getHealth() > 0)){
@@ -66,4 +91,5 @@ bool grid::takeAppDamage(int x, int y, int dmgTaken){
     }
     return false;
 }
+
  
