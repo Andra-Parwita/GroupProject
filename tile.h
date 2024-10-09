@@ -19,12 +19,12 @@ public:
     ~tile();
 
     //public functions
-    void occupy(int appId);
+    void occupy(int appId, sf::Vector2f pos);
     void clear();
     bool checkAppStatus();
     void updateStatus();
     sf::Vector2f getAppPosition();
-     std::vector<sf::CircleShape> update();
+    std::vector<sf::CircleShape> update();
 
     //accessor
     bool getIsOccupied();

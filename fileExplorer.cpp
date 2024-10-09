@@ -15,20 +15,42 @@ fileExplorer::fileExplorer() : application(100,15,1), dmg(1), attackInterval(3){
 
 // Simulate shooting (dealing damage)
 void fileExplorer::shoot() {
-  std::cout << "fileExplorer shoots" << std::endl;
-  std::cout << this->AppPosition.x << " " << this->AppPosition.y << std::endl;
-  projectiles.push_back(sf::CircleShape());
-  projectiles.back().setRadius(5);
-  projectiles.back().setOrigin(5,5);
-  projectiles.back().setPosition(this->AppPosition);
-  projectiles.back().setFillColor(sf::Color::Cyan);
+  if (projectiles.size() >= 10) { // Adjust 10 as needed
+    return; // Prevent shooting if max projectiles are active
+  }
+
+  if(internalClock.getElapsedTime().asSeconds() >= attackInterval){
+    std::cout << "fileExplorer shoots" << std::endl;
+
+    sf::CircleShape bullet;
+    bullet.setRadius(5);
+    bullet.setFillColor(sf::Color::Cyan);
+    bullet.setOrigin(5,5);
+    bullet.setPosition(this->AppPosition);
+    projectiles.push_back(bullet);
+
+    internalClock.restart();
+  }
 }
 
 // Update timer and trigger attacks if the interval has passed
  std::vector<sf::CircleShape>  fileExplorer::update() {
-  if (internalClock.getElapsedTime().asSeconds() >= attackInterval) {
-    shoot();
-    internalClock.restart();
-  }
+  std::cout << "size is " << projectiles.size() << std::endl;
+  shoot();
+
+  /* for (auto &proj : projectiles){
+    proj.move(0.5f,0.f);
+  } */
+ for (int i = 0; i < projectiles.size(); ) {
+        // Move the projectile
+        projectiles[i].move(5.f, 0.f); // Move to the right
+
+        // Remove projectiles that are off-screen
+        if (projectiles[i].getPosition().x > 2000) {
+            projectiles.erase(projectiles.begin() + i); // Remove the projectile
+        } else {
+            i++; // Only increment if we didn't erase an element
+        }
+    }
   return projectiles;
 }

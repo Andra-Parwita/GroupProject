@@ -23,7 +23,8 @@ grid::~grid(){
 //functions
 bool grid::addApplication(int x, int y, int appId){
     if ((tiles[x][y].getIsOccupied() == false) && (appId != 5)){
-        tiles[x][y].occupy(appId);
+        sf::Vector2f pos = sf::Vector2f(y*(85.f)+30,x*(150.f)+250);
+        tiles[x][y].occupy(appId, pos);
         std::cout << "added " << appId << " to " << x << " " <<  y << std::endl;
         return true;
     } else if ((appId == 5) && ((tiles[x][y].getIsOccupied() == true))){
@@ -57,7 +58,6 @@ int grid::checkNumOfTileIDs(int wantedId){
             int current = tiles[i][j].getApplicationType().getId();
             if (current == wantedId){
                 total += 1;
-
             }
         }
     }
@@ -70,7 +70,8 @@ int grid::getNumShootingTiles(){
         for(int j = 0; j < 20; j++){
             int current = tiles[i][j].getApplicationType().getId();
             if (current == 1){
-                projectileContainers[numOfProjectileProducers] = tiles[i][j].update(); //
+                std::vector<sf::CircleShape> newProjectiles = tiles[i][j].update();
+                projectileContainers[numOfProjectileProducers].insert(projectileContainers[numOfProjectileProducers].end(),newProjectiles.begin(), newProjectiles.end());
                 numOfProjectileProducers++;
             }
         }

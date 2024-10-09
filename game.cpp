@@ -396,7 +396,7 @@ void Game::update(){ //game updates
 
 void Game::render(){ //renders the game objects
 
-    this->window->clear(); //clearing frame
+    this->window->clear(sf::Color::Black); //clearing frame
 
 
     //drawing objects
@@ -424,14 +424,15 @@ void Game::render(){ //renders the game objects
         this->window->draw(this->virusSprites[i]);
     }
 
+
     int projectileCount = gridMap->getNumShootingTiles();
     std::vector<sf::CircleShape>* projected = gridMap->getProjectiles();
-    for (int i = 0; i < projectileCount; i++){
-        for (int j =0; j < projected[i].size(); j++){
+    for (int i = 0; i < projectileCount; i++) {
+        for (int j = 0; j < projected[i].size(); j++) {
             window->draw(projected[i][j]);
-            projected[i][j].move(5,0);
         }
-    } 
+    }
+
 
     this->window->draw(this->timerText);
     this->window->draw(this->resourceText);

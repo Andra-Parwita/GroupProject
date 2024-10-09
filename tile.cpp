@@ -5,7 +5,7 @@ tile::tile() : isOccupied(false){applicationType = new application;}
 tile::~tile(){delete applicationType;}
 
 //public functions
-void tile::occupy(int appId){ //add app ids and connect to new application creation
+void tile::occupy(int appId, sf::Vector2f pos){ //add app ids and connect to new application creation
     switch (appId) {
         case 0:
             applicationType = new vscode();
@@ -30,6 +30,7 @@ void tile::occupy(int appId){ //add app ids and connect to new application creat
         default:
         return;
     }
+    applicationType->setAppPosition(pos);
     isOccupied = true;
 }
 void tile::clear(){delete applicationType; isOccupied = false; applicationType = new application;}
