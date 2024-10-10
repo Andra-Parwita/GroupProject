@@ -25,6 +25,7 @@ public:
     void updateStatus();
     sf::Vector2f getAppPosition();
     std::vector<sf::CircleShape> update();
+    bool checkShootedCollisions(sf::FloatRect pos);
 
     //accessor
     bool getIsOccupied();

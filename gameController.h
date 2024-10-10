@@ -24,6 +24,7 @@ private:
     int resource;
     std::chrono::high_resolution_clock::time_point timeStart;
     application* costChecker;
+    application* dmgChecker;
 
     //init functions
     void startTimer();
@@ -35,6 +36,7 @@ private:
     int trojanSpawnTime;
 
     sf::Clock* spawnerClock;
+    sf::Clock* appCooldowns;
 public:
     //constructors
     gameController();
@@ -45,16 +47,21 @@ public:
     int getResource();
     int getVirusCount();
     int costCheck(int Id);
+    int appDmgCheck(int Id);
 
     float elapsedTime() const;
     
     //spawning functions
-    virus** spawnVirus(virus** virusManager, int virusId, int rowId);
     float bugSpawnTimeCheck();
     bool canSpawnBug();
 
     float trojanSpawnTimeCheck();
     bool canSpawnTrojan();
+
+    virus** spawnVirus(virus** virusManager, int virusId, int rowId);
+    
+    //cleaning
+    virus** cleanUpDeadViruses(virus** virusManager);
 };
 
 

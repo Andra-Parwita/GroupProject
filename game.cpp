@@ -160,6 +160,15 @@ bool Game::gridMapChecker(int x, int y){
     return false;
 }
 
+void Game::cleanUpDeadVirusesSprites(){
+    int newCount = 0;
+    for (int i = 0; i < gameManager->getVirusCount(); i++) {
+        if (virusManager[i]->checkAlive() == false) {
+            virusSprites[newCount++] = virusSprites[i];
+        }
+    }
+}
+
 void Game::spawnEnemy(int id){
     int type = id; // for debug - setting to only bug spawn
 
@@ -173,7 +182,7 @@ void Game::spawnEnemy(int id){
     //resizing the number of rectangle shapes
     if (gameManager->getVirusCount() >= maxVirusSpritesSpace){
         int oldSize = maxVirusSpritesSpace;
-        int newSize = maxVirusSpritesSpace + 10;
+        int newSize = maxVirusSpritesSpace*2;
         std::cout << "old:" << oldSize << "new:" << newSize << std::endl;
 
         sf::RectangleShape* temp = new sf::RectangleShape[newSize];
@@ -291,9 +300,9 @@ void Game::pollEvents(){ //game ui inputs
 
 void Game::update(){ //game updates
     this->pollEvents(); //keyboard
-    int currentProducers = 0;
 
     //checking tile types for production
+    int currentProducers = 0;
     for (int i = 0; i<5; i++){
         for (int j =0; j<20; j++) {
             currentProducers = gridMap->checkNumOfTileIDs(0);
@@ -337,8 +346,27 @@ void Game::update(){ //game updates
         clock.restart();
     }
 
-    //virus interactions
-    for (int i = 0; i < gameManager->getVirusCount(); i++){ //enemy virus checking for movement and health
+    //getting projectiles
+    int projectileCount = gridMap->getNumShootingTiles();
+    std::vector<sf::CircleShape>* projected = gridMap->getProjectiles();
+
+    gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
+    Game::cleanUpDeadVirusesSprites();
+    ////enemy virus checking 
+    for (int i = 0; i < gameManager->getVirusCount(); i++){
+
+        //projectiles hitting virus
+        for (int j = 0; j < projectileCount; j++) {
+            for (int k = 0; k < projected[j].size(); k++) {
+                if (projected[j][k].getGlobalBounds().intersects(virusSprites->getGlobalBounds()) == true){
+                    virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(1)));
+                    std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(1) << std::endl;
+                    gridMap->checkForProjectileCollison(virusSprites->getGlobalBounds());
+                }
+            }
+        }
+
+        //virus alive or dead
         if (virusManager[i]->getHealth() <= 0){
             virusManager[i]->setStatus(false);
             std::cout<< "Enemy status is now false" << std::endl;
@@ -386,18 +414,18 @@ void Game::update(){ //game updates
     //mouse position updates
     //std::cout<<"Mouse pos:  " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
 
-    std::string currentTime = std::to_string(gameManager->elapsedTime());
-    timerText.setString(currentTime);
-
-    std::string currentResource = std::to_string(gameManager->getResource());
-    resourceText.setString(currentResource + " Mb");
-
 }
 
 void Game::render(){ //renders the game objects
 
     this->window->clear(sf::Color::Black); //clearing frame
 
+    //time clock
+    std::string currentTime = std::to_string(gameManager->elapsedTime());
+    timerText.setString(currentTime);
+
+    std::string currentResource = std::to_string(gameManager->getResource());
+    resourceText.setString(currentResource + " Mb");
 
     //drawing objects
     for (int i = 0; i < 5; i ++){ //grid map display

@@ -70,13 +70,21 @@ int grid::getNumShootingTiles(){
         for(int j = 0; j < 20; j++){
             int current = tiles[i][j].getApplicationType().getId();
             if (current == 1){
-                std::vector<sf::CircleShape> newProjectiles = tiles[i][j].update();
-                projectileContainers[numOfProjectileProducers].insert(projectileContainers[numOfProjectileProducers].end(),newProjectiles.begin(), newProjectiles.end());
                 numOfProjectileProducers++;
             }
         }
     }
     return numOfProjectileProducers;
+}
+
+void grid::checkForProjectileCollison(sf::FloatRect pos){
+    for (int i =0; i < 5; i++){
+        for(int j = 0; j < 20; j++){
+            if (tiles[i][j].getApplicationType().getId() == 1){
+                tiles[i][j].checkShootedCollisions(pos);
+            }
+        }
+    }
 }
 
 std::vector<sf::CircleShape>* grid::getProjectiles(){
@@ -90,18 +98,13 @@ std::vector<sf::CircleShape>* grid::getProjectiles(){
         for (int j = 0; j < 20; j++) {
             if (tiles[i][j].getApplicationType().getId() == 1) {
                 std::vector<sf::CircleShape> newProjectiles = tiles[i][j].update();
-                projectileContainers[numOfProjectileProducers].insert(
-                    projectileContainers[numOfProjectileProducers].end(),
-                    newProjectiles.begin(), newProjectiles.end()
-                );
-                numOfProjectileProducers++;
+                projectileContainers[numOfProjectileProducers].insert(projectileContainers[numOfProjectileProducers].end(),newProjectiles.begin(), newProjectiles.end());
             }
         }
     }
 
     return projectileContainers;
 }
-
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken){
     if ((tiles[x][y].getIsOccupied() == true) && (tiles[x][y].checkAppStatus() == true) && (tiles[x][y].getApplicationType().getHealth() > 0)){
@@ -113,5 +116,8 @@ bool grid::takeAppDamage(int x, int y, int dmgTaken){
     }
     return false;
 }
+
+
+
 
  

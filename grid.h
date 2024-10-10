@@ -24,7 +24,10 @@ public:
     int checkNumOfTileIDs(int iD);
     void checkAppsStatus();
     int getNumShootingTiles();
+    void getAppDamage(int id){};
+    void checkForProjectileCollison(sf::FloatRect pos);
 
+    //functions
     std::vector<sf::CircleShape>* getProjectiles();
     bool takeAppDamage(int x, int y, int dmgTaken);
 };

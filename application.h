@@ -11,6 +11,7 @@ protected:
     int cost;
     int health;
     bool isAlive;
+    int dmg;
     sf::Vector2f AppPosition;
 
 public:
@@ -25,16 +26,19 @@ public:
     void setCost(int cost);
     void setStatus(bool status);
     void setAppPosition(sf::Vector2f position);
+    void setDmg(int dmg);
 
     //accessors
     int getId();
     int getHealth();
     int getCost();
+    int getDmg();
     bool checkAlive();
     sf::Vector2f getAppPosition();
 
     //actions
-    virtual std::vector<sf::CircleShape>  update();
+    virtual std::vector<sf::CircleShape>  update(); //turn into virtual function
+    virtual bool checkProjCollison(sf::FloatRect pos);
 };
 
 #endif

@@ -65,6 +65,7 @@ public:
     void pollEvents();
     void update();
     void render();
+    void cleanUpDeadVirusesSprites();
 
     void spawnEnemy(int id);
 

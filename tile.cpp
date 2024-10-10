@@ -53,6 +53,11 @@ std::vector<sf::CircleShape> tile::update(){
     return data;
 }
 
+bool tile::checkShootedCollisions(sf::FloatRect pos){
+    bool data = applicationType->checkProjCollison(pos);
+    return data;
+}
+
 //accessors
 bool tile::getIsOccupied(){return isOccupied;}
 application tile::getApplicationType(){return *applicationType;}
