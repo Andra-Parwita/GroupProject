@@ -366,7 +366,7 @@ void Game::update(){ //game updates
 
 
         for (int j = 0; j < projectileCount; j++) {
-            for (int k = 0; k < projected[j]->size(); k++) {
+            for (int k = 0; k < projected[j]->size();) {
                 // std::cout<< "Health is now" << projected[j]->at(k).getPosition().y << " sprite: " << virusSprites[i].getPosition().y +50 << std::endl;
                 
                 if ((projected[j]->at(k).getPosition().x) >= (virusSprites[i].getPosition().x -5) && 
@@ -375,6 +375,9 @@ void Game::update(){ //game updates
                     (projected[j]->at(k).getPosition().y) >= (virusSprites[i].getPosition().y -50)){
                         virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(1)));
                         std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(1) << std::endl;
+                        projected[j]->erase(projected[j]->begin() + k);
+                } else {
+                    k++;
                 }
             }
         } 

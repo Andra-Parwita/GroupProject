@@ -8,8 +8,8 @@
 fileExplorer::fileExplorer(int health, int cost, int id, int dmg,
                            int attackInterval)
     : application(100, 15, 1),
-      attackInterval(attackInterval){dmg = 20;}
-fileExplorer::fileExplorer() : application(100,15,1), attackInterval(3){dmg = 20;}
+      attackInterval(attackInterval){dmg = 10;}
+fileExplorer::fileExplorer() : application(100,15,1), attackInterval(3){dmg = 10;}
 
 
 // Simulate shooting (dealing damage)
@@ -25,7 +25,7 @@ void fileExplorer::shoot() {
     bullet.setRadius(5);
     bullet.setFillColor(sf::Color::Cyan);
     bullet.setOrigin(5,5);
-    bullet.setPosition(this->AppPosition.x, this->AppPosition.y + 25); //off setting
+    bullet.setPosition(this->AppPosition.x + 10, this->AppPosition.y + 25); //off setting
     projectiles.push_back(bullet);
 
     internalClock.restart();
@@ -37,8 +37,11 @@ void fileExplorer::shoot() {
  shoot();
  
  for (int i = 0; i < projectiles.size(); ) {
-        // Move the projectile
-        projectiles[i].move(5.f, 0.f); // Move to the right
+        
+        if(internalClockMove.getElapsedTime().asSeconds() >= 0.01){
+          projectiles[i].move(5.f, 0.f); // Move to the right
+          internalClockMove.restart();
+        }
 
         // Remove projectiles that are off-screen
         if ((projectiles[i].getPosition().x > 2000) || (projectiles[i].getGlobalBounds().intersects(pos))) {
@@ -49,4 +52,3 @@ void fileExplorer::shoot() {
     }
   return &projectiles;
 }
-

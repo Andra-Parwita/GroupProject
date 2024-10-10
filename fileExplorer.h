@@ -9,13 +9,14 @@ class fileExplorer : public application {
  private:
   int attackInterval;  // Time between attacks (in seconds)
   sf::Clock internalClock;
+  sf::Clock internalClockMove;
 
   std::vector<sf::CircleShape> projectiles; //the container of projectiles
   
 
  public:
   // Constructor
-  fileExplorer(int health, int cost, int id, int dmg = 20,
+  fileExplorer(int health, int cost, int id, int dmg = 10,
                int attackInterval = 3);
   fileExplorer();
 
