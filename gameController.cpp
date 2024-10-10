@@ -179,7 +179,7 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
 }
 
 virus** gameController::cleanUpDeadViruses(virus** virusManager){
-    int newCount = 0;
+    /* int newCount = 0;
     for (int i = 0; i < virusCounter; i++) {
         if (virusManager[i]->checkAlive() == false) {
             // Delete the dead enemy object to free its memory
@@ -196,6 +196,6 @@ virus** gameController::cleanUpDeadViruses(virus** virusManager){
     }
 
     // Update the enemy count
-    virusCounter = newCount;
+    virusCounter = newCount; */
     return virusManager;
 }

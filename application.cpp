@@ -24,11 +24,6 @@ int application::getDmg(){return this->dmg;}
 sf::Vector2f application::getAppPosition(){return this->AppPosition;}
 
 //std function
-std::vector<sf::CircleShape>  application::update(){
+std::vector<sf::CircleShape>* application::update(sf::FloatRect pos){
     std::cout << "default application update" << std::endl;
-}
-
-bool application::checkProjCollison(sf::FloatRect pos){
-    std::cout << "default application Rect" << std::endl;
-    return false;
 }

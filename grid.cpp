@@ -12,7 +12,11 @@ grid::grid(){
             tiles[i][j].setAppPosition(sf::Vector2f(j*(85.f)+30,i*(150.f)+250));
         }
     }
-    projectileContainers = new std::vector<sf::CircleShape>[100];
+    projectileContainers = new std::vector<sf::CircleShape>*[100];
+
+    for (int i =0; i < 100; i++){
+        projectileContainers[i] = new std::vector<sf::CircleShape>;
+    }
 }
 
 grid::~grid(){
@@ -77,28 +81,24 @@ int grid::getNumShootingTiles(){
     return numOfProjectileProducers;
 }
 
-void grid::checkForProjectileCollison(sf::FloatRect pos){
-    for (int i =0; i < 5; i++){
-        for(int j = 0; j < 20; j++){
-            if (tiles[i][j].getApplicationType().getId() == 1){
-                tiles[i][j].checkShootedCollisions(pos);
-            }
-        }
-    }
-}
 
-std::vector<sf::CircleShape>* grid::getProjectiles(){
+std::vector<sf::CircleShape>** grid::getProjectiles(sf::FloatRect pos){
     // Clear the container before fetching updated projectiles
     for (int i = 0; i < 100; i++) {
-        projectileContainers[i].clear();
+        projectileContainers[i]->clear();
     }
-
     int numOfProjectileProducers = 0;
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 20; j++) {
             if (tiles[i][j].getApplicationType().getId() == 1) {
-                std::vector<sf::CircleShape> newProjectiles = tiles[i][j].update();
-                projectileContainers[numOfProjectileProducers].insert(projectileContainers[numOfProjectileProducers].end(),newProjectiles.begin(), newProjectiles.end());
+                std::vector<sf::CircleShape>* newProjectiles = tiles[i][j].update(pos);
+                if (newProjectiles != nullptr) {  
+                    projectileContainers[numOfProjectileProducers]->insert(
+                        projectileContainers[numOfProjectileProducers]->end(),
+                        newProjectiles->begin(), newProjectiles->end()
+                    );
+                }
+                numOfProjectileProducers++;
             }
         }
     }

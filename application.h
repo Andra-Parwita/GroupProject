@@ -2,6 +2,7 @@
 #define APPLICATION_H
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "virus.h"
 
 class application
 {
@@ -37,8 +38,7 @@ public:
     sf::Vector2f getAppPosition();
 
     //actions
-    virtual std::vector<sf::CircleShape>  update(); //turn into virtual function
-    virtual bool checkProjCollison(sf::FloatRect pos);
+    virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos); //turn into virtual function
 };
 
 #endif

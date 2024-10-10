@@ -11,6 +11,9 @@ void Game::initVariables(){
     //game controller
     gameManager = new gameController;
     srand(time(NULL)); //seed for random, might change to another seed
+    projected = new std::vector<sf::CircleShape>*[100];
+    projectileCount = 0;
+
 }
 
 
@@ -143,6 +146,7 @@ Game::~Game(){
     
     delete this->gridMap;
     delete this->gameManager;
+    delete projected;
 }
 
 //Public Functions
@@ -347,29 +351,40 @@ void Game::update(){ //game updates
     }
 
     //getting projectiles
-    int projectileCount = gridMap->getNumShootingTiles();
-    std::vector<sf::CircleShape>* projected = gridMap->getProjectiles();
+    projectileCount = gridMap->getNumShootingTiles();
+    if (virusSprites != nullptr){
+        projected = gridMap->getProjectiles(virusSprites->getGlobalBounds());
+    } 
 
-    gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
-    Game::cleanUpDeadVirusesSprites();
+    // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
+    // Game::cleanUpDeadVirusesSprites();
     ////enemy virus checking 
     for (int i = 0; i < gameManager->getVirusCount(); i++){
+        if (virusSprites != nullptr){
+            projected = gridMap->getProjectiles(virusSprites[i].getGlobalBounds());
+        } 
 
-        //projectiles hitting virus
+
         for (int j = 0; j < projectileCount; j++) {
-            for (int k = 0; k < projected[j].size(); k++) {
-                if (projected[j][k].getGlobalBounds().intersects(virusSprites->getGlobalBounds()) == true){
-                    virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(1)));
-                    std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(1) << std::endl;
-                    gridMap->checkForProjectileCollison(virusSprites->getGlobalBounds());
+            for (int k = 0; k < projected[j]->size(); k++) {
+                // std::cout<< "Health is now" << projected[j]->at(k).getPosition().y << " sprite: " << virusSprites[i].getPosition().y +50 << std::endl;
+                
+                if ((projected[j]->at(k).getPosition().x) >= (virusSprites[i].getPosition().x -5) && 
+                    ((projected[j]->at(k).getPosition().x) <= (virusSprites[i].getPosition().x +50)) && 
+                    (projected[j]->at(k).getPosition().y) <= (virusSprites[i].getPosition().y +50) &&
+                    (projected[j]->at(k).getPosition().y) >= (virusSprites[i].getPosition().y -50)){
+                        virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(1)));
+                        std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(1) << std::endl;
                 }
             }
-        }
+        } 
 
         //virus alive or dead
         if (virusManager[i]->getHealth() <= 0){
             virusManager[i]->setStatus(false);
-            std::cout<< "Enemy status is now false" << std::endl;
+            virusSprites[i].setPosition(sf::Vector2f(2300,1100));
+            virusSprites[i].setFillColor(sf::Color::Transparent);
+            virusManager[i]->setPosXY(2300,1100);
         }
 
         if (virusManager[i]->checkAlive() == true){
@@ -452,14 +467,11 @@ void Game::render(){ //renders the game objects
         this->window->draw(this->virusSprites[i]);
     }
 
-
-    int projectileCount = gridMap->getNumShootingTiles();
-    std::vector<sf::CircleShape>* projected = gridMap->getProjectiles();
     for (int i = 0; i < projectileCount; i++) {
-        for (int j = 0; j < projected[i].size(); j++) {
-            window->draw(projected[i][j]);
+        for (int j = 0; j < projected[i]->size(); j++) {
+            window->draw((*projected[i])[j]);
         }
-    }
+    } 
 
 
     this->window->draw(this->timerText);

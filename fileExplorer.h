@@ -3,18 +3,19 @@
 
 #include "application.h"
 #include <SFML/Graphics.hpp>
+#include "virus.h"
 
 class fileExplorer : public application {
  private:
-  int dmg;             // Amount of damage dealt
   int attackInterval;  // Time between attacks (in seconds)
   sf::Clock internalClock;
 
   std::vector<sf::CircleShape> projectiles; //the container of projectiles
+  
 
  public:
   // Constructor
-  fileExplorer(int health, int cost, int id, int dmg = 1,
+  fileExplorer(int health, int cost, int id, int dmg = 20,
                int attackInterval = 3);
   fileExplorer();
 
@@ -22,7 +23,7 @@ class fileExplorer : public application {
   void shoot();
 
   // Update timer for attack
-  std::vector<sf::CircleShape>  update();
+  std::vector<sf::CircleShape>* update(sf::FloatRect pos);
 };
 
 #endif

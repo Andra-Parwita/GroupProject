@@ -48,15 +48,11 @@ void tile::setAppHealth(int hp){applicationType->setHealth(hp);}
 void tile::setAppPosition(sf::Vector2f pos){
     applicationType->setAppPosition(pos);
 }
-std::vector<sf::CircleShape> tile::update(){
-    std::vector<sf::CircleShape> data = applicationType->update();
+std::vector<sf::CircleShape>* tile::update(sf::FloatRect pos){
+    std::vector<sf::CircleShape>* data = applicationType->update(pos);
     return data;
 }
 
-bool tile::checkShootedCollisions(sf::FloatRect pos){
-    bool data = applicationType->checkProjCollison(pos);
-    return data;
-}
 
 //accessors
 bool tile::getIsOccupied(){return isOccupied;}

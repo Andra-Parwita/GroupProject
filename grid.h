@@ -3,12 +3,13 @@
 #include <SFML/Graphics.hpp> 
 #include "tile.h"
 #include "fileExplorer.h"
+#include "virus.h"
 
 class grid
 {
 private:
     tile** tiles; //tile data
-    std::vector<sf::CircleShape>* projectileContainers;
+    std::vector<sf::CircleShape>** projectileContainers;
 
 public:
     //constructors
@@ -25,10 +26,9 @@ public:
     void checkAppsStatus();
     int getNumShootingTiles();
     void getAppDamage(int id){};
-    void checkForProjectileCollison(sf::FloatRect pos);
 
     //functions
-    std::vector<sf::CircleShape>* getProjectiles();
+    std::vector<sf::CircleShape>** getProjectiles(sf::FloatRect pos);
     bool takeAppDamage(int x, int y, int dmgTaken);
 };
 

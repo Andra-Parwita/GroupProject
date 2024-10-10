@@ -40,6 +40,11 @@ private:
     sf::RectangleShape* virusSprites;
     int maxVirusSpritesSpace;
 
+    //projectile
+    std::vector<sf::CircleShape>** projected;
+    int projectileCount;
+    
+
     //clock
     sf::Clock clock;
     int fiveSec;
