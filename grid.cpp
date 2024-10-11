@@ -20,8 +20,16 @@ grid::grid(){
 }
 
 grid::~grid(){
-    delete tiles;
-    delete[] projectileContainers;
+    if (tiles != nullptr){
+        for(int i = 0; i < 5; i++){
+            if (tiles[i] != nullptr){
+                delete[] this->tiles[i];
+            }
+        }
+        delete[] this->tiles;
+    }
+    
+    delete projectileContainers;
     }
 
 //functions
