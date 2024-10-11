@@ -10,7 +10,10 @@ gameController::gameController() : resource(100){
 }
 
 gameController::~gameController(){
-    delete[] spawnerClock;
+    delete spawnerClock;
+    delete appCooldowns;
+    delete costChecker;
+    delete dmgChecker;
 }
 
 //private function

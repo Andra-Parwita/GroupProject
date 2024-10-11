@@ -17,38 +17,37 @@ private:
     sf::Event ev; //gets curent input events on the window (continuous)
 
     //gameObject
-    sf::RectangleShape** dispTiles;
-    sf::RectangleShape** appSpriteHolders;
+    sf::RectangleShape** dispTiles; //Tile sprites (boxes)
+    sf::RectangleShape** appSpriteHolders; //The sprite holders in 
 
-    sf::RectangleShape* taskBar;
-    sf::RectangleShape* taskBarSprites;
+    sf::RectangleShape* taskBar; //the actual task bar
+    sf::RectangleShape* taskBarSprites; //the sprites within the task bar
 
     //mapdata
     grid* gridMap; //actual map data
 
     //fonts and text
-    sf::Font font; 
-    sf::Text timerText;
+    sf::Font font; //font
+    sf::Text timerText; //
     sf::Text resourceText;
 
     //gameController
-    gameController* gameManager;
-    int currentSelectionId;
+    gameController* gameManager; //pointer to game controller
+    int currentSelectionId; //current selected app id
 
     //virus handler
-    virus** virusManager;
-    sf::RectangleShape* virusSprites;
-    int maxVirusSpritesSpace;
+    virus** virusManager; //handles all the viruses
+    sf::RectangleShape* virusSprites; //hands the virus sprites 
+    int maxVirusSpritesSpace;//max space allocated for virus sprites (remove if changing to vector)
 
     //projectile
-    std::vector<sf::CircleShape>** projected;
-    int projectileCount;
+    std::vector<sf::CircleShape>** projected; //stores all projectile arrays which hold each projectile
+    int projectileCount; //the number of projectile vectors 
     
 
     //clock
-    sf::Clock clock;
-    int fiveSec;
-    sf::Clock bugSpawner;
+    sf::Clock clock; //internal clock
+    int fiveSec; //
 
     //init functions
     void initVariables(); //initalises variables
@@ -57,6 +56,10 @@ private:
     void initBar();
     void initText();
     void initVirus();
+
+    //private functions
+    bool taskBarChecker(int i);
+    bool gridMapChecker(int x, int y);
 
 public:
     //constuctors and destructors
@@ -73,10 +76,6 @@ public:
     void cleanUpDeadVirusesSprites();
 
     void spawnEnemy(int id);
-
-    bool taskBarChecker(int i);
-    bool gridMapChecker(int x, int y);
-
 
 };
 

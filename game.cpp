@@ -121,7 +121,9 @@ Game::~Game(){
 
     if (virusManager != nullptr){
         for(int i = 0; i < gameManager->getVirusCount(); i++){
-            delete[] this->virusManager[i];
+            if (virusManager[i] != nullptr){
+                delete[] this->virusManager[i];
+            }
         }
         delete[] this->virusManager;
     }
@@ -130,7 +132,9 @@ Game::~Game(){
 
     if (dispTiles != nullptr){
         for(int i = 0; i < 5; i++){
-            delete[] this->dispTiles[i];
+            if (dispTiles[i] != nullptr){
+                delete[] this->dispTiles[i];
+            }
         }
         delete[] this->dispTiles;
     }
@@ -139,14 +143,15 @@ Game::~Game(){
 
     if (appSpriteHolders != nullptr){
         for(int i = 0; i < 5; i++){
-            delete[] this->appSpriteHolders[i];
+            if (appSpriteHolders[i] != nullptr){
+                delete[] this->appSpriteHolders[i];
+            }
         }
         delete[] this->appSpriteHolders;
     }
     
     delete this->gridMap;
     delete this->gameManager;
-    delete projected;
 }
 
 //Public Functions

@@ -2,10 +2,11 @@
 #define FILEEXPLORER_H
 
 #include "application.h"
+#include "shooter.h"
 #include <SFML/Graphics.hpp>
 #include "virus.h"
 
-class fileExplorer : public application {
+class fileExplorer : public shooter {
  private:
   int attackInterval;  // Time between attacks (in seconds)
   sf::Clock internalClock;
@@ -19,6 +20,7 @@ class fileExplorer : public application {
   fileExplorer(int health, int cost, int id, int dmg = 10,
                int attackInterval = 3);
   fileExplorer();
+  ~fileExplorer();
 
   // Function to attack enemies
   void shoot();

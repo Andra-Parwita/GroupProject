@@ -26,4 +26,5 @@ sf::Vector2f application::getAppPosition(){return this->AppPosition;}
 //std function
 std::vector<sf::CircleShape>* application::update(sf::FloatRect pos){
     std::cout << "default application update" << std::endl;
+    return proj;
 }

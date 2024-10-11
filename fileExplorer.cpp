@@ -1,17 +1,24 @@
 #include "fileExplorer.h"
 
-#include <chrono>
 #include <iostream>
-#include <thread>
 
 // Constructor
 fileExplorer::fileExplorer(int health, int cost, int id, int dmg,
-                           int attackInterval)
-    : application(100, 15, 1),
-      attackInterval(attackInterval){dmg = 10;}
-fileExplorer::fileExplorer() : application(100,15,1), attackInterval(3){dmg = 10;}
+                           int attackInterval) :
+      attackInterval(attackInterval){
+      dmg = 10;
+      health = 100;
+      cost = 15;
+      id = 1;
+  }
+fileExplorer::fileExplorer() : attackInterval(3){
+    dmg = 10;
+    health = 100;
+    cost = 15;
+    id = 1;
+  }
 
-
+fileExplorer::~fileExplorer(){}
 // Simulate shooting (dealing damage)
 void fileExplorer::shoot() {
   if (projectiles.size() >= 10) { // Adjust 10 as needed

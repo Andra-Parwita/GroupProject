@@ -14,6 +14,7 @@ protected:
     bool isAlive;
     int dmg;
     sf::Vector2f AppPosition;
+    std::vector<sf::CircleShape>* proj;
 
 public:
     //constructors
