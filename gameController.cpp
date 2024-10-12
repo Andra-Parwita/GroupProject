@@ -4,7 +4,7 @@
 gameController::gameController() : resource(100){
     gameController::startTimer();
     virusCounter = 0;
-    maxVirusSpace = 10;
+    maxVirusSpace = 100;
     bugSpawnTime = 10;
     spawnerClock = new sf::Clock[5];
 }
@@ -24,7 +24,7 @@ void gameController::startTimer() {
 //public functions
 float gameController::elapsedTime() const {
     std::chrono::high_resolution_clock::time_point timeEnd = std::chrono::high_resolution_clock::now();
-    return std::chrono::duration<float>(timeEnd - timeStart).count();
+    return (std::chrono::duration<float>(timeEnd - timeStart).count());
 }
 
 int gameController::costCheck(int id){
