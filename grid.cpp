@@ -67,6 +67,10 @@ void grid::checkAppsStatus(){
     }
 }
 
+int grid::checkAppId(int x, int y){
+    return tiles[x][y].getApplicationType().getId();
+}
+
 bool grid::checkOccupancy(int x, int y){return tiles[x][y].getIsOccupied();}
 
 int grid::checkNumOfTileIDs(int wantedId){

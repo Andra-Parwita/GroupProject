@@ -109,9 +109,9 @@ void Game::initMap(){
 }
 
 void Game::initVirus(){
-    maxVirusSpritesSpace = 10;
+    maxVirusSpritesSpace = 100;
     virusSprites = new sf::RectangleShape[maxVirusSpritesSpace];
-    virusManager = new virus*[10];
+    virusManager = new virus*[100];
 }
 
 //constuctors and destructors
@@ -353,6 +353,7 @@ void Game::update(){ //game updates
     this->pollEvents(); //keyboard
 
     //checking mouse and output
+    inGrid = false;
     inBar = false;
     sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);  
 
@@ -373,10 +374,56 @@ void Game::update(){ //game updates
         }
     }
 
-    if (!inBar) { //resets the descriptions
+    //subtext for mouse
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 20; j++){
+            sf::FloatRect Bounds = dispTiles[i][j].getGlobalBounds();
+            if (Bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+                dispTiles[i][j].setOutlineColor(sf::Color::White);
+                inGrid = true;
+
+                if (gridIndicatorTimer.getElapsedTime().asSeconds() >= 1.0f) {
+                    PopDisplayText.setPosition(mousePos.x, mousePos.y + 15);
+                    int CurrentId = gridMap->checkAppId(i,j);
+                    std::string appName = "";
+                    switch (CurrentId)
+                    {
+                    case 0:
+                        appName = "VsCode \n";
+                        break;
+                    case 1:
+                        appName = "FileExplorer \n";
+                        break;
+                    case 2:
+                        appName = "FireWall \n";
+                        break;
+                    case 3:
+                        appName = "VPN \n";
+                        break;
+                    case 4:
+                        appName = "Chrome \n";
+                        break;
+                    default:
+                        break;
+                    }
+                    std::string first = std::to_string(i);
+                    std::string second = std::to_string(j);
+                    PopDisplayText.setString(appName);
+                } 
+            } else {
+                dispTiles[i][j].setOutlineColor(sf::Color::Cyan);
+            }
+        }
+    }
+
+    
+    
+    if (!inBar && !inGrid) { //resets the descriptions
         PopupBoxTimer.restart();
+        gridIndicatorTimer.restart();
         PopDisplayText.setString(""); //change to name of selected app later!
     }
+
 
     //checking tile types for production
     int currentProducers = 0;
@@ -409,6 +456,42 @@ void Game::update(){ //game updates
                 Game::spawnEnemy(4);
         }
     }*/
+
+   //waves spawner
+   if ((gameManager->elapsedTime() >= 100) && (gameManager->elapsedTime() <= 100.1)){ //first wave of enemies
+        if (waveTimer.getElapsedTime().asSeconds() >= 1){
+            std::cout << "Wave 1!" << std::endl;
+            for (int i = 0; i < 5; i++){
+                Game::spawnEnemy(0);
+            }
+            waveTimer.restart();
+        }
+   } else if ((gameManager->elapsedTime() >= 200) && (gameManager->elapsedTime() <= 200.1)){ //second wave of enemies
+        if (waveTimer.getElapsedTime().asSeconds() >= 1){
+            std::cout << "Wave 2!" << std::endl;
+            for (int i = 0; i < 5; i++){
+                Game::spawnEnemy(0);
+            }
+            for (int i = 0; i < 3; i++){
+                Game::spawnEnemy(1);
+            }
+            waveTimer.restart();
+        }
+   } else if ((gameManager->elapsedTime() >= 300) && (gameManager->elapsedTime() <= 300.1)){ //third wave of enemies
+        if (waveTimer.getElapsedTime().asSeconds() >= 1){
+            std::cout << "Wave 3!" << std::endl;
+            for (int i = 0; i < 8; i++){
+                Game::spawnEnemy(0);
+            }
+            for (int i = 0; i < 3; i++){
+                Game::spawnEnemy(1);
+            }
+            for (int i = 0; i < 2; i++){
+                Game::spawnEnemy(2);
+            }
+         waveTimer.restart();
+        }
+   }
 
     //internal one second timer
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock

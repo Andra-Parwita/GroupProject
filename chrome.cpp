@@ -18,9 +18,9 @@ chrome::chrome() : application(100,25,4), explodeTime(2), elapsedTime(0), explod
 
 // Explode funciton
 bool chrome::explode() {
-  std::cout << internalClock.getElapsedTime().asSeconds() << std::endl;
+  //std::cout << internalClock.getElapsedTime().asSeconds() << std::endl;
   if(internalClock.getElapsedTime().asSeconds() >= explodeTime){
-    std::cout << "explosion proj created" << std::endl;
+    //std::cout << "explosion proj created" << std::endl;
     sf::CircleShape boom;
     boom.setRadius(175);
     boom.setFillColor(sf::Color::Red);
@@ -33,7 +33,7 @@ bool chrome::explode() {
 }
 
 std::vector<sf::CircleShape>* chrome::update(sf::FloatRect pos){
-  std::cout << "calling?!" << std::endl;
+  //std::cout << "calling?!" << std::endl;
   if (chrome::explode() == true){
     if(internalClock.getElapsedTime().asSeconds() >= 2.5f){
       this->setStatus(false);

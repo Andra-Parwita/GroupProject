@@ -24,6 +24,8 @@ private:
     sf::RectangleShape* taskBarSprites; //the sprites within the task bar
     sf::Clock PopupBoxTimer;
     bool inBar;
+    sf::Clock gridIndicatorTimer;
+    bool inGrid;
 
     //mapdata
     grid* gridMap; //actual map data
@@ -55,6 +57,7 @@ private:
     //clock
     sf::Clock clock; //internal clock
     int fiveSec; //
+    sf::Clock waveTimer;
 
     //init functions
     void initVariables(); //initalises variables

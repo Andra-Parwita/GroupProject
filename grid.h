@@ -26,7 +26,8 @@ public:
     int checkNumOfTileIDs(int iD);
     void checkAppsStatus();
     int getNumShootingTiles(int id);
-    void getAppDamage(int id){};
+    void getAppDamage(int id);
+    int checkAppId(int x, int y);
 
     //functions
     std::vector<sf::CircleShape>** getProjectiles(sf::FloatRect pos);
