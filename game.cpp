@@ -184,12 +184,12 @@ void Game::spawnEnemy(int id){
     //random row spawn
     int rowSpawn = rand()%5;
     std::cout << "rowChosen: " << rowSpawn << std::endl;
-
+    
     virusManager = gameManager->spawnVirus(virusManager, type, rowSpawn);
     std::cout << "spawning ended \n" << std::endl;
 
     //resizing the number of rectangle shapes
-    if (gameManager->getVirusCount() >= maxVirusSpritesSpace){
+    if ((gameManager->getVirusCount()+2) >= maxVirusSpritesSpace){
         int oldSize = maxVirusSpritesSpace;
         int newSize = maxVirusSpritesSpace*2;
         std::cout << "old:" << oldSize << "new:" << newSize << std::endl;
@@ -212,24 +212,35 @@ void Game::spawnEnemy(int id){
     switch (virusManager[gameManager->getVirusCount()-1]->getId())
     {
     case 0: //for bug
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f));
+        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //bug
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Red);
         break;
     case 1:
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f));
-        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Magenta);
+        if (gameManager->getVirusCount() >= 3){
+            virusSprites[gameManager->getVirusCount()-3].setSize(sf::Vector2f(60.f,55.f)); //worm
+            virusSprites[gameManager->getVirusCount()-3].setFillColor(sf::Color::White);
+            std::cout << "head sprite set" << std::endl;
+
+            virusSprites[gameManager->getVirusCount()-2].setSize(sf::Vector2f(60.f,65.f));
+            virusSprites[gameManager->getVirusCount()-2].setFillColor(sf::Color::White);
+            std::cout << "middle sprite set" << std::endl;
+
+            virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(60.f,55.f));
+            virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::White);
+            std::cout << "end sprite set" << std::endl;
+        }
         break;
     case 2:
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f));
+        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,40.f)); //trojan
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Green);
         break;
     case 3:
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f));
+        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //logicbomb
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Yellow);
         break;
     case 4:
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f));
-        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::White);
+        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //Iloveyou
+        virusSprites[gameManager->getVirusCount()-1].setOutlineColor(sf::Color::White);
         break;
     default:
         std::cout << "No valid ID for sprite type!" << std::endl;
@@ -240,11 +251,23 @@ void Game::spawnEnemy(int id){
     sf::Vector2f endOfCurrentRow = dispTiles[rowSpawn][19].getPosition();
     endOfCurrentRow.x = endOfCurrentRow.x + 15;
     endOfCurrentRow.y = endOfCurrentRow.y + 50;
-    virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
-    virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
+    if (type != 1){
+        virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
+        virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
     
-    std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
-    std::cout << "spawning sprites ended \n" << std::endl;
+        std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
+        std::cout << "spawning sprites ended \n" << std::endl;
+    } else if (type == 1){ //for worm unqiue spawn
+        virusSprites[gameManager->getVirusCount()-3].setPosition(endOfCurrentRow.x, endOfCurrentRow.y); //set spritePosition
+        virusManager[gameManager->getVirusCount()-3]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
+        virusSprites[gameManager->getVirusCount()-2].setPosition(endOfCurrentRow.x, endOfCurrentRow.y -5); //set spritePosition
+        virusManager[gameManager->getVirusCount()-2]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y -5);  //set Data Position
+        virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow.x, endOfCurrentRow.y); //set spritePosition
+        virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
+
+        std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
+        std::cout << "spawning worm sprites ended \n" << std::endl;
+    }
 }
 
 void Game::pollEvents(){ //game ui inputs
@@ -269,7 +292,6 @@ void Game::pollEvents(){ //game ui inputs
             for (int j = 0; j < 5; j++){
                 for (int k = 0; k < 20; k++){
                     if(Game::gridMapChecker(j,k) == true){ //check if mouse is on current tile
-
                         std::cout << "Cost of: " << currentSelectionId << " is " << gameManager->costCheck(currentSelectionId) << std::endl;
 
                         if(gameManager->getResource() >= gameManager->costCheck(currentSelectionId)){ //gets cost of app
@@ -324,11 +346,11 @@ void Game::update(){ //game updates
                 Game::spawnEnemy(0);
         }
     }
-    /* if (gameManager->canSpawnWorm() == true){ 
-        if (gameManager->elapsedTime() >= 120){
+    if (gameManager->canSpawnWorm() == true){ 
+        if (gameManager->elapsedTime() >= 10){
                 Game::spawnEnemy(1);
         }
-    } */if (gameManager->canSpawnTrojan() == true){ 
+    } if (gameManager->canSpawnTrojan() == true){ 
         if (gameManager->elapsedTime() >= 180){
                 Game::spawnEnemy(2);
         }
@@ -402,14 +424,32 @@ void Game::update(){ //game updates
             }
         }
 
+        //end 
         if (virusSprites->getPosition().x <= 0){
             //game over
         }
 
+        //checking if  virus is on a app
         virusManager[i]->setFreeze(false);
         for (int j = 0; j < 5; j++){
             for (int k =0; k < 20; k++){
                 if ((dispTiles[j][k].getGlobalBounds().contains(virusManager[i]->getPosX(), virusManager[i]->getPosY()) == true) && (gridMap->checkOccupancy(j,k) == true)){
+
+                    //checking if worm segments should all stop
+                    if (virusManager[i]->getId() == 1 ){
+                        if (virusManager[i + 1] != nullptr){
+                            if ((virusManager[i+1]->getSegmentId() == 1) || (virusManager[i+1]->getSegmentId() == 2)){
+                                virusManager[i + 1]->setFreeze(true);
+                            }
+                        }
+                        if (virusManager[i + 2] != nullptr){
+                            if ((virusManager[i+2]->getSegmentId() == 1) || (virusManager[i+2]->getSegmentId() == 2)){
+                                virusManager[i + 2]->setFreeze(true);
+                            }
+                        }
+                    }
+
+                    //default stopping to eat app
                     virusManager[i]->setFreeze(true);
                     if (virusManager[i]->getDmgClock() >= 1.0f){
                         if (gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()) == true){

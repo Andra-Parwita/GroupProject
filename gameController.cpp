@@ -49,6 +49,9 @@ int gameController::costCheck(int id){
         break;
     }
     totalCost = costChecker->getCost();
+    if (id == 5){
+        totalCost = 0;
+    }
     return totalCost;
 }
 
@@ -106,8 +109,27 @@ bool gameController::canSpawnBug(){
     return false;
 }
 
+float gameController::wormSpawnTimeCheck(){
+    if (gameController::elapsedTime() <= 10){
+        this->wormSpawnTime = 30;
+    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){
+        this->wormSpawnTime = 25;
+    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 600)){
+        this->wormSpawnTime = 20;
+    }
+    return this->wormSpawnTime;
+}
+
+bool gameController::canSpawnWorm(){
+    if (spawnerClock[1].getElapsedTime().asSeconds() >= gameController::wormSpawnTimeCheck()){
+        spawnerClock[1].restart();
+        return true;
+    } 
+    return false;
+}
+
 float gameController::trojanSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 300){
+    if (gameController::elapsedTime() <= 180){
         this->trojanSpawnTime = 25;
     } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){
         this->trojanSpawnTime = 18;
@@ -125,13 +147,14 @@ bool gameController::canSpawnTrojan(){
     return false;
 }
 
+
 virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId){
     if (gameController::elapsedTime() >= 10){
         this->virusCounter++;
         std::cout << "increased number of viruses by 1, Current: " << virusCounter << std::endl;
 
-        //extends old array by 5
-        if (virusCounter >= maxVirusSpace){
+        //extends multiplies old array by 2
+        if ((virusCounter + 2) >= maxVirusSpace){
             std::cout << "checked size" << std::endl;
             int oldSize = maxVirusSpace;
             int newSize = maxVirusSpace*2;
@@ -154,6 +177,7 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
         }
     
         //checking ids
+
         switch (virusId)
         {
         case 0:
@@ -162,6 +186,29 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
             std::cout << "bug spawned" << std::endl;
             break;
         case 1:
+            if ((virusCounter+2) < maxVirusSpace){
+                if (virusManager[virusCounter-1] == nullptr){
+                    virusManager[virusCounter-1] = new worm;
+                    virusManager[virusCounter-1]->setRow(rowId);
+                    std::cout << "worm head spawned" << std::endl;
+                    virusCounter++;
+                }
+
+                if (virusManager[virusCounter-1] == nullptr){
+                    virusManager[virusCounter-1] = new worm(1);
+                    virusManager[virusCounter-1]->setRow(rowId);
+                    virusManager[virusCounter-1]->setSegmentid(1);
+                    std::cout << "worm middle spawned" << std::endl;
+                    virusCounter++;
+                }
+
+                if (virusManager[virusCounter-1] == nullptr){
+                    virusManager[virusCounter-1] = new worm(2);
+                    virusManager[virusCounter-1]->setRow(rowId);
+                    virusManager[virusCounter-1]->setSegmentid(2);
+                    std::cout << "worm end spawned" << std::endl;
+                }
+            }
             break;
         case 2:
             virusManager[virusCounter-1] = new trojan;
