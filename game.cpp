@@ -13,7 +13,8 @@ void Game::initVariables(){
     srand(time(NULL)); //seed for random, might change to another seed
     projected = new std::vector<sf::CircleShape>*[100];
     projectileCount = 0;
-
+    explosions = new std::vector<sf::CircleShape>*[100];
+    explosionCount = 0;
 }
 
 
@@ -42,6 +43,12 @@ void Game::initText(){
     resourceText.setCharacterSize(30);
     resourceText.setPosition(sf::Vector2f(410.0f,10.0f));
     resourceText.setFillColor(sf::Color::Cyan);
+
+    PopDisplayText.setFont(font);
+    PopDisplayText.setString("");
+    PopDisplayText.setCharacterSize(16);
+    resourceText.setPosition(sf::Vector2f(200.0f,10.0f));
+    PopDisplayText.setFillColor(sf::Color::Cyan);
 }
 
 void Game::initBar(){  //task bar
@@ -108,7 +115,7 @@ void Game::initVirus(){
 }
 
 //constuctors and destructors
-Game::Game() : currentSelectionId(0) {
+Game::Game() : currentSelectionId(5) {
     this->initVariables();
     this->initWindow();
     this->initMap();
@@ -231,7 +238,7 @@ void Game::spawnEnemy(int id){
         }
         break;
     case 2:
-        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,40.f)); //trojan
+        virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,55.f)); //trojan
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Green);
         break;
     case 3:
@@ -251,13 +258,9 @@ void Game::spawnEnemy(int id){
     sf::Vector2f endOfCurrentRow = dispTiles[rowSpawn][19].getPosition();
     endOfCurrentRow.x = endOfCurrentRow.x + 15;
     endOfCurrentRow.y = endOfCurrentRow.y + 50;
-    if (type != 1){
-        virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
-        virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
-    
-        std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
-        std::cout << "spawning sprites ended \n" << std::endl;
-    } else if (type == 1){ //for worm unqiue spawn
+    switch (type)
+    {
+    case 1:
         virusSprites[gameManager->getVirusCount()-3].setPosition(endOfCurrentRow.x, endOfCurrentRow.y); //set spritePosition
         virusManager[gameManager->getVirusCount()-3]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
         virusSprites[gameManager->getVirusCount()-2].setPosition(endOfCurrentRow.x, endOfCurrentRow.y -5); //set spritePosition
@@ -267,6 +270,22 @@ void Game::spawnEnemy(int id){
 
         std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
         std::cout << "spawning worm sprites ended \n" << std::endl;
+        break;
+    case 2:
+        virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
+        virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y-2.5);  //set Data Position
+    
+        std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
+        std::cout << "spawning sprites ended \n" << std::endl;
+        break;
+    
+    default:
+        virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
+        virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
+    
+        std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
+        std::cout << "spawning sprites ended \n" << std::endl;
+        break;
     }
 }
 
@@ -286,6 +305,7 @@ void Game::pollEvents(){ //game ui inputs
                     currentSelectionId = i;
                     std::cout << "changed Id to " << currentSelectionId << std::endl;
                 }
+
             }
 
             //placement
@@ -332,6 +352,32 @@ void Game::pollEvents(){ //game ui inputs
 void Game::update(){ //game updates
     this->pollEvents(); //keyboard
 
+    //checking mouse and output
+    inBar = false;
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);  
+
+    for (int i = 0; i < 6; i++) {
+        sf::FloatRect taskBarBounds = taskBar[i].getGlobalBounds();
+
+        if (taskBarBounds.contains(static_cast<sf::Vector2f>(mousePos))) {
+            inBar = true;
+            taskBar[i].setOutlineColor(sf::Color::White);
+            // std::cout << PopupBoxTimer.getElapsedTime().asSeconds() << std::endl;
+
+            if (PopupBoxTimer.getElapsedTime().asSeconds() >= 1.0f) {
+                PopDisplayText.setPosition(mousePos.x, mousePos.y + 15);
+                PopDisplayText.setString(gameManager->getAppDesc(i));
+            }
+        } else {
+            taskBar[i].setOutlineColor(sf::Color::Cyan);
+        }
+    }
+
+    if (!inBar) { //resets the descriptions
+        PopupBoxTimer.restart();
+        PopDisplayText.setString(""); //change to name of selected app later!
+    }
+
     //checking tile types for production
     int currentProducers = 0;
     for (int i = 0; i<5; i++){
@@ -347,7 +393,7 @@ void Game::update(){ //game updates
         }
     }
     if (gameManager->canSpawnWorm() == true){ 
-        if (gameManager->elapsedTime() >= 10){
+        if (gameManager->elapsedTime() >= 240){
                 Game::spawnEnemy(1);
         }
     } if (gameManager->canSpawnTrojan() == true){ 
@@ -378,9 +424,14 @@ void Game::update(){ //game updates
     }
 
     //getting projectiles
-    projectileCount = gridMap->getNumShootingTiles();
-    if (virusSprites != nullptr){
+    projectileCount = gridMap->getNumShootingTiles(1);
+    if (virusSprites != nullptr){ //get projectiles
         projected = gridMap->getProjectiles(virusSprites->getGlobalBounds());
+    } 
+
+    explosionCount = gridMap->getNumShootingTiles(4);
+    if (virusSprites != nullptr){ //get explosion
+        explosions = gridMap->getExplosions(virusSprites->getGlobalBounds());
     } 
 
     // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
@@ -390,7 +441,6 @@ void Game::update(){ //game updates
         if (virusSprites != nullptr){
             projected = gridMap->getProjectiles(virusSprites[i].getGlobalBounds());
         } 
-
 
         for (int j = 0; j < projectileCount; j++) {
             for (int k = 0; k < projected[j]->size();) {
@@ -408,6 +458,24 @@ void Game::update(){ //game updates
                 }
             }
         } 
+
+        if (virusSprites != nullptr){ //get explosion
+            explosions = gridMap->getExplosions(virusSprites->getGlobalBounds());
+        } 
+
+        for (int j = 0; j < explosionCount; j++) {
+            for (int k = 0; k < explosions[j]->size();) {
+                // std::cout<< "Health is now" << projected[j]->at(k).getPosition().y << " sprite: " << virusSprites[i].getPosition().y +50 << std::endl;
+                if (virusSprites[i].getGlobalBounds().intersects((*explosions[j])[k].getGlobalBounds())){
+                        virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(4)));
+                        // std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(4) << std::endl;
+                        explosions[j]->erase(explosions[j]->begin() + k);
+                } else {
+                    k++;
+                }
+            }
+        } 
+
 
         //virus alive or dead
         if (virusManager[i]->getHealth() <= 0){
@@ -521,9 +589,17 @@ void Game::render(){ //renders the game objects
         }
     } 
 
+    for (int i = 0; i < explosionCount; i++) {
+        if (explosions[i]!= nullptr){
+            for (int j = 0; j < explosions[i]->size(); j++) {
+                window->draw((*explosions[i])[j]);
+            }
+        }
+    } 
 
     this->window->draw(this->timerText);
     this->window->draw(this->resourceText);
+    this->window->draw(this->PopDisplayText);
 
     this->window->display(); //displays frame
 }

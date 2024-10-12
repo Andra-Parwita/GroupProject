@@ -12,10 +12,15 @@ grid::grid(){
             tiles[i][j].setAppPosition(sf::Vector2f(j*(85.f)+30,i*(150.f)+250));
         }
     }
-    projectileContainers = new std::vector<sf::CircleShape>*[100];
 
+    projectileContainers = new std::vector<sf::CircleShape>*[100];
     for (int i =0; i < 100; i++){
         projectileContainers[i] = new std::vector<sf::CircleShape>;
+    }
+
+    explosionContainers = new std::vector<sf::CircleShape>*[100];
+    for (int i =0; i < 100; i++){
+        explosionContainers[i] = new std::vector<sf::CircleShape>;
     }
 }
 
@@ -28,8 +33,9 @@ grid::~grid(){
         }
         delete[] this->tiles;
     }
-    
+
     delete projectileContainers;
+    delete explosionContainers;
     }
 
 //functions
@@ -76,12 +82,12 @@ int grid::checkNumOfTileIDs(int wantedId){
     return total;
 }
 
-int grid::getNumShootingTiles(){
+int grid::getNumShootingTiles(int id){
     int numOfProjectileProducers = 0;
     for (int i =0; i < 5; i++){
         for(int j = 0; j < 20; j++){
             int current = tiles[i][j].getApplicationType().getId();
-            if (current == 1){
+            if (current == id){
                 numOfProjectileProducers++;
             }
         }
@@ -112,6 +118,31 @@ std::vector<sf::CircleShape>** grid::getProjectiles(sf::FloatRect pos){
     }
 
     return projectileContainers;
+}
+
+std::vector<sf::CircleShape>** grid::getExplosions(sf::FloatRect pos){
+    // Clear the container before fetching updated projectiles
+    for (int i = 0; i < 100; i++) {
+        explosionContainers[i]->clear();
+    }
+
+    int numOfProjectileProducers = 0;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 20; j++) {
+            if (tiles[i][j].getApplicationType().getId() == 4) {
+                std::vector<sf::CircleShape>* newProjectiles = tiles[i][j].update(pos);
+                if (newProjectiles != nullptr) {  
+                    explosionContainers[numOfProjectileProducers]->insert(
+                        explosionContainers[numOfProjectileProducers]->end(),
+                        newProjectiles->begin(), newProjectiles->end()
+                    );
+                }
+                numOfProjectileProducers++;
+            }
+        }
+    }
+
+    return explosionContainers;
 }
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken){

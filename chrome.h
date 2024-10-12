@@ -2,24 +2,27 @@
 #define CHROME_H
 
 #include "application.h"
+#include "SFML/Graphics.hpp"
 
 class chrome : public application {
  private:
-  int dmg;            // Amount of damage dealt
   int explodeRadius;  // Explosion radius
   int explodeTime;    // Time until boom
   int elapsedTime;    // Time elapsed since placing
 
+  sf::Clock internalClock;
+  std::vector<sf::CircleShape> explosion;
+
+  bool explode();
+
  public:
   // Constructor
-  chrome(int health, int cost, int id, int dmg = 100, int explodeTime = 3);
+  chrome(int health, int cost, int id, int dmg, int explodeTime);
   chrome();
 
   // Function to attack enemies
-  void explode();
+  std::vector<sf::CircleShape>* update(sf::FloatRect pos);
 
-  // Update timer for attack
-  void updateTimer(int deltaTime);
 };
 
 #endif

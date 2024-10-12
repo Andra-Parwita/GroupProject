@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "virus.h"
+#include <string.h>
 
 class application
 {
@@ -15,6 +16,7 @@ protected:
     int dmg;
     sf::Vector2f AppPosition;
     std::vector<sf::CircleShape>* proj;
+    std::string Desc;
 
 public:
     //constructors
@@ -37,6 +39,7 @@ public:
     int getDmg();
     bool checkAlive();
     sf::Vector2f getAppPosition();
+    virtual std::string getDesc();
 
     //actions
     virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos); //turn into virtual function

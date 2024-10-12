@@ -14,12 +14,6 @@ class vscode : public application {
   vscode(int health, int cost, int id, int memoryProduction = 5,
          int productionInterval = 3);
   vscode();
-
-  // Function to produce memory
-  int produceMemory();
-
-  // Update the timer and check for memory production
-  void updateTimer(int deltaTime);
 };
 
 #endif

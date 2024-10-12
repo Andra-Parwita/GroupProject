@@ -56,6 +56,35 @@ int gameController::costCheck(int id){
 }
 
 
+std::string gameController::getAppDesc(int id){
+    std::string desc = "";
+    switch (id){
+    case 0:
+        this->descChecker = new vscode();
+        break;
+    case 1:
+        this->descChecker = new fileExplorer();
+        break;
+    case 2:
+        this->descChecker = new antivirus();
+        break;
+    case 3:
+        this->descChecker = new vpn();
+        break;
+    case 4:
+        this->descChecker = new chrome();
+        break;
+    default:
+        break;
+    }
+    if (id == 5){
+        desc = "Remove Tool \n Removes stuff you click on! \n No refunds!!";
+    } else {
+        desc = descChecker->getDesc();
+    }
+    return desc;
+}
+
 int gameController::appDmgCheck(int id){
     int dmg = 0;
     switch (id){
@@ -78,6 +107,7 @@ int gameController::appDmgCheck(int id){
         break;
     }
     dmg = dmgChecker->getDmg();
+    std::cout << "outputted dmg is: " << dmg << std::endl;
     return dmg;
 }
 
@@ -93,9 +123,9 @@ int gameController::getVirusCount(){return virusCounter;}
 float gameController::bugSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 60){
         this->bugSpawnTime = 20;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 200)){
+    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 400)){
         this->bugSpawnTime = 10;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 600)){
         this->bugSpawnTime = 5;
     }
     return this->bugSpawnTime;
@@ -110,12 +140,12 @@ bool gameController::canSpawnBug(){
 }
 
 float gameController::wormSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 10){
+    if (gameController::elapsedTime() <= 240){
+        this->wormSpawnTime = 40;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
         this->wormSpawnTime = 30;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){
+    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
         this->wormSpawnTime = 25;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 600)){
-        this->wormSpawnTime = 20;
     }
     return this->wormSpawnTime;
 }
@@ -131,9 +161,9 @@ bool gameController::canSpawnWorm(){
 float gameController::trojanSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 180){
         this->trojanSpawnTime = 25;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 500)){
+    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 500)){
         this->trojanSpawnTime = 18;
-    } else if ((gameController::elapsedTime() > 60) && (gameController::elapsedTime() <= 600)){
+    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
         this->trojanSpawnTime = 10;
     }
     return this->trojanSpawnTime;

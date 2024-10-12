@@ -10,6 +10,7 @@ class grid
 private:
     tile** tiles; //tile data
     std::vector<sf::CircleShape>** projectileContainers;
+    std::vector<sf::CircleShape>** explosionContainers;
 
 public:
     //constructors
@@ -24,11 +25,12 @@ public:
     bool checkOccupancy(int x, int y);
     int checkNumOfTileIDs(int iD);
     void checkAppsStatus();
-    int getNumShootingTiles();
+    int getNumShootingTiles(int id);
     void getAppDamage(int id){};
 
     //functions
     std::vector<sf::CircleShape>** getProjectiles(sf::FloatRect pos);
+    std::vector<sf::CircleShape>** getExplosions(sf::FloatRect pos);
     bool takeAppDamage(int x, int y, int dmgTaken);
 };
 

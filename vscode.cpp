@@ -11,23 +11,4 @@ vscode::vscode(int health, int cost, int id, int memoryProduction,
       memoryProduction(memoryProduction),
       productionInterval(productionInterval),
       elapsedTime(0) {}
-vscode::vscode()
-    : application(100, 5, 0), memoryProduction(5), productionInterval(3) {}
-
-// Produce memory every productionInterval seconds
-int vscode::produceMemory() {
-  std::cout << "+ " << memoryProduction << " mB\n";  // remove later
-  return memoryProduction;  // Return the memory produced
-}
-
-// Update the timer and check for memory production
-void vscode::updateTimer(int deltaTime) {
-  elapsedTime += deltaTime;  // Increment elapsed time by deltaTime
-  if (elapsedTime >= productionInterval) {
-    std::this_thread::sleep_for(std::chrono::seconds(productionInterval));
-    // Reset elapsed time and produce memory
-    elapsedTime = 0;
-    // Add memory to total "bank" later
-    produceMemory();
-  }
-}
+ vscode::vscode() :  application(100,5,0), memoryProduction(5), productionInterval(3){Desc = "VsCode \n Cost: 5 \n Makes you more RAM?! SOMEHOW? \n +1 mb/s";}

@@ -22,6 +22,8 @@ private:
 
     sf::RectangleShape* taskBar; //the actual task bar
     sf::RectangleShape* taskBarSprites; //the sprites within the task bar
+    sf::Clock PopupBoxTimer;
+    bool inBar;
 
     //mapdata
     grid* gridMap; //actual map data
@@ -30,6 +32,8 @@ private:
     sf::Font font; //font
     sf::Text timerText; //
     sf::Text resourceText;
+
+    sf::Text PopDisplayText;
 
     //gameController
     gameController* gameManager; //pointer to game controller
@@ -43,6 +47,9 @@ private:
     //projectile
     std::vector<sf::CircleShape>** projected; //stores all projectile arrays which hold each projectile
     int projectileCount; //the number of projectile vectors 
+
+    std::vector<sf::CircleShape>** explosions; 
+    int explosionCount;
     
 
     //clock

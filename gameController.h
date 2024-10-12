@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <thread>
+#include <string.h>
 
 #include "application.h"
 #include "fileExplorer.h"
@@ -26,6 +27,7 @@ private:
     std::chrono::high_resolution_clock::time_point timeStart;
     application* costChecker;
     application* dmgChecker;
+    application* descChecker;
 
     //init functions
     void startTimer();
@@ -51,6 +53,7 @@ public:
     int getVirusCount();
     int costCheck(int Id);
     int appDmgCheck(int Id);
+    std::string getAppDesc(int Id);
 
     float elapsedTime() const;
     
