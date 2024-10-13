@@ -68,4 +68,5 @@ bool virus::move() {
   } else if (freeze == true) {
     return false;
   }
+  return false;
 }
