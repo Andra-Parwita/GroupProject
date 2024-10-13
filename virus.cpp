@@ -43,7 +43,7 @@ bool virus::move(){
     if (freeze == false){
         if ((virus::checkAlive() == true) && (health > 0)){
             if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){
-                std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
+                // std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
                 virus::setPosX(position_x -85);
                 internalClock.restart(); 
                 return true;

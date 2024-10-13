@@ -189,7 +189,8 @@ void Game::spawnEnemy(int id){
     int type = id; // for debug - setting to only bug spawn
 
     //random row spawn
-    int rowSpawn = rand()%5;
+    //int rowSpawn = rand()%5;
+    int rowSpawn = (int) (5.0 * (rand() / (RAND_MAX + 1.0)));
     std::cout << "rowChosen: " << rowSpawn << std::endl;
     
     virusManager = gameManager->spawnVirus(virusManager, type, rowSpawn);
@@ -247,7 +248,7 @@ void Game::spawnEnemy(int id){
         break;
     case 4:
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //Iloveyou
-        virusSprites[gameManager->getVirusCount()-1].setOutlineColor(sf::Color::White);
+        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Cyan);
         break;
     default:
         std::cout << "No valid ID for sprite type!" << std::endl;
@@ -440,25 +441,28 @@ void Game::update(){ //game updates
         }
     }
     if (gameManager->canSpawnWorm() == true){ 
-        if (gameManager->elapsedTime() >= 240){
+        if (gameManager->elapsedTime() >= 180){
                 Game::spawnEnemy(1);
         }
-    } if (gameManager->canSpawnTrojan() == true){ 
-        if (gameManager->elapsedTime() >= 180){
+    } 
+    if (gameManager->canSpawnTrojan() == true){ 
+        if (gameManager->elapsedTime() >= 120){
                 Game::spawnEnemy(2);
         }
-    } if (gameManager->canSpawnLogicBomb() == true){ 
-        if (gameManager->elapsedTime() >= 10){
+    }
+     if (gameManager->canSpawnLogicBomb() == true){ 
+        if (gameManager->elapsedTime() >= 240){
                 Game::spawnEnemy(3);
         }
-    } /* if (gameManager->ILOVEYOUSpawnTimeCheck() == true){ 
-        if (gameManager->elapsedTime() >= 400){
+    }
+     if (gameManager->canSpawnIloveyou() == true){ 
+        if (gameManager->elapsedTime() >= 300){
                 Game::spawnEnemy(4);
         }
-    }*/
+    }
 
-   //waves spawner
-   if ((gameManager->elapsedTime() >= 100) && (gameManager->elapsedTime() <= 100.1)){ //first wave of enemies
+   //waves spawner (testing!)  
+   /* if ((gameManager->elapsedTime() >= 100) && (gameManager->elapsedTime() <= 100.1)){ //first wave of enemies
         if (waveTimer.getElapsedTime().asSeconds() >= 1){
             std::cout << "Wave 1!" << std::endl;
             for (int i = 0; i < 5; i++){
@@ -491,7 +495,7 @@ void Game::update(){ //game updates
             }
          waveTimer.restart();
         }
-   }
+   } */
 
     //internal one second timer
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock
@@ -519,6 +523,8 @@ void Game::update(){ //game updates
 
     // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
     // Game::cleanUpDeadVirusesSprites();
+
+    /////////////////////////////////////////////////////////////////////////////////////////
     ////enemy virus checking 
     for (int i = 0; i < gameManager->getVirusCount(); i++){
         if (virusSprites != nullptr){
@@ -570,8 +576,9 @@ void Game::update(){ //game updates
 
         if (virusManager[i]->checkAlive() == true){
             if (virusManager[i]->move() == true){
-                virusSprites[i].setPosition(sf::Vector2f((virusSprites[i].getPosition().x)-85.f,virusSprites[i].getPosition().y));
-                std::cout << "Sprite: " << virusSprites[i].getPosition().x << " Manager: " << virusManager[i]->getPosX() << std::endl;
+                // virusSprites[i].setPosition(sf::Vector2f((virusSprites[i].getPosition().x)-85.f,virusSprites[i].getPosition().y));
+                virusSprites[i].setPosition(sf::Vector2f(virusManager[i]->getPosX(), virusManager[i]->getPosY()));
+                // std::cout << "Sprite: " << virusSprites[i].getPosition().x << " Manager: " << virusManager[i]->getPosX() << std::endl;
             }
         }
 
@@ -694,7 +701,8 @@ void Game::render(){ //renders the game objects
     for (int i=0; i < gameManager->getVirusCount(); i++){
         this->window->draw(this->virusSprites[i]);
     }
-
+    
+    projectileCount = gridMap->getNumShootingTiles(1);
     for (int i = 0; i < projectileCount; i++) {
         for (int j = 0; j < projected[i]->size(); j++) {
             window->draw((*projected[i])[j]);
