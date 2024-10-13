@@ -5,9 +5,11 @@ Description:
 A single-level lane-type tower defence game similar to Plants vs Zombies using typical computer applications that defend the computer against viruses. The game will consist of “applications” you can place on the field. The field will consist of  5x20 tiles (subject to change). The goal is to stop the viruses from reaching your side as they cross the field. 
 
 To do:
-- App specialised Functions (change VPN into something else)
+core:
+- App (change VPN into something else)
 - App cooldowns after placement (so there is no more spam)
 - game over 
+Additional:
 - Refactor the whole damn code (reduce redundancy, add const)
 - Convert Virus Manager into std::vector (from array)
 - Spriting 

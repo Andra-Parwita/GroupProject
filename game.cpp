@@ -620,7 +620,7 @@ void Game::update() {  // game updates
           virusManager[i]->setHealth((virusManager[i]->getHealth()) -
                                      (gameManager->appDmgCheck(3)));
           virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
-          std::cout << "Health is now" << virusManager[i]->getHealth()
+          std::cout << "Health is now " << virusManager[i]->getHealth()
                     << " Dmg taken is: " << gameManager->appDmgCheck(3)
                     << " Enemy is slowed to: " << virusManager[i]->getTileTime()
                     << std::endl;
@@ -810,7 +810,7 @@ void Game::render() {  // renders the game objects
 
   for (int i = 0; i < slowCount; i++) {
     for (int j = 0; j < slowed[i]->size(); j++) {
-      window->draw((*projected[i])[j]);
+      window->draw((*slowed[i])[j]);
     }
   }
 
