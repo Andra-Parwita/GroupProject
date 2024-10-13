@@ -5,13 +5,14 @@
 
 class logicBomb : public virus {
  protected:
+  sf::Clock internalExClock;
  public:
   // constructors
   logicBomb();
   logicBomb(int health, float tileTime, int id, int dmg);
   ~logicBomb();
 
-  void explode();
+  bool move();
 };
 
 #endif

@@ -45,6 +45,7 @@ private:
     virus** virusManager; //handles all the viruses
     sf::RectangleShape* virusSprites; //hands the virus sprites 
     int maxVirusSpritesSpace;//max space allocated for virus sprites (remove if changing to vector)
+    sf::Clock virusExplosionClock;
 
     //projectile
     std::vector<sf::CircleShape>** projected; //stores all projectile arrays which hold each projectile

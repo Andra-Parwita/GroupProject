@@ -115,7 +115,7 @@ void Game::initVirus(){
 }
 
 //constuctors and destructors
-Game::Game() : currentSelectionId(5) {
+Game::Game() : currentSelectionId(0) {
     this->initVariables();
     this->initWindow();
     this->initMap();
@@ -447,11 +447,11 @@ void Game::update(){ //game updates
         if (gameManager->elapsedTime() >= 180){
                 Game::spawnEnemy(2);
         }
-    } /*if (gameManager->canSpawnLogicBomb() == true){ 
-        if (gameManager->elapsedTime() >= 240){
+    } if (gameManager->canSpawnLogicBomb() == true){ 
+        if (gameManager->elapsedTime() >= 10){
                 Game::spawnEnemy(3);
         }
-    } if (gameManager->ILOVEYOUSpawnTimeCheck() == true){ 
+    } /* if (gameManager->ILOVEYOUSpawnTimeCheck() == true){ 
         if (gameManager->elapsedTime() >= 400){
                 Game::spawnEnemy(4);
         }
@@ -581,7 +581,16 @@ void Game::update(){ //game updates
         }
 
         //checking if  virus is on a app
-        virusManager[i]->setFreeze(false);
+        if (virusManager[i]->getId() == 3) {  // logicBomb ID
+            // Only freeze if explosion has already started, not before
+            if ((virusManager[i]->getExplosion() == true) && (virusManager[i]->getHealth() <= 0)) {
+                virusManager[i]->setFreeze(true);  // Freeze only after explosion
+            } else {
+                virusManager[i]->setFreeze(false); // Let it move if not exploding
+            }
+        } else {
+            virusManager[i]->setFreeze(false);  // Handle other virus types
+        }
         for (int j = 0; j < 5; j++){
             for (int k =0; k < 20; k++){
                 if ((dispTiles[j][k].getGlobalBounds().contains(virusManager[i]->getPosX(), virusManager[i]->getPosY()) == true) && (gridMap->checkOccupancy(j,k) == true)){
@@ -600,6 +609,7 @@ void Game::update(){ //game updates
                         }
                     }
 
+
                     //default stopping to eat app
                     virusManager[i]->setFreeze(true);
                     if (virusManager[i]->getDmgClock() >= 1.0f){
@@ -608,6 +618,25 @@ void Game::update(){ //game updates
                         } 
                         virusManager[i]->restartClock();
                     }
+
+                    if (virusManager[i]->getId() == 3){
+                        // std::cout << "Ex CHecker: " << virusManager[i]->getExplosion() <<std::endl;
+                        if (virusManager[i]->getExplosion() == true){
+                            virusManager[i]->setFreeze(true);
+                            virusManager[i]->move();
+                            virusSprites[i].setSize(sf::Vector2f(300.0f, 400.0f));
+                            virusSprites[i].setPosition(sf::Vector2f(virusSprites[i].getPosition().x, virusSprites[i].getPosition().y - 160));
+                            gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j,k+1, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j,k-1, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j+1,k, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j+1,k+1, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j+1,k-1, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j-1,k, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j-1,k+1, virusManager[i]->getDmg()*100);
+                            gridMap->takeAppDamage(j-1,k-1, virusManager[i]->getDmg()*100);
+                        }
+                    } 
                 }
             }
         }

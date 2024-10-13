@@ -150,12 +150,14 @@ std::vector<sf::CircleShape>** grid::getExplosions(sf::FloatRect pos){
 }
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken){
-    if ((tiles[x][y].getIsOccupied() == true) && (tiles[x][y].checkAppStatus() == true) && (tiles[x][y].getApplicationType().getHealth() > 0)){
-        int currentHP = tiles[x][y].getApplicationType().getHealth();
-        int newHP = currentHP - dmgTaken;
-        tiles[x][y].setAppHealth(newHP);
-        std::cout << "App health is now: " << tiles[x][y].getApplicationType().getHealth() << std::endl;
-        return true;
+    if ((x < 5) && (y < 20) && (y > 0) && (x > 0)){
+        if ((tiles[x][y].getIsOccupied() == true) && (tiles[x][y].checkAppStatus() == true) && (tiles[x][y].getApplicationType().getHealth() > 0)){
+            int currentHP = tiles[x][y].getApplicationType().getHealth();
+            int newHP = currentHP - dmgTaken;
+            tiles[x][y].setAppHealth(newHP);
+            std::cout << "App health is now: " << tiles[x][y].getApplicationType().getHealth() << std::endl;
+            return true;
+        }
     }
     return false;
 }

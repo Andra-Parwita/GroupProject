@@ -43,7 +43,9 @@ void tile::updateStatus(){
     }
 }
 
-bool tile::checkAppStatus(){return applicationType->checkAlive();}
+bool tile::checkAppStatus(){
+    return applicationType->checkAlive();
+}
 void tile::setAppHealth(int hp){applicationType->setHealth(hp);}
 void tile::setAppPosition(sf::Vector2f pos){
     applicationType->setAppPosition(pos);

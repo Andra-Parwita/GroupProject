@@ -178,6 +178,25 @@ bool gameController::canSpawnTrojan(){
 }
 
 
+float gameController::logicBombSpawnTimeCheck(){
+    if (gameController::elapsedTime() <= 10){
+        this->logicBombSpawnTime = 10;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
+        this->logicBombSpawnTime = 25;
+    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
+        this->logicBombSpawnTime = 25;
+    }
+    return this->logicBombSpawnTime;
+}
+
+bool gameController::canSpawnLogicBomb(){
+    if (spawnerClock[3].getElapsedTime().asSeconds() >= gameController::wormSpawnTimeCheck()){
+        spawnerClock[3].restart();
+        return true;
+    } 
+    return false;
+}
+
 virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId){
     if (gameController::elapsedTime() >= 10){
         this->virusCounter++;
@@ -246,6 +265,9 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
             std::cout << "trojan spawned" << std::endl;
             break;
         case 3:
+            virusManager[virusCounter-1] = new logicBomb;
+            virusManager[virusCounter-1]->setRow(rowId);
+            std::cout << "logicBomb spawned" << std::endl;
             break;
         case 4:
             break;

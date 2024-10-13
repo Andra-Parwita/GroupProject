@@ -19,6 +19,7 @@
 #include "bug.h"
 #include "trojan.h"
 #include "worm.h"
+#include "logicBomb.h"
 
 class gameController
 {
@@ -35,9 +36,11 @@ private:
     //counters
     int virusCounter;
     int maxVirusSpace;
+
     int bugSpawnTime;
     int trojanSpawnTime;
     int wormSpawnTime;
+    int logicBombSpawnTime;
 
     sf::Clock* spawnerClock;
     sf::Clock* appCooldowns;
@@ -66,6 +69,9 @@ public:
 
     float wormSpawnTimeCheck();
     bool canSpawnWorm();
+
+    float logicBombSpawnTimeCheck();
+    bool canSpawnLogicBomb();
 
     virus** spawnVirus(virus** virusManager, int virusId, int rowId);
     

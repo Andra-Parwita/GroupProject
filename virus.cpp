@@ -2,8 +2,8 @@
 
 
 //constuctors
-virus::virus() : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(99){srand(time(NULL)); segmentId = 0;}
-virus::virus(int row) : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(row){srand(time(NULL)); segmentId = 0;}
+virus::virus() : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(99){srand(time(NULL)); segmentId = 0; explosionCheck = false;}
+virus::virus(int row) : health(0), tileTime(0), id(99), dmg(0), isAlive(false), currentRow(row){srand(time(NULL)); segmentId = 0; explosionCheck = false;}
 virus::virus(int health, float tileTime, int id, int dmg)
     : health(health), tileTime(tileTime), id(id), dmg(dmg), isAlive(false){srand(time(NULL)); segmentId = 0;}
 virus::~virus() {}
@@ -22,6 +22,7 @@ void virus::setPosXY(float x, float y){virus::setPosX(x); virus::setPosY(y);}
 void virus::setFreeze(bool state){this->freeze = state;}
 void virus::restartClock(){dmgClock.restart();}
 void virus::setSegmentid(int id){this->segmentId = id;}
+void virus::setExplosionCheck(bool check){this->explosionCheck = check;}
 
 // accessors
 int virus::getId() { return this->id; }
@@ -34,6 +35,7 @@ float virus::getPosX(){return this->position_x;}
 int virus::getRow(){return this->currentRow;}
 int virus::getDmgClock(){return dmgClock.getElapsedTime().asSeconds();}
 int virus::getSegmentId(){return this->segmentId;}
+bool virus::getExplosion(){return this->explosionCheck;}
 
 
 //movement
