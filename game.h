@@ -63,6 +63,7 @@ class Game {
   sf::Clock clock;  // internal clock
   int fiveSec;      //
   sf::Clock waveTimer;
+  sf::Clock* appCooldownClocks;
 
   // init functions
   void initVariables();  // initalises variables

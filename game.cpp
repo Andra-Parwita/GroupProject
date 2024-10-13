@@ -116,6 +116,8 @@ void Game::initVirus(){
     virusManager = new virus*[100];
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //constuctors and destructors
 Game::Game() : currentSelectionId(0) {
     this->initVariables();
@@ -250,7 +252,7 @@ void Game::spawnEnemy(int id){
         break;
     case 4:
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //Iloveyou
-        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Cyan);
+        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color(125,125,125));
         break;
     default:
         std::cout << "No valid ID for sprite type!" << std::endl;
@@ -318,32 +320,38 @@ void Game::pollEvents(){ //game ui inputs
                         std::cout << "Cost of: " << currentSelectionId << " is " << gameManager->costCheck(currentSelectionId) << std::endl;
 
                         if(gameManager->getResource() >= gameManager->costCheck(currentSelectionId)){ //gets cost of app
-                            if((gridMap->checkOccupancy(j,k) == false) || (currentSelectionId == 5)){ //checks if remove tool or occupied
-                                gameManager->addResource(-(gameManager->costCheck(currentSelectionId))); //takes currency
-                                switch (currentSelectionId){
-                                case 0:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Blue);
-                                    break;
-                                case 1:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Cyan);
-                                    break;
-                                case 2:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Red);
-                                    break;
-                                case 3:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Green);
-                                    break;
-                                case 4:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Magenta);
-                                    break;
-                                default:
-                                    appSpriteHolders[j][k].setFillColor(sf::Color::Transparent);
-                                    break;
-                                }
+							if((gridMap->checkOccupancy(j,k) == false) || (currentSelectionId == 5)){ //checks if remove tool or occupied
+								if (gameManager->appCooldownCheck(currentSelectionId, true)){
+									gameManager->addResource(-(gameManager->costCheck(currentSelectionId))); //takes currency
+									switch (currentSelectionId){
+									case 0:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Blue);
+										break;
+									case 1:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Cyan);
+										break;
+									case 2:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Red);
+										break;
+									case 3:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Green);
+										break;
+									case 4:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Magenta);
+										break;
+									default:
+										appSpriteHolders[j][k].setFillColor(sf::Color::Transparent);
+										break;
+									}
 
-                                gridMap->addApplication(j,k,currentSelectionId); //adds selection id to
-                                std::cout << gridMap->checkOccupancy(j,k) << std::endl;
-                            }
+									gridMap->addApplication(j,k,currentSelectionId); //adds selection id to
+									std::cout << gridMap->checkOccupancy(j,k) << std::endl;
+								} else {
+									if (currentSelectionId != 5){
+										taskBarSprites[currentSelectionId].setFillColor(sf::Color(125,125,125));
+									}
+								}
+							}
                         }
                     }
                 }
@@ -355,6 +363,36 @@ void Game::pollEvents(){ //game ui inputs
 void Game::update(){ //game updates
     this->pollEvents(); //keyboard
 
+	for (int i = 0; i < 5; i ++){
+		if (!gameManager->appCooldownCheck(i, false)){
+			taskBarSprites[i].setFillColor(sf::Color(125,125,125));
+		} else {
+			switch (i)
+			{
+			case 0:
+				taskBarSprites[0].setFillColor(sf::Color::Blue);
+				break;
+			case 1:
+				taskBarSprites[1].setFillColor(sf::Color::Cyan);
+				break;
+			case 2:
+				taskBarSprites[2].setFillColor(sf::Color::Red);
+				break;
+			case 3:
+				taskBarSprites[3].setFillColor(sf::Color::Green);
+				break;
+			case 4:
+				taskBarSprites[4].setFillColor(sf::Color::Magenta);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //checking mouse and output
     inGrid = false;
     inBar = false;
@@ -436,28 +474,30 @@ void Game::update(){ //game updates
         }
     }
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //spawners
-    if (gameManager->canSpawnBug() == true){ 
+    if (gameManager->canSpawnBug() == true){  //bug
         if (gameManager->elapsedTime() >= 15){
                 Game::spawnEnemy(0);
         }
     }
-    if (gameManager->canSpawnWorm() == true){ 
+    if (gameManager->canSpawnWorm() == true){  //worm
         if (gameManager->elapsedTime() >= 180){
                 Game::spawnEnemy(1);
         }
     } 
-    if (gameManager->canSpawnTrojan() == true){ 
+    if (gameManager->canSpawnTrojan() == true){ //trojan
         if (gameManager->elapsedTime() >= 120){
                 Game::spawnEnemy(2);
         }
     }
-     if (gameManager->canSpawnLogicBomb() == true){ 
+     if (gameManager->canSpawnLogicBomb() == true){ //logicbomb
         if (gameManager->elapsedTime() >= 240){
                 Game::spawnEnemy(3);
         }
     }
-     if (gameManager->canSpawnIloveyou() == true){ 
+     if (gameManager->canSpawnIloveyou() == true){ //iloveyou
         if (gameManager->elapsedTime() >= 300){
                 Game::spawnEnemy(4);
         }
@@ -499,6 +539,8 @@ void Game::update(){ //game updates
         }
    } */
 
+  	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //internal one second timer
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock
         fiveSec++;
@@ -511,6 +553,8 @@ void Game::update(){ //game updates
         std::cout << fiveSec << std::endl;
         clock.restart();
     }
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //getting projectiles
     projectileCount = gridMap->getNumShootingTiles(1);
@@ -531,7 +575,7 @@ void Game::update(){ //game updates
     // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
     // Game::cleanUpDeadVirusesSprites();
 
-    /////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////enemy virus checking 
     for (int i = 0; i < gameManager->getVirusCount(); i++){
         if (virusSprites != nullptr){
@@ -563,22 +607,26 @@ void Game::update(){ //game updates
             // std::cout<< "Health is now" << slowed[j]->at(k).getPosition().y <<
             // " sprite: " << virusSprites[i].getPosition().y +50 << std::endl;
 
-            if ((slowed[j]->at(k).getPosition().x) >=
-                    (virusSprites[i].getPosition().x - 5) &&
-                ((slowed[j]->at(k).getPosition().x) <=
-                (virusSprites[i].getPosition().x + 50)) &&
-                (slowed[j]->at(k).getPosition().y) <=
-                    (virusSprites[i].getPosition().y + 50) &&
-                (slowed[j]->at(k).getPosition().y) >=
-                    (virusSprites[i].getPosition().y - 50))
-            {
-            virusManager[i]->setHealth((virusManager[i]->getHealth()) -
-                                        (gameManager->appDmgCheck(3)));
-            virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
-            std::cout << "Health is now " << virusManager[i]->getHealth()
-                        << " Dmg taken is: " << gameManager->appDmgCheck(3)
-                        << " Enemy is slowed to: " << virusManager[i]->getTileTime()
-                        << std::endl;
+            if ((slowed[j]->at(k).getPosition().x) >=(virusSprites[i].getPosition().x - 5) &&
+                ((slowed[j]->at(k).getPosition().x) <=(virusSprites[i].getPosition().x + 50)) &&
+                (slowed[j]->at(k).getPosition().y) <=(virusSprites[i].getPosition().y + 50) &&
+                (slowed[j]->at(k).getPosition().y) >=(virusSprites[i].getPosition().y - 50)){
+            virusManager[i]->setHealth((virusManager[i]->getHealth()) - (gameManager->appDmgCheck(3)));
+			if ((virusManager[i + 1] != nullptr)){
+				if (virusManager[i+1]->getSegmentId() == 1){
+					virusManager[i+1]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+					std::cout << "Enemy middle segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
+					if ((virusManager[i + 2] != nullptr)){
+						if (virusManager[i+2]->getSegmentId() == 2){
+							virusManager[i+2]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+							std::cout << "Enemy end segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
+						}
+					}
+				}
+			}
+			virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+            std::cout << "Health is now " << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(3) 
+			<< " Enemy is slowed to: " << virusManager[i]->getTileTime() << std::endl;
             slowed[j]->erase(slowed[j]->begin() + k);
             } else{ 
                 k++;
@@ -689,6 +737,7 @@ void Game::update(){ //game updates
         // dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
     }
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //refresh and checks apps statuses
     gridMap->checkAppsStatus(); // checks if any apps are dead and removes them
     for (int i = 0; i < 5; i ++){ //for application sprites

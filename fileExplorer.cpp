@@ -10,14 +10,14 @@ fileExplorer::fileExplorer(int health, int cost, int id, int dmg,
       health = 100;
       cost = 15;
       id = 1;
-      Desc = "File Explorer \n Cost: 15 \n Will shoot files \n shoots straight file in a lane";
+      Desc = "File Explorer \n Cost: 15 \n Will shoot files \n shoots straight file in a lane \n 3 Sec Cooldown";
   }
 fileExplorer::fileExplorer() : attackInterval(3){
     dmg = 10;
     health = 100;
     cost = 15;
     id = 1;
-    Desc = "File Explorer \n Cost: 15 \n Will shoot files \n shoots straight file in a lane";
+    Desc = "File Explorer \n Cost: 15 \n Will shoot files \n shoots straight file in a lane \n 3 Sec Cooldown";
   }
 
 fileExplorer::~fileExplorer(){}

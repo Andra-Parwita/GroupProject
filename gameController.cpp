@@ -7,11 +7,12 @@ gameController::gameController() : resource(100){
     maxVirusSpace = 100;
     bugSpawnTime = 10;
     spawnerClock = new sf::Clock[5];
+    appCooldownClocks = new sf::Clock[5];
 }
 
 gameController::~gameController(){
     delete spawnerClock;
-    delete appCooldowns;
+    delete appCooldownClocks;
     delete costChecker;
     delete dmgChecker;
 }
@@ -25,6 +26,67 @@ void gameController::startTimer() {
 float gameController::elapsedTime() const {
     std::chrono::high_resolution_clock::time_point timeEnd = std::chrono::high_resolution_clock::now();
     return (std::chrono::duration<float>(timeEnd - timeStart).count());
+}
+
+bool gameController::appCooldownCheck(int id, bool freed){
+	switch (id) {
+	case 0: //Vs Code cooldown
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 2.0f){	
+            if (freed == true){
+                appCooldownClocks[id].restart();
+            }
+			return true;
+		} else {
+			//std::cout << "on cooldown!" << std::endl;
+		}
+		break;
+	case 1: //File Explorer cooldown
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 3.0f){	
+			if (freed == true){
+                appCooldownClocks[id].restart();
+            }
+			return true;
+		} else {
+			//std::cout << "on cooldown!" << std::endl;
+		}
+		break;
+	case 2: //FireWall cooldown
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 5.0f){	
+			if (freed == true){
+                appCooldownClocks[id].restart();
+            }
+			return true;
+		} else {
+			//std::cout << "on cooldown!" << std::endl;
+		}
+		break;
+	case 3: //VPN cooldown
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 3.0f){	
+			if (freed == true){
+                appCooldownClocks[id].restart();
+            }
+			return true;
+		} else {
+			//std::cout << "on cooldown!" << std::endl;
+		}
+		break;
+	case 4: //Chrome cooldown
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 5.0f){	
+			if (freed == true){
+                appCooldownClocks[id].restart();
+            }
+			return true;
+		} else {
+			//std::cout << "on cooldown!" << std::endl;
+		}
+		break;
+    case 5: //for remove tool
+        return true;
+        break;
+	default:
+		break;
+	}
+	return false;
 }
 
 int gameController::costCheck(int id){

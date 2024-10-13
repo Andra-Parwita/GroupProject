@@ -11,7 +11,7 @@ vpn::vpn(int health, int cost, int id, int dmg, int attackInterval)
   id = 3;
   Desc =
       "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
-      "very little damage";
+      "very little damage \n 3 Sec Cooldown";
 }
 vpn::vpn() : attackInterval(10) {
   dmg = 5;
@@ -20,7 +20,7 @@ vpn::vpn() : attackInterval(10) {
   id = 3;
   Desc =
       "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
-      "very little damage";
+      "very little damage \n 3 Sec Cooldown";
 }
 
 vpn::~vpn() {}

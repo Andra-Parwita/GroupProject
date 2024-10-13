@@ -45,7 +45,7 @@ private:
     int iloveyouSpawnTime;
 
     sf::Clock* spawnerClock;
-    sf::Clock* appCooldowns;
+    sf::Clock* appCooldownClocks;
     sf::Clock wormSpawner;
 public:
     //constructors
@@ -58,6 +58,7 @@ public:
     int getVirusCount();
     int costCheck(int Id);
     int appDmgCheck(int Id);
+    bool appCooldownCheck(int Id, bool freed);
     std::string getAppDesc(int Id);
 
     float elapsedTime() const;
