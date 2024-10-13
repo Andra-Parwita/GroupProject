@@ -808,6 +808,12 @@ void Game::render() {  // renders the game objects
     }
   }
 
+  for (int i = 0; i < slowCount; i++) {
+    for (int j = 0; j < slowed[i]->size(); j++) {
+      window->draw((*projected[i])[j]);
+    }
+  }
+
   for (int i = 0; i < explosionCount; i++) {
     if (explosions[i] != nullptr) {
       for (int j = 0; j < explosions[i]->size(); j++) {

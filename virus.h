@@ -47,7 +47,7 @@ class virus {
   // accessors
   int getId();
   int getHealth();
-  int getTileTime();
+  float getTileTime();
   int getDmg();
   float getPosX();
   float getPosY();
