@@ -1,40 +1,67 @@
 #include "vpn.h"
 
-#include <chrono>
 #include <iostream>
-#include <thread>
 
 // Constructor
-vpn::vpn(int health, int cost, int id, int dmg, float slow, int slowDuration,
-         int attackInterval)
-    : application(health, cost, id),
-      dmg(dmg),
-      slow(slow),
-      slowDuration(slowDuration),
-      attackInterval(attackInterval),
-      elapsedTime(0) {}
+vpn::vpn(int health, int cost, int id, int dmg, int attackInterval)
+    : attackInterval(attackInterval) {
+  dmg = 5;
+  health = 100;
+  cost = 25;
+  id = 3;
+  Desc =
+      "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
+      "very little damage";
+}
+vpn::vpn() : attackInterval(10) {
+  dmg = 5;
+  health = 100;
+  cost = 25;
+  id = 3;
+  Desc =
+      "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
+      "very little damage";
+}
 
-vpn::vpn()
-    : application(100, 25, 3),
-      dmg(1),
-      slow(1.25),
-      slowDuration(3),
-      attackInterval(5) {}
+vpn::~vpn() {}
+// Simulate shooting (dealing damage)
+void vpn::shoot() {
+  if (projectiles.size() >= 10) {  // Adjust 10 as needed
+    return;  // Prevent shooting if max projectiles are active
+  }
 
-void vpn::shootSlow() {
-  std::cout << "vpn shoots, dealing " << dmg  // remove later
-            << " damage and slowing the enemy by " << slow << "% for "
-            << slowDuration << " seconds.\n";
-  // Additional logic to deal damage and apply slow effect to an enemy can be
-  // added here
+  if (internalClock.getElapsedTime().asSeconds() >= attackInterval) {
+    std::cout << "vpn shoots" << std::endl;
+
+    sf::CircleShape bullet;
+    bullet.setRadius(5);
+    bullet.setFillColor(sf::Color::Green);
+    bullet.setOrigin(5, 5);
+    bullet.setPosition(this->AppPosition.x + 10,
+                       this->AppPosition.y + 25);  // off setting
+    projectiles.push_back(bullet);
+
+    internalClock.restart();
+  }
 }
 
 // Update timer and trigger attacks if the interval has passed
-void vpn::updateTimer(int deltaTime) {
-  elapsedTime += deltaTime;  // Increment elapsed time
-  if (elapsedTime >= attackInterval) {
-    std::this_thread::sleep_for(std::chrono::seconds(attackInterval));
-    shootSlow();      // Attack and slow the enemy
-    elapsedTime = 0;  // Reset elapsed time after attacking
+std::vector<sf::CircleShape>* vpn::update(sf::FloatRect pos) {
+  shoot();
+
+  for (int i = 0; i < projectiles.size();) {
+    if (internalClockMove.getElapsedTime().asSeconds() >= 0.01) {
+      projectiles[i].move(5.f, 0.f);  // Move to the right
+      internalClockMove.restart();
+    }
+
+    // Remove projectiles that are off-screen
+    if ((projectiles[i].getPosition().x > 2000) ||
+        (projectiles[i].getGlobalBounds().intersects(pos))) {
+      projectiles.erase(projectiles.begin() + i);  // Remove the projectile
+    } else {
+      i++;  // Only increment if we didn't erase an element
+    }
   }
+  return &projectiles;
 }

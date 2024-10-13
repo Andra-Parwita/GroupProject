@@ -1,93 +1,96 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <SFML/Graphics.hpp> 
+#include <SFML/Graphics.hpp>
 #include <iostream>
-#include "grid.h"
-#include "gameController.h"
 #include <string>
+
+#include "gameController.h"
+#include "grid.h"
 #include "virus.h"
 
-class Game
-{
-private:
-    //Variables
-    sf::RenderWindow* window; //window
-    sf::VideoMode videoMode; //window size params
-    sf::Event ev; //gets curent input events on the window (continuous)
+class Game {
+ private:
+  // Variables
+  sf::RenderWindow* window;  // window
+  sf::VideoMode videoMode;   // window size params
+  sf::Event ev;  // gets curent input events on the window (continuous)
 
-    //gameObject
-    sf::RectangleShape** dispTiles; //Tile sprites (boxes)
-    sf::RectangleShape** appSpriteHolders; //The sprite holders in 
+  // gameObject
+  sf::RectangleShape** dispTiles;         // Tile sprites (boxes)
+  sf::RectangleShape** appSpriteHolders;  // The sprite holders in
 
-    sf::RectangleShape* taskBar; //the actual task bar
-    sf::RectangleShape* taskBarSprites; //the sprites within the task bar
-    sf::Clock PopupBoxTimer;
-    bool inBar;
-    sf::Clock gridIndicatorTimer;
-    bool inGrid;
+  sf::RectangleShape* taskBar;         // the actual task bar
+  sf::RectangleShape* taskBarSprites;  // the sprites within the task bar
+  sf::Clock PopupBoxTimer;
+  bool inBar;
+  sf::Clock gridIndicatorTimer;
+  bool inGrid;
 
-    //mapdata
-    grid* gridMap; //actual map data
+  // mapdata
+  grid* gridMap;  // actual map data
 
-    //fonts and text
-    sf::Font font; //font
-    sf::Text timerText; //
-    sf::Text resourceText;
+  // fonts and text
+  sf::Font font;       // font
+  sf::Text timerText;  //
+  sf::Text resourceText;
 
-    sf::Text PopDisplayText;
+  sf::Text PopDisplayText;
 
-    //gameController
-    gameController* gameManager; //pointer to game controller
-    int currentSelectionId; //current selected app id
+  // gameController
+  gameController* gameManager;  // pointer to game controller
+  int currentSelectionId;       // current selected app id
 
-    //virus handler
-    virus** virusManager; //handles all the viruses
-    sf::RectangleShape* virusSprites; //hands the virus sprites 
-    int maxVirusSpritesSpace;//max space allocated for virus sprites (remove if changing to vector)
-    sf::Clock virusExplosionClock;
+  // virus handler
+  virus** virusManager;              // handles all the viruses
+  sf::RectangleShape* virusSprites;  // hands the virus sprites
+  int maxVirusSpritesSpace;  // max space allocated for virus sprites (remove if
+                             // changing to vector)
+  sf::Clock virusExplosionClock;
 
-    //projectile
-    std::vector<sf::CircleShape>** projected; //stores all projectile arrays which hold each projectile
-    int projectileCount; //the number of projectile vectors 
+  // projectile
+  std::vector<sf::CircleShape>**
+      projected;  // stores all projectile arrays which hold each projectile
+  int projectileCount;  // the number of projectile vectors
 
-    std::vector<sf::CircleShape>** explosions; 
-    int explosionCount;
-    
+  std::vector<sf::CircleShape>** slowed;
+  int slowCount;
 
-    //clock
-    sf::Clock clock; //internal clock
-    int fiveSec; //
-    sf::Clock waveTimer;
+  std::vector<sf::CircleShape>** explosions;
+  int explosionCount;
 
-    //init functions
-    void initVariables(); //initalises variables
-    void initWindow(); //starts the window
-    void initMap();
-    void initBar();
-    void initText();
-    void initVirus();
+  // clock
+  sf::Clock clock;  // internal clock
+  int fiveSec;      //
+  sf::Clock waveTimer;
 
-    //private functions
-    bool taskBarChecker(int i);
-    bool gridMapChecker(int x, int y);
+  // init functions
+  void initVariables();  // initalises variables
+  void initWindow();     // starts the window
+  void initMap();
+  void initBar();
+  void initText();
+  void initVirus();
 
-public:
-    //constuctors and destructors
-    Game();
-    ~Game();
+  // private functions
+  bool taskBarChecker(int i);
+  bool gridMapChecker(int x, int y);
 
-    //accessor
-    const bool getWindowIsOpen() const;
+ public:
+  // constuctors and destructors
+  Game();
+  ~Game();
 
-    //Functions
-    void pollEvents();
-    void update();
-    void render();
-    void cleanUpDeadVirusesSprites();
+  // accessor
+  const bool getWindowIsOpen() const;
 
-    void spawnEnemy(int id);
+  // Functions
+  void pollEvents();
+  void update();
+  void render();
+  void cleanUpDeadVirusesSprites();
 
+  void spawnEnemy(int id);
 };
 
 #endif
