@@ -27,7 +27,7 @@ void virus::setExplosionCheck(bool check){this->explosionCheck = check;}
 // accessors
 int virus::getId() { return this->id; }
 int virus::getHealth() { return this->health; }
-int virus::getTileTime() { return this->tileTime; }
+float virus::getTileTime() { return this->tileTime; }
 int virus::getDmg() { return this->dmg; }
 bool virus::checkAlive() { return this->isAlive; }
 float virus::getPosY(){return this->position_y;}
