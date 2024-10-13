@@ -140,7 +140,7 @@ bool gameController::canSpawnBug(){
 }
 
 float gameController::wormSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 240){
+    if (gameController::elapsedTime() <= 400){
         this->wormSpawnTime = 40;
     } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
         this->wormSpawnTime = 30;
@@ -159,12 +159,12 @@ bool gameController::canSpawnWorm(){
 }
 
 float gameController::trojanSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 180){
-        this->trojanSpawnTime = 25;
+    if (gameController::elapsedTime() <= 300){
+        this->trojanSpawnTime = 21;
     } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 500)){
-        this->trojanSpawnTime = 18;
+        this->trojanSpawnTime = 15;
     } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
-        this->trojanSpawnTime = 10;
+        this->trojanSpawnTime = 8;
     }
     return this->trojanSpawnTime;
 }
@@ -179,19 +179,38 @@ bool gameController::canSpawnTrojan(){
 
 
 float gameController::logicBombSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 10){
-        this->logicBombSpawnTime = 10;
-    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
-        this->logicBombSpawnTime = 25;
+    if (gameController::elapsedTime() <= 500){
+        this->logicBombSpawnTime = 30;
     } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
         this->logicBombSpawnTime = 25;
+    } else if ((gameController::elapsedTime() > 600) && (gameController::elapsedTime() <= 700)){
+        this->logicBombSpawnTime = 15;
     }
     return this->logicBombSpawnTime;
 }
 
 bool gameController::canSpawnLogicBomb(){
-    if (spawnerClock[3].getElapsedTime().asSeconds() >= gameController::wormSpawnTimeCheck()){
+    if (spawnerClock[3].getElapsedTime().asSeconds() >= gameController::logicBombSpawnTimeCheck()){
         spawnerClock[3].restart();
+        return true;
+    } 
+    return false;
+}
+
+float gameController::iloveyouTimeCheck(){
+    if (gameController::elapsedTime() <= 500){
+        this->iloveyouSpawnTime = 25;
+    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
+        this->iloveyouSpawnTime = 18;
+    } else if ((gameController::elapsedTime() > 600) && (gameController::elapsedTime() <= 700)){
+        this->iloveyouSpawnTime = 10;
+    }
+    return this->iloveyouSpawnTime;
+}
+
+bool gameController::canSpawnIloveyou(){
+    if (spawnerClock[4].getElapsedTime().asSeconds() >= gameController::iloveyouTimeCheck()){
+        spawnerClock[4].restart();
         return true;
     } 
     return false;
@@ -232,14 +251,14 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
         case 0:
             virusManager[virusCounter-1] = new bug;
             virusManager[virusCounter-1]->setRow(rowId);
-            std::cout << "bug spawned" << std::endl;
+            std::cout << "bug spawned on row: " << rowId << std::endl;
             break;
         case 1:
             if ((virusCounter+2) < maxVirusSpace){
                 if (virusManager[virusCounter-1] == nullptr){
                     virusManager[virusCounter-1] = new worm;
                     virusManager[virusCounter-1]->setRow(rowId);
-                    std::cout << "worm head spawned" << std::endl;
+                    std::cout << "worm head spawned on row: " << rowId << std::endl;
                     virusCounter++;
                 }
 
@@ -262,14 +281,17 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
         case 2:
             virusManager[virusCounter-1] = new trojan;
             virusManager[virusCounter-1]->setRow(rowId);
-            std::cout << "trojan spawned" << std::endl;
+            std::cout << "trojan spawned on row: " << rowId << std::endl;
             break;
         case 3:
             virusManager[virusCounter-1] = new logicBomb;
             virusManager[virusCounter-1]->setRow(rowId);
-            std::cout << "logicBomb spawned" << std::endl;
+            std::cout << "logicBomb spawned on row: " << rowId << std::endl;
             break;
         case 4:
+            virusManager[virusCounter-1] = new iloveyou;
+            virusManager[virusCounter-1]->setRow(rowId);
+            std::cout << "iloveyou spawned on row: " << rowId << std::endl;
             break;
         default:
             break;
