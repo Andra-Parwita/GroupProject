@@ -194,12 +194,6 @@ void Game::spawnEnemy(int id) {
   int type = id;  // for debug - setting to only bug spawn
 
   // random row spawn
-  int rowSpawn = rand() % 5;
-  std::cout << "rowChosen: " << rowSpawn << std::endl;
-
-  virusManager = gameManager->spawnVirus(virusManager, type, rowSpawn);
-  std::cout << "spawning ended \n" << std::endl;
-  // random row spawn
   // int rowSpawn = rand()%5;
   int rowSpawn = (int)(5.0 * (rand() / (RAND_MAX + 1.0)));
   std::cout << "rowChosen: " << rowSpawn << std::endl;
