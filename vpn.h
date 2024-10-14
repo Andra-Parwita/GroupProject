@@ -2,6 +2,7 @@
 #define VPN_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "application.h"
 #include "shooter.h"
@@ -14,6 +15,8 @@ class vpn : public shooter {
   sf::Clock internalClockMove;
 
   std::vector<sf::CircleShape> projectiles;  // the container of projectiles
+  sf::SoundBuffer buffer;
+  sf::Sound sound;
 
  public:
   // Constructor

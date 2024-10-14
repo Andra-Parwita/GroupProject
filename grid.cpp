@@ -180,7 +180,7 @@ std::vector<sf::CircleShape>** grid::getExplosions(sf::FloatRect pos) {
 }
 
 bool grid::takeAppDamage(int x, int y, int dmgTaken) {
-  if ((x < 5) && (y < 20) && (y > 0) && (x > 0)) {
+  if ((x < 5) && (y < 20) && (y >= 0) && (x >= 0)) {
     if ((tiles[x][y].getIsOccupied() == true) &&
         (tiles[x][y].checkAppStatus() == true) &&
         (tiles[x][y].getApplicationType().getHealth() > 0)) {

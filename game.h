@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <string>
 
@@ -65,6 +66,13 @@ class Game {
   sf::Clock waveTimer;
   sf::Clock* appCooldownClocks;
 
+  //sound
+  sf::SoundBuffer* soundBuffers;
+  sf::Sound enemyhitSound;
+  sf::Sound apphitSound;
+  sf::Sound selectSound;
+  sf::Sound explosionSound;
+
   // init functions
   void initVariables();  // initalises variables
   void initWindow();     // starts the window
@@ -72,6 +80,7 @@ class Game {
   void initBar();
   void initText();
   void initVirus();
+  void initSound();
 
   // private functions
   bool taskBarChecker(int i);

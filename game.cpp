@@ -17,6 +17,7 @@ void Game::initVariables(){
     explosionCount = 0;
     slowed = new std::vector<sf::CircleShape> *[100];
     slowCount = 0;
+	soundBuffers = new sf::SoundBuffer [4];
 }
 
 
@@ -116,6 +117,23 @@ void Game::initVirus(){
     virusManager = new virus*[100];
 }
 
+void Game::initSound(){
+	if (!soundBuffers[0].loadFromFile("./SFX/AppHurt.wav")){ //app damaged sound
+		std::cout << "Could not load App Hurt" << std::endl;
+	}
+	apphitSound.setBuffer(soundBuffers[0]);
+
+	if (!soundBuffers[1].loadFromFile("./SFX/EnemyHurt.wav")){ //hurt enemy
+		std::cout << "Could not load Enemy Hurt " << std::endl;
+	}
+	enemyhitSound.setBuffer(soundBuffers[1]);
+
+	if (!soundBuffers[2].loadFromFile("./SFX/blipSelect.wav")){ //
+		std::cout << "Could not load Select sound" << std::endl;
+	}
+	selectSound.setBuffer(soundBuffers[2]);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //constuctors and destructors
@@ -126,6 +144,7 @@ Game::Game() : currentSelectionId(0) {
     this->initBar();
     this->initText();
     this->initVirus();
+	this->initSound();
 }
 Game::~Game(){
     delete this->window;
@@ -160,6 +179,8 @@ Game::~Game(){
         }
         delete[] this->appSpriteHolders;
     }
+
+	delete[] this->soundBuffers;
     
     delete this->gridMap;
     delete this->gameManager;
@@ -308,6 +329,7 @@ void Game::pollEvents(){ //game ui inputs
             for (int i = 0; i < 6; i++){
                 if (Game::taskBarChecker(i) == true){
                     currentSelectionId = i;
+					selectSound.play();
                     std::cout << "changed Id to " << currentSelectionId << std::endl;
                 }
 
@@ -346,6 +368,7 @@ void Game::pollEvents(){ //game ui inputs
 
 									gridMap->addApplication(j,k,currentSelectionId); //adds selection id to
 									std::cout << gridMap->checkOccupancy(j,k) << std::endl;
+									selectSound.play();
 								} else {
 									if (currentSelectionId != 5){
 										taskBarSprites[currentSelectionId].setFillColor(sf::Color(125,125,125));
@@ -572,6 +595,13 @@ void Game::update(){ //game updates
         explosions = gridMap->getExplosions(virusSprites->getGlobalBounds());
     } 
 
+	projectileCount = gridMap->getNumShootingTiles(1);
+    for (int i = 0; i < projectileCount; i++) {
+        for (int j = 0; j < projected[i]->size(); j++) {
+            window->draw((*projected[i])[j]);
+        }
+    } 
+
     // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
     // Game::cleanUpDeadVirusesSprites();
 
@@ -590,6 +620,7 @@ void Game::update(){ //game updates
                     (projected[j]->at(k).getPosition().y) <= (virusSprites[i].getPosition().y +50) &&
                     (projected[j]->at(k).getPosition().y) >= (virusSprites[i].getPosition().y -50)){
                         virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(1)));
+						enemyhitSound.play();
                         std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(1) << std::endl;
                         projected[j]->erase(projected[j]->begin() + k);
                 } else {
@@ -627,6 +658,7 @@ void Game::update(){ //game updates
 			virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
             std::cout << "Health is now " << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(3) 
 			<< " Enemy is slowed to: " << virusManager[i]->getTileTime() << std::endl;
+			enemyhitSound.play();
             slowed[j]->erase(slowed[j]->begin() + k);
             } else{ 
                 k++;
@@ -644,6 +676,7 @@ void Game::update(){ //game updates
                 if (virusSprites[i].getGlobalBounds().intersects((*explosions[j])[k].getGlobalBounds())){
                         virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(4)));
                         // std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(4) << std::endl;
+						enemyhitSound.play();
                         explosions[j]->erase(explosions[j]->begin() + k);
                 } else {
                     k++;
@@ -707,6 +740,7 @@ void Game::update(){ //game updates
                     virusManager[i]->setFreeze(true);
                     if (virusManager[i]->getDmgClock() >= 1.0f){
                         if (gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()) == true){
+							apphitSound.play();
                             virusManager[i]->setFreeze(true);
                         } 
                         virusManager[i]->restartClock();
@@ -794,7 +828,8 @@ void Game::render(){ //renders the game objects
         for (int j = 0; j < projected[i]->size(); j++) {
             window->draw((*projected[i])[j]);
         }
-    }
+    } 
+   
 
     for (int i = 0; i < slowCount; i++) {
         for (int j = 0; j < slowed[i]->size(); j++) {
@@ -815,4 +850,5 @@ void Game::render(){ //renders the game objects
     this->window->draw(this->PopDisplayText);
 
     this->window->display(); //displays frame
+	
 }

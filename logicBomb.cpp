@@ -5,11 +5,21 @@ logicBomb::logicBomb(int health, float tileTime, int id, int dmg)
     : virus(50, 2.0, 3, 10) {
         this->isAlive = true;
         this->explosionCheck = false;
+        if (!soundBuffer.loadFromFile("./SFX/EnemyEx.wav")){ //
+		std::cout << "Could not load Explode sound" << std::endl;
+	}
+	explosionSound.setBuffer(soundBuffer);
+    once = false;
     }
 
 logicBomb::logicBomb() : virus(50, 2.0, 3, 10) {
     this->isAlive = true;
     this->explosionCheck = false;
+    if (!soundBuffer.loadFromFile("./SFX/EnemyEx.wav")){ //
+		std::cout << "Could not load Explode sound" << std::endl;
+	}
+	explosionSound.setBuffer(soundBuffer);
+    once = false;
 }
 
 logicBomb::~logicBomb(){}
@@ -18,6 +28,10 @@ bool logicBomb::move() {
     if ((freeze == true) || (explosionCheck == true)) {
         // std::cout << internalExClock.getElapsedTime().asSeconds() << std::endl;
         if (internalExClock.getElapsedTime().asSeconds() >= 5.0f) {
+            if (!once){
+                explosionSound.play();
+                once = true;
+            }
             std::cout << "exploded" << std::endl;
             this->explosionCheck = true;
 

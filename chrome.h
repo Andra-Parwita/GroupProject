@@ -3,6 +3,7 @@
 
 #include "application.h"
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 
 class chrome : public application {
  private:
@@ -11,9 +12,15 @@ class chrome : public application {
   int elapsedTime;    // Time elapsed since placing
 
   sf::Clock internalClock;
+  bool once;
   std::vector<sf::CircleShape> explosion;
 
   bool explode();
+
+  sf::SoundBuffer buffer;
+  sf::Sound sound;
+
+  void boomsfx();
 
  public:
   // Constructor
