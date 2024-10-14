@@ -6,13 +6,12 @@ A single-level lane-type tower defence game similar to Plants vs Zombies using t
 
 To do:
 core:
-- App (change VPN into something else)
-- App cooldowns after placement (so there is no more spam)
 - game over 
 Additional:
 - Refactor the whole damn code (reduce redundancy, add const)
 - Convert Virus Manager into std::vector (from array)
 - Spriting 
+- Sound (add any extras ?music?)
 - Menu (pause)
 - Make a damn Makefile
 - controlled test cases
@@ -23,4 +22,4 @@ Additional:
 Authored by Ida Bagus Andra Parwita and Fardeen Rahman
  - note GitHub Andra-Parwita did not link with the computer used to push, hence different collaborations (check commits in main)
 
-g++ -std=c++11 main.cpp game.cpp grid.cpp tile.cpp application.cpp fileExplorer.cpp vpn.cpp vscode.cpp antivirus.cpp chrome.cpp gameController.cpp  virus.cpp bug.cpp trojan.cpp worm.cpp shooter.cpp logicBomb.cpp iloveyou.cpp -I/opt/homebrew/Cellar/sfml/2.6.1/include -L/opt/homebrew/Cellar/sfml/2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system
+g++ -std=c++11 main.cpp game.cpp grid.cpp tile.cpp application.cpp fileExplorer.cpp vpn.cpp vscode.cpp antivirus.cpp chrome.cpp gameController.cpp  virus.cpp bug.cpp trojan.cpp worm.cpp shooter.cpp logicBomb.cpp iloveyou.cpp -I/opt/homebrew/Cellar/sfml/2.6.1/include -L/opt/homebrew/Cellar/sfml/2.6.1/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
