@@ -1,4 +1,5 @@
 - October 15, 2024  
+added balanincing changes to time (much harder after 500 secs)  
 added Change log - Andra Parwita  
 Added testing for indiviual files - Andra Parwita  
 Fixed deletion malloc problems and implemented game over - Andra Parwita  

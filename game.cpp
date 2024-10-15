@@ -19,6 +19,7 @@ void Game::initVariables(){
     slowed = new std::vector<sf::CircleShape> *[100];
     slowCount = 0;
 	soundBuffers = new sf::SoundBuffer [4];
+	overOnce = false;
 }
 
 
@@ -81,6 +82,9 @@ void Game::initBar(){  //task bar
     taskBarSprites[3].setFillColor(sf::Color::Green);
     taskBarSprites[4].setFillColor(sf::Color::Magenta);
     taskBarSprites[5].setFillColor(sf::Color::Transparent);
+
+	selectedIcon.setFillColor(sf::Color::Transparent);
+	selectedIcon.setSize(sf::Vector2f(10.0f,10.0f));
 }
 
 void Game::initMap(){
@@ -118,9 +122,9 @@ void Game::initMap(){
 }
 
 void Game::initVirus(){
-    maxVirusSpritesSpace = 100;
+    maxVirusSpritesSpace = 300;
     virusSprites = new sf::RectangleShape[maxVirusSpritesSpace];
-    virusManager = new virus*[100];
+    virusManager = new virus*[300];
 }
 
 void Game::initSound(){
@@ -143,7 +147,7 @@ void Game::initSound(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //constuctors and destructors
-Game::Game() : currentSelectionId(0) {
+Game::Game() : currentSelectionId(5) {
     this->initVariables();
     this->initWindow();
     this->initMap();
@@ -351,6 +355,27 @@ void Game::pollEvents(){ //game ui inputs
                 if (Game::taskBarChecker(i) == true){
                     currentSelectionId = i;
 					selectSound.play();
+					switch (currentSelectionId){
+						case 0:
+							selectedIcon.setFillColor(sf::Color::Blue);
+							break;
+						case 1:
+							selectedIcon.setFillColor(sf::Color::Cyan);
+							break;
+						case 2:
+							selectedIcon.setFillColor(sf::Color::Red);
+							break;
+						case 3:
+							selectedIcon.setFillColor(sf::Color::Green);
+							break;
+						case 4:
+							selectedIcon.setFillColor(sf::Color::Magenta);
+							break;
+						default:
+							selectedIcon.setFillColor(sf::Color::Transparent);
+							break;
+					}
+
                     std::cout << "changed Id to " << currentSelectionId << std::endl;
                 }
 
@@ -360,12 +385,16 @@ void Game::pollEvents(){ //game ui inputs
             for (int j = 0; j < 5; j++){
                 for (int k = 0; k < 20; k++){
                     if(Game::gridMapChecker(j,k) == true){ //check if mouse is on current tile
-                        std::cout << "Cost of: " << currentSelectionId << " is " << gameManager->costCheck(currentSelectionId) << std::endl;
-
+                        // std::cout << "Cost of: " << currentSelectionId << " is " << gameManager->costCheck(currentSelectionId) << std::endl;
+						//std::cout << "before resource: " << std::endl;
                         if(gameManager->getResource() >= gameManager->costCheck(currentSelectionId)){ //gets cost of app
+						//std::cout << "before manager: " << std::endl;
 							if((gridMap->checkOccupancy(j,k) == false) || (currentSelectionId == 5)){ //checks if remove tool or occupied
+								//std::cout << "before last check" << std::endl;
 								if (gameManager->appCooldownCheck(currentSelectionId, true)){
+									//std::cout << "before manager: " << std::endl;
 									gameManager->addResource(-(gameManager->costCheck(currentSelectionId))); //takes currency
+									//std::cout << "before sprite: " << std::endl;
 									switch (currentSelectionId){
 									case 0:
 										appSpriteHolders[j][k].setFillColor(sf::Color::Blue);
@@ -386,9 +415,9 @@ void Game::pollEvents(){ //game ui inputs
 										appSpriteHolders[j][k].setFillColor(sf::Color::Transparent);
 										break;
 									}
-
+									//std::cout << "from: " << gridMap->checkOccupancy(j,k) << std::endl;
 									gridMap->addApplication(j,k,currentSelectionId); //adds selection id to
-									std::cout << gridMap->checkOccupancy(j,k) << std::endl;
+									//std::cout << gridMap->checkOccupancy(j,k) << std::endl;
 									selectSound.play();
 								} else {
 									if (currentSelectionId != 5){
@@ -441,6 +470,7 @@ void Game::update(){ //game updates
     inGrid = false;
     inBar = false;
     sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);  
+	selectedIcon.setPosition(mousePos.x - 5, mousePos.y - 5); //puts icon position to mouse (to show what is currently selected)
 
     for (int i = 0; i < 6; i++) {
         sf::FloatRect taskBarBounds = taskBar[i].getGlobalBounds();
@@ -697,7 +727,6 @@ void Game::update(){ //game updates
                 if (virusSprites[i].getGlobalBounds().intersects((*explosions[j])[k].getGlobalBounds())){
                         virusManager[i]->setHealth((virusManager[i]->getHealth())- (gameManager->appDmgCheck(4)));
                         // std::cout<< "Health is now" << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(4) << std::endl;
-						enemyhitSound.play();
                         explosions[j]->erase(explosions[j]->begin() + k);
                 } else {
                     k++;
@@ -723,7 +752,7 @@ void Game::update(){ //game updates
         }
 
         //end 
-        if (virusSprites->getPosition().x < 0){
+        if (virusSprites[i].getPosition().x < 0){
 			std::cout << "Game Over" << std::endl; 
             gameOver = true;
         }
@@ -822,6 +851,14 @@ void Game::render(){ //renders the game objects
 		GameOverText.setPosition(600.0f,400.0f);
 		this->window->draw(GameOverText);
 
+		if (overOnce){
+			gameOverClock.restart();
+			overOnce = false;
+		}
+		if (gameOverClock.getElapsedTime().asSeconds() >= 10.0f){
+			this->window->close();
+		}
+
 	} else {
 		//time clock
 		std::string currentTime = std::to_string(gameManager->elapsedTime());
@@ -880,6 +917,7 @@ void Game::render(){ //renders the game objects
 		this->window->draw(this->timerText);
 		this->window->draw(this->resourceText);
 		this->window->draw(this->PopDisplayText);
+		this->window->draw(this->selectedIcon);
 
 	}
 

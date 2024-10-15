@@ -2,15 +2,15 @@
 
 // Constructor
 worm::worm(int health, float tileTime, int id, int dmg)
-    : virus(100, 4.5, 1, 15) {
+    : virus(200, 4.5, 1, 15) {
         this->isAlive = true;
     }
 
-worm::worm() : virus(100, 4.5, 1, 15) {
+worm::worm() : virus(200, 4.5, 1, 15) {
     this->isAlive = true;
 }
 
-worm::worm(int segId) : virus(100, 4.5, 1, 15){
+worm::worm(int segId) : virus(200, 4.5, 1, 15){
     this->isAlive = true;
     this->worm::setSegmentid(segId);
 }

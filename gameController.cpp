@@ -1,10 +1,10 @@
 #include "gameController.h"
 
 //constuctors
-gameController::gameController() : resource(100){
+gameController::gameController() : resource(20){
     gameController::startTimer();
     virusCounter = 0;
-    maxVirusSpace = 100;
+    maxVirusSpace = 300;
     bugSpawnTime = 10;
     spawnerClock = new sf::Clock[5];
     appCooldownClocks = new sf::Clock[5];
@@ -31,7 +31,7 @@ float gameController::elapsedTime() const {
 bool gameController::appCooldownCheck(int id, bool freed){
 	switch (id) {
 	case 0: //Vs Code cooldown
-		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 2.0f){	
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 3.0f){	
             if (freed == true){
                 appCooldownClocks[id].restart();
             }
@@ -71,7 +71,7 @@ bool gameController::appCooldownCheck(int id, bool freed){
 		}
 		break;
 	case 4: //Chrome cooldown
-		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 5.0f){	
+		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 8.0f){	
 			if (freed == true){
                 appCooldownClocks[id].restart();
             }
@@ -110,9 +110,10 @@ int gameController::costCheck(int id){
     default:
         break;
     }
-    totalCost = costChecker->getCost();
     if (id == 5){
         totalCost = 0;
+    } else {
+        totalCost = costChecker->getCost();
     }
     return totalCost;
 }
@@ -185,11 +186,15 @@ int gameController::getVirusCount(){return virusCounter;}
 float gameController::bugSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 60){
         this->bugSpawnTime = 20;
-    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 400)){
+    } else if ((gameController::elapsedTime() > 200) && (gameController::elapsedTime() <= 300)){
         this->bugSpawnTime = 10;
-    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 600)){
+    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 400)){
+        this->bugSpawnTime = 8;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
         this->bugSpawnTime = 5;
-    }
+    } else if ((gameController::elapsedTime() > 500)){
+        this->bugSpawnTime = 3;
+    } 
     return this->bugSpawnTime;
 }
 
@@ -202,12 +207,14 @@ bool gameController::canSpawnBug(){
 }
 
 float gameController::wormSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 400){
+    if (gameController::elapsedTime() <= 240){
         this->wormSpawnTime = 40;
-    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
+    } else if ((gameController::elapsedTime() > 240) && (gameController::elapsedTime() <= 400)){
         this->wormSpawnTime = 30;
-    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
-        this->wormSpawnTime = 25;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
+        this->wormSpawnTime = 20;
+    } else if ((gameController::elapsedTime() > 500)){
+        this->wormSpawnTime = 12;
     }
     return this->wormSpawnTime;
 }
@@ -223,10 +230,12 @@ bool gameController::canSpawnWorm(){
 float gameController::trojanSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 300){
         this->trojanSpawnTime = 21;
-    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 500)){
+    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 400)){
         this->trojanSpawnTime = 15;
-    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
         this->trojanSpawnTime = 8;
+    } else if ((gameController::elapsedTime() > 500)){
+        this->trojanSpawnTime = 5;
     }
     return this->trojanSpawnTime;
 }
@@ -241,12 +250,14 @@ bool gameController::canSpawnTrojan(){
 
 
 float gameController::logicBombSpawnTimeCheck(){
-    if (gameController::elapsedTime() <= 500){
-        this->logicBombSpawnTime = 30;
-    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
+    if (gameController::elapsedTime() <= 300){
         this->logicBombSpawnTime = 25;
-    } else if ((gameController::elapsedTime() > 600) && (gameController::elapsedTime() <= 700)){
-        this->logicBombSpawnTime = 15;
+    } else if ((gameController::elapsedTime() > 300) && (gameController::elapsedTime() <= 400)){
+        this->logicBombSpawnTime = 20;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
+        this->logicBombSpawnTime = 10;
+    } else if ((gameController::elapsedTime() > 500)){
+        this->logicBombSpawnTime = 5;
     }
     return this->logicBombSpawnTime;
 }
@@ -260,12 +271,14 @@ bool gameController::canSpawnLogicBomb(){
 }
 
 float gameController::iloveyouTimeCheck(){
-    if (gameController::elapsedTime() <= 500){
+    if (gameController::elapsedTime() <= 360){
         this->iloveyouSpawnTime = 25;
-    } else if ((gameController::elapsedTime() > 500) && (gameController::elapsedTime() <= 600)){
-        this->iloveyouSpawnTime = 18;
-    } else if ((gameController::elapsedTime() > 600) && (gameController::elapsedTime() <= 700)){
+    } else if ((gameController::elapsedTime() > 360) && (gameController::elapsedTime() <= 400)){
+        this->iloveyouSpawnTime = 15;
+    } else if ((gameController::elapsedTime() > 400) && (gameController::elapsedTime() <= 500)){
         this->iloveyouSpawnTime = 10;
+    } else if ((gameController::elapsedTime() > 500)){
+        this->iloveyouSpawnTime = 8;
     }
     return this->iloveyouSpawnTime;
 }

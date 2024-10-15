@@ -9,7 +9,7 @@ chrome::chrome(int health, int cost, int id, int dmg, int explodeTime)
     : application(100, 25, 4),
       explodeTime(explodeTime),
       elapsedTime(0),
-      explodeRadius(3) {Desc = "Chrome \n Cost: 25 \n TOO MUCH RAM! MUST BLOW UP \n Explodes 3x3 \n 5 Sec Cooldown"; dmg = 200;
+      explodeRadius(3) {Desc = "Chrome \n Cost: 25 \n TOO MUCH RAM! MUST BLOW UP \n Explodes 3x3 \n 8 Sec Cooldown"; dmg = 200;
       if (!buffer.loadFromFile("./SFX/ChromExplosion.wav")){ //
 		    std::cout << "Could not load Chrome Shoot sound" << std::endl;
 	  }
@@ -18,7 +18,7 @@ chrome::chrome(int health, int cost, int id, int dmg, int explodeTime)
   }
 
 chrome::chrome() : application(100,25,4), explodeTime(2), elapsedTime(0), explodeRadius(3){
-  Desc = "Chrome \n Cost: 25 \n TOO MUCH RAM! MUST BLOW UP \n Explodes 3x3 \n 5 Sec Cooldown";
+  Desc = "Chrome \n Cost: 25 \n TOO MUCH RAM! MUST BLOW UP \n Explodes 3x3 \n 8 Sec Cooldown";
   dmg = 200;
   if (!buffer.loadFromFile("./SFX/ChromExplosion.wav")){ //
 		std::cout << "Could not load Chrome Shoot sound" << std::endl;

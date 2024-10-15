@@ -7,10 +7,10 @@ vpn::vpn(int health, int cost, int id, int dmg, int attackInterval)
     : attackInterval(attackInterval) {
   dmg = 5;
   health = 100;
-  cost = 25;
+  cost = 20;
   id = 3;
   Desc =
-      "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
+      "VPN \n Cost: 20 \n Will exponentially slow enemies on impact, \n Deals "
       "very little damage \n 3 Sec Cooldown";
   if (!buffer.loadFromFile("./SFX/FreezeShoot.wav")){ //
 		std::cout << "Could not load Freeze Shoot sound" << std::endl;
@@ -20,10 +20,10 @@ vpn::vpn(int health, int cost, int id, int dmg, int attackInterval)
 vpn::vpn() : attackInterval(10) {
   dmg = 5;
   health = 100;
-  cost = 25;
+  cost = 20;
   id = 3;
   Desc =
-      "VPN \n Cost: 25 \n Will exponentially slow enemies on impact, \n Deals "
+      "VPN \n Cost: 20 \n Will exponentially slow enemies on impact, \n Deals "
       "very little damage \n 3 Sec Cooldown";
   if (!buffer.loadFromFile("./SFX/FreezeShoot.wav")){ //
 		std::cout << "Could not load Freeze Shoot sound" << std::endl;
@@ -39,7 +39,7 @@ void vpn::shoot() {
   }
 
   if (internalClock.getElapsedTime().asSeconds() >= attackInterval) {
-    std::cout << "vpn shoots" << std::endl;
+    // std::cout << "vpn shoots" << std::endl;
     sound.play();
 
     sf::CircleShape bullet;

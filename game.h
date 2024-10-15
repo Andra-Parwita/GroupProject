@@ -23,6 +23,7 @@ class Game {
 
   sf::RectangleShape* taskBar;         // the actual task bar
   sf::RectangleShape* taskBarSprites;  // the sprites within the task bar
+  sf::RectangleShape selectedIcon;
   sf::Clock PopupBoxTimer;
   bool inBar;
   sf::Clock gridIndicatorTimer;
@@ -66,7 +67,9 @@ class Game {
   sf::Clock* appCooldownClocks;
 
   bool gameOver;
+  bool overOnce;
   sf::Text GameOverText;
+  sf::Clock gameOverClock;
 
   //sound
   sf::SoundBuffer* soundBuffers;

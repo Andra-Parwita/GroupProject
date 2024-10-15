@@ -39,7 +39,7 @@ void fileExplorer::shoot() {
   }
 
   if(internalClock.getElapsedTime().asSeconds() >= attackInterval){
-    std::cout << "fileExplorer shoots" << std::endl;
+    // std::cout << "fileExplorer shoots" << std::endl;
     sound.play();
 
     sf::CircleShape bullet;

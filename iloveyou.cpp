@@ -2,12 +2,12 @@
 
 // Constructor
 iloveyou::iloveyou(int health, float tileTime, int id, int dmg)
-    : virus(120, 2.0, 4, 15) {
+    : virus(120, 1.5, 4, 25) {
         this->isAlive = true;//movement in seconds
         this->rowSwitcher = 0;
     }
 
-iloveyou::iloveyou() : virus(120, 2.0, 4, 15) {
+iloveyou::iloveyou() : virus(120, 1.5, 4, 25) {
     this->isAlive = true; //movement in seconds
     this->rowSwitcher = 0;
 }  
