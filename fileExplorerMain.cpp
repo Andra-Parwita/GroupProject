@@ -1,15 +1,21 @@
 #include "fileExplorer.h"
 
-int main() {
-  fileExplorer f1(100, 50,
-                  1);  // Create a fileExplorer with health, cost, and ID
-  int gameTime = 0;
-  int deltaTime = 1;  // Each loop iteration simulates 1 second of game time
+using namespace std;
 
-  // Simulate a 10-second game loop
-  while (gameTime < 10) {
-    f1.updateTimer(deltaTime);  // Update fileExplorer's timer
-    gameTime += deltaTime;      // Increment game time
+int main() {
+  sf::Clock clock;
+
+  fileExplorer Obj;
+  cout << Obj.getDesc() << endl;
+  cout << "DMG: " << Obj.getDmg() << endl;
+  cout << "HEALTH: " << Obj.getHealth() << endl;
+  cout << "X: " << Obj.getAppPosition().x << " Y: " << Obj.getAppPosition().y << endl;
+  sf::RectangleShape shape;
+  shape.setSize(sf::Vector2f(100.f,100.f));
+  sf::FloatRect g = shape.getGlobalBounds();
+  
+  while (clock.getElapsedTime().asSeconds() <= 10.0f){
+    Obj.update(g); //uncomment all of the couts inside fileExplorer to see internal updates
   }
 
   return 0;
