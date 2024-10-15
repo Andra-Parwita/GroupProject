@@ -8,7 +8,7 @@ class shooter : public application
 public:;
     shooter();
     ~shooter();
-    virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos) = 0; //turn into virtual function
+    virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos) = 0; //virtual
 };
 
 #endif

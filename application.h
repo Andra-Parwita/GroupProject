@@ -5,18 +5,18 @@
 #include "virus.h"
 #include <string.h>
 
-class application
+class application //parent class for placed unit applications
 {
 protected:
     //variables
-    int id;
+    int id; 
     int cost;
     int health;
     bool isAlive;
     int dmg;
-    sf::Vector2f AppPosition;
-    std::vector<sf::CircleShape>* proj;
-    std::string Desc;
+    sf::Vector2f AppPosition; //position of the app (should be linked with app sprite)
+    std::vector<sf::CircleShape>* proj; //projectiles, should be only used by shooter class or chrome (explosive)
+    std::string Desc; //descruption string
 
 public:
     //constructors
@@ -42,7 +42,7 @@ public:
     virtual std::string getDesc();
 
     //actions
-    virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos); //turn into virtual function
+    virtual std::vector<sf::CircleShape>* update(sf::FloatRect pos); //what the class should do, eg their specialised function
 };
 
 #endif

@@ -69,7 +69,7 @@ std::vector<sf::CircleShape>* vpn::update(sf::FloatRect pos) {
         (projectiles[i].getGlobalBounds().intersects(pos))) {
       projectiles.erase(projectiles.begin() + i);  // Remove the projectile
     } else {
-      i++;  // Only increment if we didn't erase an element
+      i++;  //increment 
     }
   }
   return &projectiles;
