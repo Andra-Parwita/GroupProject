@@ -830,7 +830,7 @@ void Game::update(){ //game updates
                             virusManager[i]->setFreeze(true);
                             virusManager[i]->move();
                             virusSprites[i].setSize(sf::Vector2f(300.0f, 400.0f));
-                            virusSprites[i].setPosition(sf::Vector2f(virusSprites[i].getPosition().x, virusSprites[i].getPosition().y - 160));
+                            virusSprites[i].setPosition(sf::Vector2f(virusSprites[i].getPosition().x - 85, virusSprites[i].getPosition().y - 160));
                             gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()*100);
                             gridMap->takeAppDamage(j,k+1, virusManager[i]->getDmg()*100);
                             gridMap->takeAppDamage(j,k-1, virusManager[i]->getDmg()*100);
