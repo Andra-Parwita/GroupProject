@@ -4,17 +4,14 @@ Group Project for OOP (comp sci)
 Description:
 A single-level lane-type tower defence game similar to Plants vs Zombies using typical computer applications that defend the computer against viruses. The game will consist of “applications” you can place on the field. The field will consist of  5x20 tiles (subject to change). The goal is to stop the viruses from reaching your side as they cross the field. 
 
-To do:
-core:
-- game over 
-Additional:
+To do:  
+Additional:  
 - Refactor the whole damn code (reduce redundancy, add const)
 - Convert Virus Manager into std::vector (from array)
 - Spriting 
 - Sound (add any extras ?music?)
 - Menu (pause)
-- Make a damn Makefile
-- controlled test cases
+- controlled test cases~
 - balancing
 - showing hp states
 - put stuff into folders cause omg it's hard to read and find stuff
