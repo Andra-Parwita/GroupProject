@@ -2,7 +2,7 @@
 
 // Constructor
 logicBomb::logicBomb(int health, float tileTime, int id, int dmg)
-    : virus(50, 2.0, 3, 10) {
+    : virus(100, 2.0, 3, 10) {
         this->isAlive = true;
         this->explosionCheck = false;
         if (!soundBuffer.loadFromFile("./SFX/EnemyEx.wav")){ //
@@ -12,7 +12,7 @@ logicBomb::logicBomb(int health, float tileTime, int id, int dmg)
     once = false;
     }
 
-logicBomb::logicBomb() : virus(50, 2.0, 3, 10) {
+logicBomb::logicBomb() : virus(100, 2.0, 3, 10) {
     this->isAlive = true;
     this->explosionCheck = false;
     if (!soundBuffer.loadFromFile("./SFX/EnemyEx.wav")){ //
@@ -30,7 +30,6 @@ bool logicBomb::move() {
         if (internalExClock.getElapsedTime().asSeconds() >= 5.0f) {
             if (!once){
                 explosionSound.play();
-                once = true;
             }
             std::cout << "exploded" << std::endl;
             this->explosionCheck = true;
