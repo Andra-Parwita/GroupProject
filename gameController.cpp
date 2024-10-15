@@ -1,6 +1,6 @@
 #include "gameController.h"
 
-//constuctors
+//constuctors 
 gameController::gameController() : resource(20){
     gameController::startTimer();
     virusCounter = 0;
@@ -23,12 +23,12 @@ void gameController::startTimer() {
 }
 
 //public functions
-float gameController::elapsedTime() const {
+float gameController::elapsedTime() const { //time elasped
     std::chrono::high_resolution_clock::time_point timeEnd = std::chrono::high_resolution_clock::now();
     return (std::chrono::duration<float>(timeEnd - timeStart).count());
 }
 
-bool gameController::appCooldownCheck(int id, bool freed){
+bool gameController::appCooldownCheck(int id, bool freed){  //checking for app cooldowns
 	switch (id) {
 	case 0: //Vs Code cooldown
 		if (appCooldownClocks[id].getElapsedTime().asSeconds() >= 3.0f){	
@@ -89,7 +89,7 @@ bool gameController::appCooldownCheck(int id, bool freed){
 	return false;
 }
 
-int gameController::costCheck(int id){
+int gameController::costCheck(int id){ //checking the costs of each
     int totalCost = 0;
     switch (id){
     case 0:
@@ -119,7 +119,7 @@ int gameController::costCheck(int id){
 }
 
 
-std::string gameController::getAppDesc(int id){
+std::string gameController::getAppDesc(int id){ //getting each app desc
     std::string desc = "";
     switch (id){
     case 0:
@@ -148,7 +148,7 @@ std::string gameController::getAppDesc(int id){
     return desc;
 }
 
-int gameController::appDmgCheck(int id){
+int gameController::appDmgCheck(int id){ //getting each app damage
     int dmg = 0;
     switch (id){
     case 0:
@@ -174,7 +174,7 @@ int gameController::appDmgCheck(int id){
     return dmg;
 }
 
-void gameController::addResource(int amount){
+void gameController::addResource(int amount){ 
     this->resource += amount;
 }
 
@@ -183,7 +183,8 @@ int gameController::getResource(){return resource;}
 int gameController::getVirusCount(){return virusCounter;}
 
 //spawners
-float gameController::bugSpawnTimeCheck(){
+//bug spawn checking
+float gameController::bugSpawnTimeCheck(){ 
     if (gameController::elapsedTime() <= 60){
         this->bugSpawnTime = 20;
     } else if ((gameController::elapsedTime() > 200) && (gameController::elapsedTime() <= 300)){
@@ -206,6 +207,7 @@ bool gameController::canSpawnBug(){
     return false;
 }
 
+//worm spawn checking
 float gameController::wormSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 240){
         this->wormSpawnTime = 40;
@@ -227,6 +229,7 @@ bool gameController::canSpawnWorm(){
     return false;
 }
 
+//trojan spawn checking
 float gameController::trojanSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 300){
         this->trojanSpawnTime = 21;
@@ -248,7 +251,7 @@ bool gameController::canSpawnTrojan(){
     return false;
 }
 
-
+//logic bomb spawn checking
 float gameController::logicBombSpawnTimeCheck(){
     if (gameController::elapsedTime() <= 300){
         this->logicBombSpawnTime = 25;
@@ -270,6 +273,7 @@ bool gameController::canSpawnLogicBomb(){
     return false;
 }
 
+//iloveyou spawn checking
 float gameController::iloveyouTimeCheck(){
     if (gameController::elapsedTime() <= 360){
         this->iloveyouSpawnTime = 25;
@@ -291,12 +295,13 @@ bool gameController::canSpawnIloveyou(){
     return false;
 }
 
+//virus main spawing check
 virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId){
     if (gameController::elapsedTime() >= 10){
         this->virusCounter++;
         std::cout << "increased number of viruses by 1, Current: " << virusCounter << std::endl;
 
-        //extends multiplies old array by 2
+        // multiplies old array by 2 if there is not enough space
         if ((virusCounter + 2) >= maxVirusSpace){
             std::cout << "checked size" << std::endl;
             int oldSize = maxVirusSpace;
@@ -319,7 +324,7 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
             std::cout << "made Virus Manager to temp" << std::endl;
         }
     
-        //checking ids
+        //checking ids for which virus to create
 
         switch (virusId)
         {
@@ -377,6 +382,7 @@ virus** gameController::spawnVirus(virus** virusManager, int virusId, int rowId)
     return virusManager;
 }
 
+//unused virus cleanup
 virus** gameController::cleanUpDeadViruses(virus** virusManager){
     /* int newCount = 0;
     for (int i = 0; i < virusCounter; i++) {

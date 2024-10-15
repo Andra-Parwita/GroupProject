@@ -23,7 +23,7 @@ fileExplorer::fileExplorer() : attackInterval(3){
     cost = 15;
     id = 1;
     Desc = "File Explorer \n Cost: 15 \n Will shoot files \n shoots straight file in a lane \n 3 Sec Cooldown";
-    if (!buffer.loadFromFile("./SFX/laserShoot.wav")){ //
+    if (!buffer.loadFromFile("./SFX/laserShoot.wav")){ 
 		  std::cout << "Could not load Freeze Shoot sound" << std::endl;
 	  }
 	  sound.setBuffer(buffer);
@@ -34,7 +34,7 @@ fileExplorer::fileExplorer() : attackInterval(3){
 fileExplorer::~fileExplorer(){}
 // Simulate shooting (dealing damage)
 void fileExplorer::shoot() {
-  if (projectiles.size() >= 10) { // Adjust 10 as needed
+  if (projectiles.size() >= 10) { 
     return; // Prevent shooting if max projectiles are active
   }
 
@@ -42,7 +42,7 @@ void fileExplorer::shoot() {
     // std::cout << "fileExplorer shoots" << std::endl;
     sound.play();
 
-    sf::CircleShape bullet;
+    sf::CircleShape bullet; //bullet creation
     bullet.setRadius(5);
     bullet.setFillColor(sf::Color::Cyan);
     bullet.setOrigin(5,5);
@@ -59,7 +59,7 @@ void fileExplorer::shoot() {
  
  for (int i = 0; i < projectiles.size(); ) {
         
-        if(internalClockMove[i].getElapsedTime().asSeconds() >= 0.01){
+        if(internalClockMove[i].getElapsedTime().asSeconds() >= 0.01){ //checks speed at which projectile moves
           projectiles[i].move(5.f, 0.f); // Move to the right
          internalClockMove[i].restart();
         }

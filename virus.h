@@ -57,7 +57,7 @@ class virus {
   int getSegmentId();
   bool getExplosion();
 
-  // movement
+  // movement & specialised functions
   virtual bool move();
 };
 

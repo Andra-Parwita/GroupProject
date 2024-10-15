@@ -12,18 +12,26 @@ void Game::initVariables(){
     //game controller
     gameManager = new gameController;
     srand(time(NULL)); //seed for random, might change to another seed
-    projected = new std::vector<sf::CircleShape>*[100];
+
+	//projectiles
+    projected = new std::vector<sf::CircleShape>*[100]; //std projectiles from file explorer
     projectileCount = 0;
-    explosions = new std::vector<sf::CircleShape>*[100];
+
+    explosions = new std::vector<sf::CircleShape>*[100]; //for chrom explosion projectiles
     explosionCount = 0;
-    slowed = new std::vector<sf::CircleShape> *[100];
+
+    slowed = new std::vector<sf::CircleShape> *[100]; //for slow vpn projectiles
     slowCount = 0;
+
+	//sound
 	soundBuffers = new sf::SoundBuffer [4];
-	overOnce = false;
+
+	// game over variables 
+	overOnce = true;
 }
 
 
-void Game::initWindow(){ //creates the window
+void Game::initWindow(){ //creates and initialises the window
     this->videoMode.height = 1000;
     this->videoMode.width = 2000;
     this->window = new sf::RenderWindow(this->videoMode, "Firewall");
@@ -34,34 +42,40 @@ const bool Game::getWindowIsOpen() const{ //checks if window is open
     return this->window->isOpen();
 }
 
-void Game::initText(){
+void Game::initText(){ //text initialisaion
     //text
-    if (!font.loadFromFile("./Sprites/segoeui.ttf")){
+    if (!font.loadFromFile("./Sprites/segoeui.ttf")){ //default font
         std::cout << "Font not loaded!" << std::endl;
     }
+	//for timer text at top left
     timerText.setFont(font);
     timerText.setCharacterSize(30);
     timerText.setPosition(sf::Vector2f(10.0f,10.0f));
     timerText.setFillColor(sf::Color::Cyan);
 
+	//for resources text
     resourceText.setFont(font);
     resourceText.setCharacterSize(30);
     resourceText.setPosition(sf::Vector2f(410.0f,10.0f));
     resourceText.setFillColor(sf::Color::Cyan);
 
+	//the small description at mouse
     PopDisplayText.setFont(font);
     PopDisplayText.setString("");
     PopDisplayText.setCharacterSize(16);
     PopDisplayText.setPosition(sf::Vector2f(200.0f,10.0f));
     PopDisplayText.setFillColor(sf::Color::Cyan);
 
+	//game over text
 	GameOverText.setFont(font);
 	GameOverText.setCharacterSize(60);
 	GameOverText.setFillColor(sf::Color::Cyan);
 
 }
 
-void Game::initBar(){  //task bar
+void Game::initBar(){  //task bar initialisation
+
+	//the task bar borders
     taskBar = new sf::RectangleShape[6];
     for (int i=0; i< 6; i++){
         taskBar[i].setSize(sf::Vector2f(88.f,150.f));
@@ -70,7 +84,8 @@ void Game::initBar(){  //task bar
         taskBar[i].setPosition(600+i*(88.f),10.f);
         taskBar[i].setFillColor(sf::Color::Transparent);
     }
-    
+	
+	//the sprites within the task bar
     taskBarSprites = new sf::RectangleShape[6];
     for (int i=0; i< 6; i++){
         taskBarSprites[i].setSize(sf::Vector2f(50.f,50.f));
@@ -83,6 +98,7 @@ void Game::initBar(){  //task bar
     taskBarSprites[4].setFillColor(sf::Color::Magenta);
     taskBarSprites[5].setFillColor(sf::Color::Transparent);
 
+	//the small icon at mouse which tells what app is selected
 	selectedIcon.setFillColor(sf::Color::Transparent);
 	selectedIcon.setSize(sf::Vector2f(10.0f,10.0f));
 }
@@ -92,6 +108,7 @@ void Game::initMap(){
 
     dispTiles = new sf::RectangleShape*[5]; //making display tiles
 
+	//initilsing the displayed tile map
     for (int i=0; i < 5; i++){
         dispTiles[i] = new sf::RectangleShape[20];
     }
@@ -106,6 +123,7 @@ void Game::initMap(){
     } 
     std::cout << "made map" << std::endl;
 
+	//initialising the sprites that are inside the tiles
     appSpriteHolders = new sf::RectangleShape*[5];
     for (int i=0; i < 5; i++){
         appSpriteHolders[i] = new sf::RectangleShape[20];
@@ -122,12 +140,15 @@ void Game::initMap(){
 }
 
 void Game::initVirus(){
+	//the virus sprites initalisation
     maxVirusSpritesSpace = 300;
-    virusSprites = new sf::RectangleShape[maxVirusSpritesSpace];
+    virusSprites = new sf::RectangleShape[maxVirusSpritesSpace]; 
+
+	//the virus manager initialisation
     virusManager = new virus*[300];
 }
 
-void Game::initSound(){
+void Game::initSound(){ //sound initialisation
 	if (!soundBuffers[0].loadFromFile("./SFX/AppHurt.wav")){ //app damaged sound
 		std::cout << "Could not load App Hurt" << std::endl;
 	}
@@ -198,12 +219,13 @@ Game::~Game(){
 	delete[] this->soundBuffers;
 	std::cout << "Sound Buffers was freed" << std::endl;
 
-	delete[] this->slowed;
-	std::cout << "Slowing Projectiles was freed" << std::endl;
-	delete[] this->explosions;
-	std::cout << "Explosions was freed" << std::endl;
-	delete[] this->projected;
-	std::cout << "Regular Peojectiles was freed" << std::endl;
+	//the projectiles are pointers and are deleted elsewhere
+	// delete[] this->slowed;
+	// std::cout << "Slowing Projectiles was freed" << std::endl;
+	// delete[] this->explosions;
+	// std::cout << "Explosions was freed" << std::endl;
+	// delete[] this->projected;
+	// std::cout << "Regular Peojectiles was freed" << std::endl;
     
     delete this->gridMap;
 	std::cout << "Grid data was freed" << std::endl;
@@ -212,21 +234,21 @@ Game::~Game(){
 }
 
 //Public Functions
-bool Game::taskBarChecker(int i){
+bool Game::taskBarChecker(int i){ //checks if the mouse is in the task bar i
     if (taskBar[i].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
         return true;
     } 
     return false;
 }
 
-bool Game::gridMapChecker(int x, int y){
+bool Game::gridMapChecker(int x, int y){ //check if the mouse is in the tile coord x, y
     if (dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
         return true;
     } 
     return false;
 }
 
-void Game::cleanUpDeadVirusesSprites(){
+void Game::cleanUpDeadVirusesSprites(){ //cleans up all dead sprites (disabled)
     int newCount = 0;
     for (int i = 0; i < gameManager->getVirusCount(); i++) {
         if (virusManager[i]->checkAlive() == false) {
@@ -235,18 +257,18 @@ void Game::cleanUpDeadVirusesSprites(){
     }
 }
 
-void Game::spawnEnemy(int id){
-    int type = id; // for debug - setting to only bug spawn
+void Game::spawnEnemy(int id){ //enemy spawn
+    int type = id; 
 
     //random row spawn
-    //int rowSpawn = rand()%5;
     int rowSpawn = (int) (5.0 * (rand() / (RAND_MAX + 1.0)));
     std::cout << "rowChosen: " << rowSpawn << std::endl;
     
+	//calling virus manager to spawn the virus on the gid
     virusManager = gameManager->spawnVirus(virusManager, type, rowSpawn);
     std::cout << "spawning ended \n" << std::endl;
 
-    //resizing the number of rectangle shapes
+    //resizing the number of rectangle shapes if not enough space
     if ((gameManager->getVirusCount()+2) >= maxVirusSpritesSpace){
         int oldSize = maxVirusSpritesSpace;
         int newSize = maxVirusSpritesSpace*2;
@@ -266,14 +288,14 @@ void Game::spawnEnemy(int id){
         std::cout << "made Virus sprites to temp" << std::endl;
     }
 
-    //setting the sprite
+    //setting the sprite for the enemy type spawned (linked to game manager)
     switch (virusManager[gameManager->getVirusCount()-1]->getId())
     {
     case 0: //for bug
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //bug
-        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Red);
+        virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color(255,100,50));
         break;
-    case 1:
+    case 1: //for worm and it's segments
         if (gameManager->getVirusCount() >= 3){
             virusSprites[gameManager->getVirusCount()-3].setSize(sf::Vector2f(60.f,55.f)); //worm
             virusSprites[gameManager->getVirusCount()-3].setFillColor(sf::Color::White);
@@ -288,15 +310,15 @@ void Game::spawnEnemy(int id){
             std::cout << "end sprite set" << std::endl;
         }
         break;
-    case 2:
+    case 2: // for trojan
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,55.f)); //trojan
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Green);
         break;
-    case 3:
+    case 3: // for logicbomb
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //logicbomb
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color::Yellow);
         break;
-    case 4:
+    case 4: //for iloveyou
         virusSprites[gameManager->getVirusCount()-1].setSize(sf::Vector2f(50.f,50.f)); //Iloveyou
         virusSprites[gameManager->getVirusCount()-1].setFillColor(sf::Color(125,125,125));
         break;
@@ -311,7 +333,7 @@ void Game::spawnEnemy(int id){
     endOfCurrentRow.y = endOfCurrentRow.y + 50;
     switch (type)
     {
-    case 1:
+    case 1: //since worm has 3 segments
         virusSprites[gameManager->getVirusCount()-3].setPosition(endOfCurrentRow.x, endOfCurrentRow.y); //set spritePosition
         virusManager[gameManager->getVirusCount()-3]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
         virusSprites[gameManager->getVirusCount()-2].setPosition(endOfCurrentRow.x, endOfCurrentRow.y -5); //set spritePosition
@@ -322,7 +344,7 @@ void Game::spawnEnemy(int id){
         std::cout << virusManager[gameManager->getVirusCount()-1]->getPosX() << " " << virusManager[gameManager->getVirusCount()-1]->getPosY() << std::endl;
         std::cout << "spawning worm sprites ended \n" << std::endl;
         break;
-    case 2:
+    case 2: //trojan 
         virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
         virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y-2.5);  //set Data Position
     
@@ -330,7 +352,7 @@ void Game::spawnEnemy(int id){
         std::cout << "spawning sprites ended \n" << std::endl;
         break;
     
-    default:
+    default: //default
         virusSprites[gameManager->getVirusCount()-1].setPosition(endOfCurrentRow); //set spritePosition
         virusManager[gameManager->getVirusCount()-1]->setPosXY(endOfCurrentRow.x, endOfCurrentRow.y);  //set Data Position
     
@@ -349,13 +371,13 @@ void Game::pollEvents(){ //game ui inputs
         }
 
         //mouse click 
-        if (this->ev.type == sf::Event::MouseButtonPressed){
+        if (this->ev.type == sf::Event::MouseButtonPressed){ //if mouse pressed
             std::cout << "button pressed" << std::endl;
-            for (int i = 0; i < 6; i++){
+            for (int i = 0; i < 6; i++){ //checking to swap the currently selected app from the task bar
                 if (Game::taskBarChecker(i) == true){
                     currentSelectionId = i;
 					selectSound.play();
-					switch (currentSelectionId){
+					switch (currentSelectionId){ //for the item icon at mouse
 						case 0:
 							selectedIcon.setFillColor(sf::Color::Blue);
 							break;
@@ -396,7 +418,7 @@ void Game::pollEvents(){ //game ui inputs
 									gameManager->addResource(-(gameManager->costCheck(currentSelectionId))); //takes currency
 									//std::cout << "before sprite: " << std::endl;
 									switch (currentSelectionId){
-									case 0:
+									case 0: //setting sprite to colour of app
 										appSpriteHolders[j][k].setFillColor(sf::Color::Blue);
 										break;
 									case 1:
@@ -434,9 +456,9 @@ void Game::pollEvents(){ //game ui inputs
 }
 
 void Game::update(){ //game updates
-    this->pollEvents(); //keyboard
+    this->pollEvents(); //calling any user inputs
 
-	for (int i = 0; i < 5; i ++){
+	for (int i = 0; i < 5; i ++){ //checking cooldowns and resetting back to normal
 		if (!gameManager->appCooldownCheck(i, false)){
 			taskBarSprites[i].setFillColor(sf::Color(125,125,125));
 		} else {
@@ -465,14 +487,15 @@ void Game::update(){ //game updates
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //checking mouse and output
-    inGrid = false;
-    inBar = false;
-    sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);  
+
+    inGrid = false; //if mouse in in the grid
+    inBar = false; //if mouse is in the taskbar
+    sf::Vector2i mousePos = sf::Mouse::getPosition(*this->window);  //current mouse pos
 	selectedIcon.setPosition(mousePos.x - 5, mousePos.y - 5); //puts icon position to mouse (to show what is currently selected)
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) { //checking for the popup item description on taskbar
         sf::FloatRect taskBarBounds = taskBar[i].getGlobalBounds();
 
         if (taskBarBounds.contains(static_cast<sf::Vector2f>(mousePos))) {
@@ -490,7 +513,7 @@ void Game::update(){ //game updates
     }
 
     //subtext for mouse
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++) { //checking for popup type of app on the tiles
         for (int j = 0; j < 20; j++){
             sf::FloatRect Bounds = dispTiles[i][j].getGlobalBounds();
             if (Bounds.contains(static_cast<sf::Vector2f>(mousePos))) {
@@ -548,12 +571,12 @@ void Game::update(){ //game updates
         }
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //spawners
+    //spawners at specific time
     if (gameManager->canSpawnBug() == true){  //bug
         if (gameManager->elapsedTime() >= 15){
-                Game::spawnEnemy(0);
+                Game::spawnEnemy(0); //id of enemy
         }
     }
     if (gameManager->canSpawnWorm() == true){  //worm
@@ -577,7 +600,7 @@ void Game::update(){ //game updates
         }
     }
 
-   //waves spawner (testing!)  
+   //waves spawner (unused)  
    /* if ((gameManager->elapsedTime() >= 100) && (gameManager->elapsedTime() <= 100.1)){ //first wave of enemies
         if (waveTimer.getElapsedTime().asSeconds() >= 1){
             std::cout << "Wave 1!" << std::endl;
@@ -613,7 +636,7 @@ void Game::update(){ //game updates
         }
    } */
 
-  	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //internal one second timer
     if (clock.getElapsedTime().asSeconds() >= 1.0f){ //one second clock
@@ -628,37 +651,36 @@ void Game::update(){ //game updates
         clock.restart();
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //getting projectiles
-    projectileCount = gridMap->getNumShootingTiles(1);
+    projectileCount = gridMap->getNumShootingTiles(1); 
     if (virusSprites != nullptr){ //get projectiles
         projected = gridMap->getProjectiles(virusSprites->getGlobalBounds());
     } 
 
+	//getting vpn projectiles
     slowCount = gridMap->getNumShootingTiles(3);
-    if (virusSprites != nullptr) { // get projectiles
+    if (virusSprites != nullptr) { // get slow projectiles
         slowed = gridMap->getSlows(virusSprites->getGlobalBounds());
     }
 
+	//getting explosion projectiles
     explosionCount = gridMap->getNumShootingTiles(4);
     if (virusSprites != nullptr){ //get explosion
         explosions = gridMap->getExplosions(virusSprites->getGlobalBounds());
     } 
 
-	projectileCount = gridMap->getNumShootingTiles(1);
-    for (int i = 0; i < projectileCount; i++) {
-        for (int j = 0; j < projected[i]->size(); j++) {
-            window->draw((*projected[i])[j]);
-        }
-    } 
-
+	//unused
     // gameManager->cleanUpDeadViruses(virusManager); //deleting and freeing space
     // Game::cleanUpDeadVirusesSprites();
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     ////enemy virus checking 
     for (int i = 0; i < gameManager->getVirusCount(); i++){
+
+		//checking hits and tracking projectiles from file explorer
         if (virusSprites != nullptr){
             projected = gridMap->getProjectiles(virusSprites[i].getGlobalBounds());
         } 
@@ -680,6 +702,7 @@ void Game::update(){ //game updates
             }
         } 
 
+		//checking hits and tracking projectiles from vpn
         if (virusSprites != nullptr){
             slowed = gridMap->getSlows(virusSprites[i].getGlobalBounds());
         }
@@ -693,30 +716,31 @@ void Game::update(){ //game updates
                 ((slowed[j]->at(k).getPosition().x) <=(virusSprites[i].getPosition().x + 50)) &&
                 (slowed[j]->at(k).getPosition().y) <=(virusSprites[i].getPosition().y + 50) &&
                 (slowed[j]->at(k).getPosition().y) >=(virusSprites[i].getPosition().y - 50)){
-            virusManager[i]->setHealth((virusManager[i]->getHealth()) - (gameManager->appDmgCheck(3)));
-			if ((virusManager[i + 1] != nullptr)){
-				if (virusManager[i+1]->getSegmentId() == 1){
-					virusManager[i+1]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
-					std::cout << "Enemy middle segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
-					if ((virusManager[i + 2] != nullptr)){
-						if (virusManager[i+2]->getSegmentId() == 2){
-							virusManager[i+2]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
-							std::cout << "Enemy end segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
+            	virusManager[i]->setHealth((virusManager[i]->getHealth()) - (gameManager->appDmgCheck(3)));
+				if ((virusManager[i + 1] != nullptr)){
+					if (virusManager[i+1]->getSegmentId() == 1){
+						virusManager[i+1]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+						std::cout << "Enemy middle segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
+						if ((virusManager[i + 2] != nullptr)){
+							if (virusManager[i+2]->getSegmentId() == 2){
+								virusManager[i+2]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+								std::cout << "Enemy end segment is slowed to: " << virusManager[i+1]->getTileTime() << std::endl;
+							}
 						}
 					}
 				}
-			}
-			virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
-            std::cout << "Health is now " << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(3) 
-			<< " Enemy is slowed to: " << virusManager[i]->getTileTime() << std::endl;
-			enemyhitSound.play();
-            slowed[j]->erase(slowed[j]->begin() + k);
-            } else{ 
+				virusManager[i]->setTileTime((virusManager[i]->getTileTime()) * 1.25);
+            	std::cout << "Health is now " << virusManager[i]->getHealth() << " Dmg taken is: " << gameManager->appDmgCheck(3) 
+				<< " Enemy is slowed to: " << virusManager[i]->getTileTime() << std::endl;
+				enemyhitSound.play();
+            	slowed[j]->erase(slowed[j]->begin() + k);
+            } else { 
                 k++;
                 }
             }
         }
 
+		//tracking explosions from chrome
         if (virusSprites != nullptr){ //get explosion
             explosions = gridMap->getExplosions(virusSprites->getGlobalBounds());
         } 
@@ -735,7 +759,7 @@ void Game::update(){ //game updates
         } 
 
 
-        //virus alive or dead
+        //checking if virus alive or dead and taking them off the grid (temp until vectors)
         if (virusManager[i]->getHealth() <= 0){
             virusManager[i]->setStatus(false);
             virusSprites[i].setPosition(sf::Vector2f(2300,1100));
@@ -743,6 +767,7 @@ void Game::update(){ //game updates
             virusManager[i]->setPosXY(2300,1100);
         }
 
+		//checking if viruses are alive or not
         if (virusManager[i]->checkAlive() == true){
             if (virusManager[i]->move() == true){
                 // virusSprites[i].setPosition(sf::Vector2f((virusSprites[i].getPosition().x)-85.f,virusSprites[i].getPosition().y));
@@ -751,14 +776,14 @@ void Game::update(){ //game updates
             }
         }
 
-        //end 
+        //checking for game over
         if (virusSprites[i].getPosition().x < 0){
 			std::cout << "Game Over" << std::endl; 
             gameOver = true;
         }
 
         //checking if  virus is on a app
-        if (virusManager[i]->getId() == 3) {  // logicBomb ID
+        if (virusManager[i]->getId() == 3) {  // for logicBomb ID since it has a special function
             // Only freeze if explosion has already started, not before
             if ((virusManager[i]->getExplosion() == true) && (virusManager[i]->getHealth() <= 0)) {
                 virusManager[i]->setFreeze(true);  // Freeze only after explosion
@@ -768,7 +793,8 @@ void Game::update(){ //game updates
         } else {
             virusManager[i]->setFreeze(false);  // Handle other virus types
         }
-        for (int j = 0; j < 5; j++){
+
+        for (int j = 0; j < 5; j++){	//checking all tiles and viruses
             for (int k =0; k < 20; k++){
                 if ((dispTiles[j][k].getGlobalBounds().contains(virusManager[i]->getPosX(), virusManager[i]->getPosY()) == true) && (gridMap->checkOccupancy(j,k) == true)){
 
@@ -787,7 +813,7 @@ void Game::update(){ //game updates
                     }
 
 
-                    //default stopping to eat app
+                    //default stopping to dmg app if it is on it
                     virusManager[i]->setFreeze(true);
                     if (virusManager[i]->getDmgClock() >= 1.0f){
                         if (gridMap->takeAppDamage(j,k, virusManager[i]->getDmg()) == true){
@@ -797,6 +823,7 @@ void Game::update(){ //game updates
                         virusManager[i]->restartClock();
                     }
 
+					//special function for logicbomb which makes it blow up
                     if (virusManager[i]->getId() == 3){
                         // std::cout << "Ex CHecker: " << virusManager[i]->getExplosion() <<std::endl;
                         if (virusManager[i]->getExplosion() == true){
@@ -822,7 +849,8 @@ void Game::update(){ //game updates
         // dispTiles[x][y].getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*this->window)))){
     }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //refresh and checks apps statuses
     gridMap->checkAppsStatus(); // checks if any apps are dead and removes them
     for (int i = 0; i < 5; i ++){ //for application sprites
@@ -842,24 +870,23 @@ void Game::render(){ //renders the game objects
 
     this->window->clear(sf::Color::Black); //clearing frame
 
-	if (gameOver) {
+	if (gameOver) { //checking if the game is over
 		timerText.setPosition(800.0f,500.0f);
 		this->window->draw(timerText);
 
 		std::string GameOverTextString = "Game Over!";
 		GameOverText.setString(GameOverTextString);
-		GameOverText.setPosition(600.0f,400.0f);
+		GameOverText.setPosition(750.0f,400.0f);
 		this->window->draw(GameOverText);
 
-		if (overOnce){
+		if (overOnce){ //for the timing to close the game
 			gameOverClock.restart();
 			overOnce = false;
-		}
-		if (gameOverClock.getElapsedTime().asSeconds() >= 10.0f){
+		} else if (gameOverClock.getElapsedTime().asSeconds() >= 15.0f){
 			this->window->close();
 		}
 
-	} else {
+	} else { //default render of the game
 		//time clock
 		std::string currentTime = std::to_string(gameManager->elapsedTime());
 		timerText.setString("Time: " + currentTime);
@@ -888,25 +915,25 @@ void Game::render(){ //renders the game objects
 			this->window->draw(this->taskBarSprites[i]);
 		}
 
-		for (int i=0; i < gameManager->getVirusCount(); i++){
+		for (int i=0; i < gameManager->getVirusCount(); i++){ //virus sprites
 			this->window->draw(this->virusSprites[i]);
 		}
 		
 		projectileCount = gridMap->getNumShootingTiles(1);
-		for (int i = 0; i < projectileCount; i++) {
+		for (int i = 0; i < projectileCount; i++) { //default file explorer projectiles
 			for (int j = 0; j < projected[i]->size(); j++) {
 				window->draw((*projected[i])[j]);
 			}
 		} 
 	
 
-		for (int i = 0; i < slowCount; i++) {
+		for (int i = 0; i < slowCount; i++) { //slowing projectiles
 			for (int j = 0; j < slowed[i]->size(); j++) {
 				window->draw((*slowed[i])[j]);
 			}
 		} 
 
-		for (int i = 0; i < explosionCount; i++) {
+		for (int i = 0; i < explosionCount; i++) { //chrome explosions
 			if (explosions[i]!= nullptr){
 				for (int j = 0; j < explosions[i]->size(); j++) {
 					window->draw((*explosions[i])[j]);
@@ -914,10 +941,10 @@ void Game::render(){ //renders the game objects
 			}
 		} 
 
-		this->window->draw(this->timerText);
-		this->window->draw(this->resourceText);
-		this->window->draw(this->PopDisplayText);
-		this->window->draw(this->selectedIcon);
+		this->window->draw(this->timerText); //timer
+		this->window->draw(this->resourceText); //resources
+		this->window->draw(this->PopDisplayText); //item desc
+		this->window->draw(this->selectedIcon); //selected item
 
 	}
 

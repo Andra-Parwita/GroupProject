@@ -7,7 +7,7 @@ class vscode : public application {
  private:
   int memoryProduction;    // Amount of memory produced
   int productionInterval;  // Time interval for memory production (in seconds)
-  int elapsedTime;         // Time elapsed since last memory production
+  int elapsedTime;         // Time elapsed since last memory production ()
 
  public:
   // Constructor

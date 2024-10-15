@@ -15,6 +15,7 @@ class vpn : public shooter {
   sf::Clock internalClockMove;
 
   std::vector<sf::CircleShape> projectiles;  // the container of projectiles
+  //sounds
   sf::SoundBuffer buffer;
   sf::Sound sound;
 

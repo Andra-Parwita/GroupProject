@@ -19,7 +19,7 @@ worm::~worm(){}
 
 
 bool worm::move(){
-    switch (segmentId)
+    switch (segmentId) //delays each segment so they move in unison
     {
     case 1:
         if (segmentClock.getElapsedTime().asSeconds() <= (tileTime*2)){

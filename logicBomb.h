@@ -6,10 +6,11 @@
 
 class logicBomb : public virus {
  protected:
+  //sounds
   sf::Clock internalExClock;
   sf::SoundBuffer soundBuffer;
   sf::Sound explosionSound;
-  bool once;
+  bool once; //plays sound once when explodes
  public:
   // constructors
   logicBomb();

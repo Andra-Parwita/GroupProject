@@ -25,16 +25,16 @@ logicBomb::logicBomb() : virus(100, 2.0, 3, 10) {
 logicBomb::~logicBomb(){}
 
 bool logicBomb::move() {
-    if ((freeze == true) || (explosionCheck == true)) {
+    if ((freeze == true) || (explosionCheck == true)) { //checks if it can explode
         // std::cout << internalExClock.getElapsedTime().asSeconds() << std::endl;
-        if (internalExClock.getElapsedTime().asSeconds() >= 5.0f) {
+        if (internalExClock.getElapsedTime().asSeconds() >= 5.0f) { //if it is on an app for 5 secs, explodes
             if (!once){
                 explosionSound.play();
             }
             std::cout << "exploded" << std::endl;
             this->explosionCheck = true;
 
-            if (internalExClock.getElapsedTime().asSeconds() >= 5.5f) {
+            if (internalExClock.getElapsedTime().asSeconds() >= 5.5f) { //delays death so explosion can render
                 std::cout << "is dead" << std::endl;
                 this->health = 0;
                 this->setStatus(false);

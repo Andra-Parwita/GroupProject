@@ -1,5 +1,7 @@
 - October 15, 2024  
+fixed double deletion between classes sharing same pointers
 added balanincing changes to time (much harder after 500 secs)  
+added current selection icon near mouse
 added Change log - Andra Parwita  
 Added testing for indiviual files - Andra Parwita  
 Fixed deletion malloc problems and implemented game over - Andra Parwita  

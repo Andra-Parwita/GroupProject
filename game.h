@@ -23,20 +23,19 @@ class Game {
 
   sf::RectangleShape* taskBar;         // the actual task bar
   sf::RectangleShape* taskBarSprites;  // the sprites within the task bar
-  sf::RectangleShape selectedIcon;
-  sf::Clock PopupBoxTimer;
-  bool inBar;
-  sf::Clock gridIndicatorTimer;
-  bool inGrid;
+  sf::RectangleShape selectedIcon; 	//current selected icon
+  sf::Clock PopupBoxTimer; 			//item desc timer
+  bool inBar; 					//if in the task bar bool
+  sf::Clock gridIndicatorTimer; //how long the mouse has been in grid
+  bool inGrid;					//if in the grid	
 
   // mapdata
   grid* gridMap;  // actual map data
 
   // fonts and text
   sf::Font font;       // font
-  sf::Text timerText;  //
+  sf::Text timerText;  
   sf::Text resourceText;
-
   sf::Text PopDisplayText;
 
   // gameController
@@ -54,18 +53,19 @@ class Game {
   std::vector<sf::CircleShape>** projected;  // stores all projectile arrays which hold each projectile
   int projectileCount;  // the number of projectile vectors
 
-  std::vector<sf::CircleShape>** slowed;
-  int slowCount;
+  std::vector<sf::CircleShape>** slowed; //stores all slowing projectile arrays 
+  int slowCount; // the number of projectile vectors
 
-  std::vector<sf::CircleShape>** explosions;
-  int explosionCount;
+  std::vector<sf::CircleShape>** explosions; // stores all explosions arrays 
+  int explosionCount; // the number of projectile vectors
 
   // clock
   sf::Clock clock;  // internal clock
-  int fiveSec;      //
-  sf::Clock waveTimer;
-  sf::Clock* appCooldownClocks;
+  int fiveSec;      //five second interval timer
+  sf::Clock waveTimer; //timer for each wave
+  sf::Clock* appCooldownClocks; //
 
+	//game over variables
   bool gameOver;
   bool overOnce;
   sf::Text GameOverText;
@@ -103,9 +103,9 @@ class Game {
   void pollEvents();
   void update();
   void render();
-  void cleanUpDeadVirusesSprites();
+  void cleanUpDeadVirusesSprites(); //virus cleanup (unused)
 
-  void spawnEnemy(int id);
+  void spawnEnemy(int id); //spawing enemies
 };
 
 #endif

@@ -27,7 +27,9 @@ class gameController
 private:
     int resource;
     std::chrono::high_resolution_clock::time_point timeStart;
-    application* costChecker;
+
+    //application id checkers for respective
+    application* costChecker;  
     application* dmgChecker;
     application* descChecker;
 
@@ -38,15 +40,17 @@ private:
     int virusCounter;
     int maxVirusSpace;
 
+    //spawntimes for each virus
     int bugSpawnTime;
     int trojanSpawnTime;
     int wormSpawnTime;
     int logicBombSpawnTime;
     int iloveyouSpawnTime;
 
+    //app clocks
     sf::Clock* spawnerClock;
     sf::Clock* appCooldownClocks;
-    sf::Clock wormSpawner;
+    sf::Clock wormSpawner; 
 public:
     //constructors
     gameController();
@@ -63,7 +67,7 @@ public:
 
     float elapsedTime() const;
     
-    //spawning functions
+    //spawning checks for each enemy
     float bugSpawnTimeCheck();
     bool canSpawnBug();
 
@@ -79,7 +83,7 @@ public:
     float iloveyouTimeCheck();
     bool canSpawnIloveyou();
 
-
+    //spawning the virus
     virus** spawnVirus(virus** virusManager, int virusId, int rowId);
     
     //cleaning

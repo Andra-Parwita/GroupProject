@@ -3,12 +3,12 @@
 // Constructor
 iloveyou::iloveyou(int health, float tileTime, int id, int dmg)
     : virus(120, 1.5, 4, 25) {
-        this->isAlive = true;//movement in seconds
+        this->isAlive = true;
         this->rowSwitcher = 0;
     }
 
 iloveyou::iloveyou() : virus(120, 1.5, 4, 25) {
-    this->isAlive = true; //movement in seconds
+    this->isAlive = true; 
     this->rowSwitcher = 0;
 }  
 
@@ -21,8 +21,8 @@ bool iloveyou::move(){
                 std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
                 virus::setPosX(position_x -85);
                 this->rowSwitcher = rand() %2; //apparently more random
-                std::cout << "Row Switcher is: " << rowSwitcher << std::endl;
-                switch (rowSwitcher)
+                // std::cout << "Row Switcher is: " << rowSwitcher << std::endl;
+                switch (rowSwitcher) //diagonal movement for I love you
                 {
                 case 1:
                     if ((position_y -150) > 200.0f ){ //up

@@ -40,9 +40,9 @@ bool virus::getExplosion(){return this->explosionCheck;}
 
 //movement
 bool virus::move(){
-    if (freeze == false){
-        if ((virus::checkAlive() == true) && (health > 0)){
-            if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){
+    if (freeze == false){ //checks if frozen (on app tile)
+        if ((virus::checkAlive() == true) && (health > 0)){ //checks if the virus is still alive
+            if(internalClock.getElapsedTime().asSeconds() >= ((tileTime)+((rand()%1000)/1000))){ //how often it can move
                 // std::cout << "moved to: " << position_x -85 << "at: " << internalClock.getElapsedTime().asSeconds()  << std::endl;
                 virus::setPosX(position_x -85);
                 internalClock.restart(); 

@@ -11,12 +11,14 @@ class chrome : public application {
   int explodeTime;    // Time until boom
   int elapsedTime;    // Time elapsed since placing
 
+  //clocks and projectiles
   sf::Clock internalClock;
-  bool once;
-  std::vector<sf::CircleShape> explosion;
+  bool once; //to play sound once
+  std::vector<sf::CircleShape> explosion; //explosion projectile
 
   bool explode();
 
+  //sound
   sf::SoundBuffer buffer;
   sf::Sound sound;
 

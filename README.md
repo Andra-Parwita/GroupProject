@@ -2,7 +2,9 @@
 Group Project for OOP (comp sci)
 
 Description:
-A single-level lane-type tower defence game similar to Plants vs Zombies using typical computer applications that defend the computer against viruses. The game will consist of “applications” you can place on the field. The field will consist of  5x20 tiles (subject to change). The goal is to stop the viruses from reaching your side as they cross the field. 
+A single-level lane-type tower defence game similar to Plants vs Zombies using typical computer applications that defend the computer against viruses. The game will consist of “applications” you can place on the field. The field will consist of  5x20 tiles (subject to change). The goal is to stop the viruses from reaching your side as they cross the field.  
+
+For changes: look at CHANGELOG.md file  
 
 To do:  
 Additional:  

@@ -35,7 +35,7 @@ void tile::occupy(int appId, sf::Vector2f pos){ //add app ids and connect to new
 }
 void tile::clear(){delete applicationType; isOccupied = false; applicationType = new application;}
 
-void tile::updateStatus(){
+void tile::updateStatus(){ //changes the status dead or alive
     if (applicationType->getId() != 99){ //checks if not placeholder application
         if ((applicationType->getHealth() <= 0)){
             tile::clear();
@@ -43,14 +43,14 @@ void tile::updateStatus(){
     }
 }
 
-bool tile::checkAppStatus(){
+bool tile::checkAppStatus(){ //
     return applicationType->checkAlive();
 }
 void tile::setAppHealth(int hp){applicationType->setHealth(hp);}
 void tile::setAppPosition(sf::Vector2f pos){
     applicationType->setAppPosition(pos);
 }
-std::vector<sf::CircleShape>* tile::update(sf::FloatRect pos){
+std::vector<sf::CircleShape>* tile::update(sf::FloatRect pos){ //gets the projectile array from the tile 
     std::vector<sf::CircleShape>* data = applicationType->update(pos);
     return data;
 }

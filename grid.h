@@ -9,7 +9,9 @@
 class grid {
  private:
   tile** tiles;  // tile data
-  std::vector<sf::CircleShape>** projectileContainers;
+
+  //projectile containers
+  std::vector<sf::CircleShape>** projectileContainers; 
   std::vector<sf::CircleShape>** slowContainers;
   std::vector<sf::CircleShape>** explosionContainers;
 
