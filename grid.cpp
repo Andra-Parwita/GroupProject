@@ -42,9 +42,15 @@ grid::~grid() {
     delete[] this->tiles;
   }
 
-  delete projectileContainers;
-  delete explosionContainers;
-  delete slowContainers;
+  if (projectileContainers != nullptr) {
+    delete projectileContainers;
+  }
+  if (explosionContainers != nullptr) {
+    delete explosionContainers;
+  }
+  if (slowContainers != nullptr) {
+    delete slowContainers;
+  }
 }
 
 // functions

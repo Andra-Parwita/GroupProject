@@ -5,6 +5,7 @@
 
 //private functions
 void Game::initVariables(){
+	gameOver = false;
     //window
     this->window = nullptr;
     fiveSec =0;
@@ -50,8 +51,13 @@ void Game::initText(){
     PopDisplayText.setFont(font);
     PopDisplayText.setString("");
     PopDisplayText.setCharacterSize(16);
-    resourceText.setPosition(sf::Vector2f(200.0f,10.0f));
+    PopDisplayText.setPosition(sf::Vector2f(200.0f,10.0f));
     PopDisplayText.setFillColor(sf::Color::Cyan);
+
+	GameOverText.setFont(font);
+	GameOverText.setCharacterSize(60);
+	GameOverText.setFillColor(sf::Color::Cyan);
+
 }
 
 void Game::initBar(){  //task bar
@@ -148,15 +154,18 @@ Game::Game() : currentSelectionId(0) {
 }
 Game::~Game(){
     delete this->window;
+	std::cout << "Window was freed" << std::endl;
 
     if (virusManager != nullptr){
         for(int i = 0; i < gameManager->getVirusCount(); i++){
             if (virusManager[i] != nullptr){
-                delete[] this->virusManager[i];
+                delete this->virusManager[i];
             }
         }
         delete[] this->virusManager;
+		std::cout << "Virus Manager was freed" << std::endl;
     }
+
 
     delete[] this->virusSprites;
 
@@ -167,6 +176,7 @@ Game::~Game(){
             }
         }
         delete[] this->dispTiles;
+		std::cout << "Display Tiles was freed" << std::endl;
     }
 
     delete[] this->taskBarSprites;
@@ -178,12 +188,23 @@ Game::~Game(){
             }
         }
         delete[] this->appSpriteHolders;
+		std::cout << "AppSprites was freed" << std::endl;
     }
 
 	delete[] this->soundBuffers;
+	std::cout << "Sound Buffers was freed" << std::endl;
+
+	delete[] this->slowed;
+	std::cout << "Slowing Projectiles was freed" << std::endl;
+	delete[] this->explosions;
+	std::cout << "Explosions was freed" << std::endl;
+	delete[] this->projected;
+	std::cout << "Regular Peojectiles was freed" << std::endl;
     
     delete this->gridMap;
+	std::cout << "Grid data was freed" << std::endl;
     delete this->gameManager;
+	std::cout << "Game Manager was freed" << std::endl;
 }
 
 //Public Functions
@@ -702,8 +723,9 @@ void Game::update(){ //game updates
         }
 
         //end 
-        if (virusSprites->getPosition().x <= 0){
-            //game over
+        if (virusSprites->getPosition().x < 0){
+			std::cout << "Game Over" << std::endl; 
+            gameOver = true;
         }
 
         //checking if  virus is on a app
@@ -791,63 +813,75 @@ void Game::render(){ //renders the game objects
 
     this->window->clear(sf::Color::Black); //clearing frame
 
-    //time clock
-    std::string currentTime = std::to_string(gameManager->elapsedTime());
-    timerText.setString(currentTime);
+	if (gameOver) {
+		timerText.setPosition(800.0f,500.0f);
+		this->window->draw(timerText);
 
-    std::string currentResource = std::to_string(gameManager->getResource());
-    resourceText.setString(currentResource + " Mb");
+		std::string GameOverTextString = "Game Over!";
+		GameOverText.setString(GameOverTextString);
+		GameOverText.setPosition(600.0f,400.0f);
+		this->window->draw(GameOverText);
 
-    //drawing objects
-    for (int i = 0; i < 5; i ++){ //grid map display
-        for (int j = 0; j < 20; j++){
-            this->window->draw(this->dispTiles[i][j]);
-        }
-    } 
+	} else {
+		//time clock
+		std::string currentTime = std::to_string(gameManager->elapsedTime());
+		timerText.setString("Time: " + currentTime);
 
-    for (int i = 0; i < 5; i ++){ //for application sprites
-        for (int j = 0; j < 20; j++){
-            this->window->draw(this->appSpriteHolders[i][j]);
-        }
-    } 
+		std::string currentResource = std::to_string(gameManager->getResource());
+		resourceText.setString(currentResource + " Mb");
 
-    for (int i=0; i< 6; i++){ //task bar
-        this->window->draw(this->taskBar[i]);
-    }
+		//drawing objects
+		for (int i = 0; i < 5; i ++){ //grid map display
+			for (int j = 0; j < 20; j++){
+				this->window->draw(this->dispTiles[i][j]);
+			}
+		} 
 
-    for (int i=0; i<6; i++){ //task bar sprites
-        this->window->draw(this->taskBarSprites[i]);
-    }
+		for (int i = 0; i < 5; i ++){ //for application sprites
+			for (int j = 0; j < 20; j++){
+				this->window->draw(this->appSpriteHolders[i][j]);
+			}
+		} 
 
-    for (int i=0; i < gameManager->getVirusCount(); i++){
-        this->window->draw(this->virusSprites[i]);
-    }
-    
-    projectileCount = gridMap->getNumShootingTiles(1);
-    for (int i = 0; i < projectileCount; i++) {
-        for (int j = 0; j < projected[i]->size(); j++) {
-            window->draw((*projected[i])[j]);
-        }
-    } 
-   
+		for (int i=0; i< 6; i++){ //task bar
+			this->window->draw(this->taskBar[i]);
+		}
 
-    for (int i = 0; i < slowCount; i++) {
-        for (int j = 0; j < slowed[i]->size(); j++) {
-            window->draw((*slowed[i])[j]);
-        }
-    } 
+		for (int i=0; i<6; i++){ //task bar sprites
+			this->window->draw(this->taskBarSprites[i]);
+		}
 
-    for (int i = 0; i < explosionCount; i++) {
-        if (explosions[i]!= nullptr){
-            for (int j = 0; j < explosions[i]->size(); j++) {
-                window->draw((*explosions[i])[j]);
-            }
-        }
-    } 
+		for (int i=0; i < gameManager->getVirusCount(); i++){
+			this->window->draw(this->virusSprites[i]);
+		}
+		
+		projectileCount = gridMap->getNumShootingTiles(1);
+		for (int i = 0; i < projectileCount; i++) {
+			for (int j = 0; j < projected[i]->size(); j++) {
+				window->draw((*projected[i])[j]);
+			}
+		} 
+	
 
-    this->window->draw(this->timerText);
-    this->window->draw(this->resourceText);
-    this->window->draw(this->PopDisplayText);
+		for (int i = 0; i < slowCount; i++) {
+			for (int j = 0; j < slowed[i]->size(); j++) {
+				window->draw((*slowed[i])[j]);
+			}
+		} 
+
+		for (int i = 0; i < explosionCount; i++) {
+			if (explosions[i]!= nullptr){
+				for (int j = 0; j < explosions[i]->size(); j++) {
+					window->draw((*explosions[i])[j]);
+				}
+			}
+		} 
+
+		this->window->draw(this->timerText);
+		this->window->draw(this->resourceText);
+		this->window->draw(this->PopDisplayText);
+
+	}
 
     this->window->display(); //displays frame
 	

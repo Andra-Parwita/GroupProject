@@ -50,8 +50,7 @@ class Game {
   sf::Clock virusExplosionClock;
 
   // projectile
-  std::vector<sf::CircleShape>**
-      projected;  // stores all projectile arrays which hold each projectile
+  std::vector<sf::CircleShape>** projected;  // stores all projectile arrays which hold each projectile
   int projectileCount;  // the number of projectile vectors
 
   std::vector<sf::CircleShape>** slowed;
@@ -65,6 +64,9 @@ class Game {
   int fiveSec;      //
   sf::Clock waveTimer;
   sf::Clock* appCooldownClocks;
+
+  bool gameOver;
+  sf::Text GameOverText;
 
   //sound
   sf::SoundBuffer* soundBuffers;
